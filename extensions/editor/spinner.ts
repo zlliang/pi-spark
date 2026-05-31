@@ -1,0 +1,91 @@
+import Type from "typebox";
+
+import type { TUI } from "@earendil-works/pi-tui";
+import type { Static } from "typebox";
+
+export const SpinnerPresetSchema = Type.Enum(["lights", "dots"]);
+
+type SpinnerPreset = Static<typeof SpinnerPresetSchema>;
+
+interface SpinnerParams {
+  frames: string[];
+  interval: number | { min: number; max: number };
+  random: boolean;
+}
+
+const SPINNER_PRESETS: Record<SpinnerPreset, SpinnerParams> = {
+  lights: {
+    frames: ["○○○○", "●○○○", "○●○○", "○○●○", "○○○●", "●●○○", "●○●○", "●○○●", "○●●○", "○●○●", "○○●●", "●●●○", "●●○●", "●○●●", "○●●●", "●●●●"],
+    interval: { min: 120, max: 240 },
+    random: true,
+  },
+  dots: {
+    frames: ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
+    interval: 80,
+    random: false,
+  },
+};
+
+export class Spinner {
+  private tui: TUI | undefined;
+
+  private frames: string[];
+  private interval: number | { min: number; max: number };
+  private random: boolean;
+
+  private working: boolean = false;
+  private frameIndex: number = -1;
+  private timer: ReturnType<typeof setTimeout> | undefined;
+
+  constructor(preset: SpinnerPreset = "lights") {
+    const params = SPINNER_PRESETS[preset];
+
+    this.frames = params.frames;
+    this.interval = params.interval;
+    this.random = params.random;
+  }
+
+  setTUI(tui: TUI): void {
+    this.tui = tui;
+  }
+
+  getFrame(): string {
+    if (!this.working) return "";
+
+    return this.frames[this.frameIndex] ?? "";
+  }
+
+  start(): void {
+    this.stop();
+
+    this.working = true;
+    this.tick();
+  }
+
+  stop(): void {
+    this.working = false;
+    this.frameIndex = -1;
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+      this.timer = undefined;
+    }
+
+    this.tui?.requestRender();
+  }
+
+  dispose(): void {
+    this.stop();
+    this.tui = undefined;
+  }
+
+  private tick(): void {
+    if (!this.working) return;
+
+    this.frameIndex = this.random ? Math.floor(Math.random() * this.frames.length) : (this.frameIndex + 1) % this.frames.length;
+    this.tui?.requestRender();
+
+    const delay = typeof this.interval === "number" ? this.interval : this.interval.min + Math.floor(Math.random() * (this.interval.max - this.interval.min + 1));
+    this.timer = setTimeout(() => this.tick(), delay);
+  }
+}
