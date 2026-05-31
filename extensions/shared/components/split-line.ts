@@ -31,9 +31,6 @@ export class SplitLine implements Component {
 	}
 
 	render(width: number): [string] {
-		const minWidth = this.padding * 2 + 1;
-		if (width < minWidth) return [this.spacingChar.repeat(width)];
-
 		const contentWidth = width - this.padding * 2;
 		const content = this.renderContent(contentWidth);
 		const paddingText = this.spacingChar.repeat(this.padding);
