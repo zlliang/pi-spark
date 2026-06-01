@@ -7,6 +7,7 @@ import type { Static } from "typebox";
 
 const UserConfigSchema = Type.Object({
   editor: Type.Optional(Type.Union([Type.Boolean(), EditorConfigSchema])),
+  footer: Type.Optional(Type.Boolean()),
 });
 
 export type UserConfig = Static<typeof UserConfigSchema>;

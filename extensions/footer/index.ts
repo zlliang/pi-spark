@@ -2,6 +2,7 @@ import { isAbsolute, relative, resolve, sep } from "node:path";
 import { truncateToWidth } from "@earendil-works/pi-tui";
 
 import { SplitLine } from "../shared/components/split-line";
+import { loadConfig } from "../shared/config";
 import { formatContextUsage, formatCost, sanitizeText } from "../shared/format";
 
 import type { ExtensionContext, ExtensionAPI, ReadonlyFooterDataProvider, Theme } from "@earendil-works/pi-coding-agent";
@@ -111,6 +112,9 @@ function formatCwd(cwd: string, home?: string): string {
 export default function (pi: ExtensionAPI) {
   pi.on("session_start", (_event, ctx) => {
     if (!ctx.hasUI) return;
+
+    const config = loadConfig(ctx);
+    if (config.footer === false) return;
 
     ctx.ui.setFooter((_tui, theme, footerData) => new FooterComponent(ctx, theme, footerData));
   });
