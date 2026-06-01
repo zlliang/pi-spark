@@ -2,63 +2,93 @@ import Type from "typebox";
 
 import type { Static } from "typebox";
 
-export const IdleTimeoutSchema = Type.Number();
+export const IdleTimeoutSchema = Type.Number({ minimum: 5000 });
 
 type IdleTimeout = Static<typeof IdleTimeoutSchema>;
 type IdleHash = string | number | boolean;
 
 const POLL_MS = 1_000;
 
-class IdleFactor {
+export class IdleListener<T> {
+  private state: "active" | "watching" | "idle" = "active";
+  private computeStateHash: (ctx: T) => IdleHash;
+  private lastStateHash: IdleHash | undefined;
+
   private idleMs: number;
   private pollMs: number;
   private idleTimer: ReturnType<typeof setTimeout> | undefined;
   private pollTimer: ReturnType<typeof setInterval> | undefined;
 
-  private stable = false;
-  private computeStateHash: () => IdleHash;
-  private lastStateHash: IdleHash = "MAGIC_STRING";
+  private enterCallbacks: Set<(ctx: T) => void> = new Set();
+  private wakeCallbacks: Set<(ctx: T) => void> = new Set();
 
-  constructor(computeStateHash: () => IdleHash, idleMs: number, pollMs: number = POLL_MS) {
+  constructor(computeStateHash: (ctx: T) => IdleHash, idleMs: IdleTimeout = 60_000, pollMs: number = POLL_MS) {
     this.computeStateHash = computeStateHash;
     this.idleMs = idleMs;
     this.pollMs = pollMs;
   }
 
-  start(notify: () => void): void {
-    this.stop();
+  on(event: "enter" | "wake", callback: (ctx: T) => void): () => void {
+    const callbackSet = event === "enter" ? this.enterCallbacks : this.wakeCallbacks;
+    callbackSet.add(callback);
 
-    this.stable = false;
-    this.lastStateHash = this.computeStateHash();
-    this.scheduleStableCheck(notify);
+    return () => callbackSet.delete(callback);
+  }
+
+  watch(ctx: T): void {
+    if (this.state === "idle") return;
+
+    this.stop();
+    this.state = "watching";
+
+    this.lastStateHash = this.computeStateHash(ctx);
+    this.reset(ctx);
 
     this.pollTimer = setInterval(() => {
-      const current = this.computeStateHash();
+      const current = this.computeStateHash(ctx);
       if (current === this.lastStateHash) return;
 
-      this.stable = false;
       this.lastStateHash = current;
-      this.scheduleStableCheck(notify);
+      this.reset(ctx);
     }, this.pollMs);
   }
 
-  stop(): void {
-    this.stable = false;
-    this.clearIdleTimer();
-    this.clearPollTimer();
+  enter(ctx: T): void {
+    if (this.state === "idle") return;
+
+    this.stop();
+    this.state = "idle";
+
+    this.enterCallbacks.forEach((callback) => callback(ctx));
   }
 
-  isStable(): boolean {
-    return this.stable;
+  /** Emit on every wake signal, even when the listener is already active. */
+  wake(ctx: T): void {
+    this.stop();
+    this.state = "active";
+
+    this.wakeCallbacks.forEach((callback) => callback(ctx));
   }
 
-  private scheduleStableCheck(notify: () => void): void {
+  dispose(): void {
+    this.stop();
+    this.state = "active";
+
+    this.enterCallbacks.clear();
+    this.wakeCallbacks.clear();
+  }
+
+  private reset(ctx: T): void {
     this.clearIdleTimer();
     this.idleTimer = setTimeout(() => {
       this.idleTimer = undefined;
-      this.stable = true;
-      notify();
+      this.enter(ctx);
     }, this.idleMs);
+  }
+
+  private stop(): void {
+    this.clearIdleTimer();
+    this.clearPollTimer();
   }
 
   private clearIdleTimer(): void {
@@ -73,82 +103,5 @@ class IdleFactor {
 
     clearInterval(this.pollTimer);
     this.pollTimer = undefined;
-  }
-}
-
-export class IdleDetector {
-  private state: "active" | "watching" | "idle" = "active";
-  private factors: IdleFactor[] = [];
-  private timeout: number;
-
-  private enterCallbacks: Set<() => void> = new Set();
-  private activityCallbacks: Set<() => void> = new Set();
-
-  constructor(timeout: IdleTimeout = 60_000) {
-    this.timeout = timeout;
-  }
-
-  addFactor(computeStateHash: () => IdleHash): void {
-    this.factors.push(new IdleFactor(computeStateHash, this.timeout));
-  }
-
-  on(event: "enter" | "activity", callback: () => void): () => void {
-    const callbackSet = event === "enter" ? this.enterCallbacks : this.activityCallbacks;
-    callbackSet.add(callback);
-
-    return () => callbackSet.delete(callback);
-  }
-
-  watch(): void {
-    if (this.state === "idle") return;
-
-    this.stopFactors();
-    this.state = "watching";
-
-    this.startFactors();
-    this.check();
-  }
-
-  emitActivity(): void {
-    this.stopFactors();
-    this.state = "active";
-    this.onActivity();
-  }
-
-  dispose(): void {
-    this.stopFactors();
-    this.state = "active";
-    this.enterCallbacks.clear();
-    this.activityCallbacks.clear();
-  }
-
-  private check(): void {
-    if (this.state !== "watching") return;
-    if (!this.factors.every((factor) => factor.isStable())) return;
-
-    this.emitEnter();
-  }
-
-  private emitEnter(): void {
-    this.stopFactors();
-    this.state = "idle";
-    this.onEnter();
-  }
-
-  private onEnter(): void {
-    this.enterCallbacks.forEach((callback) => callback());
-  }
-
-  private onActivity(): void {
-    this.activityCallbacks.forEach((callback) => callback());
-  }
-
-  private startFactors(): void {
-    const notify = () => this.check();
-    this.factors.forEach((factor) => factor.start(notify));
-  }
-
-  private stopFactors(): void {
-    this.factors.forEach((factor) => factor.stop());
   }
 }

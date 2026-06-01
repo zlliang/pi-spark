@@ -22,17 +22,19 @@ const MAX_CONVERSATION_CHARS = 8_000;
 
 export class RecapManager {
   private pi: ExtensionAPI;
-  private inflight: AbortController | undefined;
   private config: RecapConfig;
+  private inflight: AbortController | undefined;
+  private active = false;
 
   constructor(pi: ExtensionAPI, config: RecapConfig) {
     this.pi = pi;
     this.config = config;
   }
 
-  async run(ctx: ExtensionContext): Promise<void> {
-    this.cancelInflight();
+  async run(ctx: ExtensionContext, options: { force?: boolean } = {}): Promise<void> {
+    if (this.active && !options.force) return;
 
+    this.cancelInflight();
     const controller = new AbortController();
     this.inflight = controller;
 
@@ -41,6 +43,7 @@ export class RecapManager {
       if (controller.signal.aborted || this.inflight !== controller || !recapModel) return;
 
       setRecapLoadingWidget(ctx, recapModel.warning);
+      this.active = false;
 
       const result = await this.generate(ctx, recapModel.model, recapModel.thinkingLevel, controller.signal);
       if (controller.signal.aborted || this.inflight !== controller) return;
@@ -50,6 +53,7 @@ export class RecapManager {
       }
 
       setRecapTextWidget(ctx, result.content, recapModel.warning);
+      this.active = true;
 
       this.pi.appendEntry("recap", {
         provider: recapModel.model.provider,
@@ -62,6 +66,7 @@ export class RecapManager {
 
       const message = error instanceof Error ? error.message : String(error);
       setRecapTextWidget(ctx, "Unable to generate recap.", message);
+      this.active = false;
     } finally {
       if (this.inflight === controller) this.inflight = undefined;
     }
@@ -70,6 +75,7 @@ export class RecapManager {
   clear(ctx: ExtensionContext): void {
     this.cancelInflight();
     clearRecapWidget(ctx);
+    this.active = false;
   }
 
   private async generate(ctx: ExtensionContext, model: Model<Api>, thinkingLevel: ModelThinkingLevel, signal: AbortSignal): Promise<{ content: string; usage: Usage }> {
