@@ -6,6 +6,7 @@ A curated package of [pi](https://pi.dev/) extensions.
 
 - **Editor**: replaces the default editor with a compact working indicator and current model info.
 - **Footer**: shows the session info, cost, and context usage in one line, followed by extension statuses.
+- **Fullscreen**: clears the screen and scrollback on session start and pins the editor and footer to the bottom for a full-screen session.
 - **Presets**: switches named model presets with `/preset` and quick cycle shortcuts.
 - **Recap**: generates a short idle-session recap and exposes a `/recap` command for manual generation, inspired by [Claude Code's session recap](https://code.claude.com/docs/en/interactive-mode#session-recap).
 
