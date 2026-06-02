@@ -4,6 +4,7 @@ import { truncateToWidth } from "@earendil-works/pi-tui";
 import { SplitLine } from "../shared/components/split-line";
 import { loadConfig } from "../shared/config";
 import { formatContextUsage, formatCost, sanitizeText } from "../shared/format";
+import { getEntryUsage } from "../shared/usage";
 
 import type { ExtensionContext, ExtensionAPI, ReadonlyFooterDataProvider, Theme } from "@earendil-works/pi-coding-agent";
 import type { Component } from "@earendil-works/pi-tui";
@@ -56,20 +57,20 @@ class FooterComponent implements Component {
   }
 
   private getStyledCostText(): string {
-    let cost = 0;
-    this.ctx.sessionManager.getBranch().forEach((entry) => {
-      if (entry.type !== "message") return;
-
-      const message = entry.message;
-      if (message.role !== "assistant") return;
-
-      cost += message.usage.cost.total;
-    });
+    const cost = this.ctx.sessionManager.getBranch().reduce((acc, entry) => {
+      const entryUsage = getEntryUsage(this.ctx, entry);
+      if (entryUsage) acc[entryUsage.type] += entryUsage.usage.cost.total;
+      return acc;
+    }, { subscription: 0, paid: 0 });
 
     const isSubscription = this.ctx.model ? this.ctx.modelRegistry.isUsingOAuth(this.ctx.model) : false;
-    const costText = formatCost(cost, isSubscription);
+    const subscriptionCostText = isSubscription || cost.subscription > 0 ? formatCost(cost.subscription, true) : undefined;
+    const paidCostText = !isSubscription || cost.paid > 0 ? formatCost(cost.paid, false) : undefined;
+    const costText = [subscriptionCostText, paidCostText].filter(Boolean).join(" + ");
 
-    if (cost > 20) return this.theme.fg("warning", costText);
+    const totalCost = cost.subscription + cost.paid;
+    if (totalCost > 20) return this.theme.fg("warning", costText);
+
     return this.theme.fg("dim", costText);
   }
 
