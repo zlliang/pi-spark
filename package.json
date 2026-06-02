@@ -1,26 +1,39 @@
 {
   "name": "pi-spark",
-  "version": "0.0.0",
-  "description": "A curated set of pi packages",
-  "private": true,
-  "type": "module",
+  "version": "0.1.0",
+  "description": "A small, opinionated collection of pi extensions",
+  "keywords": [
+    "pi-coding-agent",
+    "pi-package"
+  ],
+  "homepage": "https://github.com/zlliang/pi-spark#readme",
+  "bugs": {
+    "url": "https://github.com/zlliang/pi-spark/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zlliang/pi-spark.git"
   },
-  "keywords": [
-    "pi-package"
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "extensions",
+    "assets",
+    "README.md",
+    "LICENSE"
   ],
+  "pi": {
+    "extensions": ["./extensions"],
+    "image": "https://raw.githubusercontent.com/zlliang/pi-spark/main/assets/cover.png"
+  },
   "scripts": {
     "start": "pi --no-extensions --extension ~/.pi/agent --extension $PWD",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck"
   },
   "dependencies": {
     "zod": "^4.4.3"
   },
-  "bundleDependencies": [
-    "zod"
-  ],
   "peerDependencies": {
     "@earendil-works/pi-agent-core": "*",
     "@earendil-works/pi-ai": "*",

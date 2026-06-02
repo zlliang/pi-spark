@@ -1,6 +1,8 @@
+![Cover](./assets/cover.png)
+
 # Pi Spark
 
-A curated package of [pi](https://pi.dev/) extensions.
+A small, opinionated collection of [pi](https://pi.dev/) extensions.
 
 ## Extensions
 
@@ -13,6 +15,12 @@ A curated package of [pi](https://pi.dev/) extensions.
 ![Screenshot](./assets/screenshot.png)
 
 ## Install
+
+Install from npm:
+
+```bash
+pi install npm:pi-spark
+```
 
 Install from git:
 
