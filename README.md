@@ -64,7 +64,7 @@ Example:
 Notes:
 
 - Set an extension key to `false` to disable it.
-- The `editor.spinner` value can be `lights` or `dots`.
+- The `editor.spinner` value can be `dots`, `lights`, or `tildes`.
 - Presets can be selected with `/preset` or `/preset <key>`.
 - Cycle presets with `ctrl+super+p` and `ctrl+shift+super+p` (`super` is `command` on macOS).
 - The `recap.idle` value is in milliseconds and must be at least `5000`.

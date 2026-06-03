@@ -2,7 +2,7 @@ import * as z from "zod";
 
 import type { TUI } from "@earendil-works/pi-tui";
 
-export const spinnerPresetSchema = z.enum(["lights", "dots"]);
+export const spinnerPresetSchema = z.enum(["dots", "lights", "tildes"]);
 
 type SpinnerPreset = z.infer<typeof spinnerPresetSchema>;
 
@@ -13,19 +13,24 @@ interface SpinnerParams {
 }
 
 const SPINNER_PRESETS: Record<SpinnerPreset, SpinnerParams> = {
-  lights: {
-    frames: ["○○○○", "●○○○", "○●○○", "○○●○", "○○○●", "●●○○", "●○●○", "●○○●", "○●●○", "○●○●", "○○●●", "●●●○", "●●○●", "●○●●", "○●●●", "●●●●"],
-    interval: { min: 120, max: 240 },
-    random: true,
-  },
   dots: {
     frames: ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"],
     interval: 80,
     random: false,
   },
+  lights: {
+    frames: ["○○○○", "●○○○", "○●○○", "○○●○", "○○○●", "●●○○", "●○●○", "●○○●", "○●●○", "○●○●", "○○●●", "●●●○", "●●○●", "●○●●", "○●●●", "●●●●"],
+    interval: { min: 120, max: 240 },
+    random: true,
+  },
+  tildes: {
+    frames: ["∼", "≈", "≋"],
+    interval: { min: 160, max: 320 },
+    random: true,
+  },
 };
 
-const DEFAULT_SPINNER_PRESET = "lights";
+const DEFAULT_SPINNER_PRESET = "tildes";
 
 export class Spinner {
   private tui: TUI | undefined;
