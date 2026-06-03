@@ -26,6 +26,10 @@ export function formatCost(cost: number, isSubscription: boolean): string {
   return `$${cost.toFixed(2)}${isSubscription ? " (sub)" : ""}`;
 }
 
+export function formatRunningTools(count: number): string {
+  return `Running ${count} ${count === 1 ? "tool" : "tools"}`;
+}
+
 /** Replace newlines, tabs, carriage returns with space, then collapse multiple spaces */
 export function sanitizeText(text: string): string {
   return text
