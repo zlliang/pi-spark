@@ -1,8 +1,10 @@
-import { isAbsolute, relative, resolve, sep } from "node:path";
+import { homedir } from "node:os";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { SplitLine } from "../shared/components/split-line";
 import { loadConfig } from "../shared/config";
-import { formatContextUsage, formatCost, sanitizeText } from "../shared/format";
+import { formatContextUsage, formatCost, formatCwd, linkText, sanitizeText } from "../shared/format";
 import { getEntryUsage } from "../shared/usage";
 
 import type { ExtensionContext, ExtensionAPI, ReadonlyFooterDataProvider, Theme } from "@earendil-works/pi-coding-agent";
@@ -31,7 +33,9 @@ class FooterComponent implements Component {
   }
 
   private getLeft(): string {
-    let text = formatCwd(this.ctx.sessionManager.getCwd(), process.env.HOME || process.env.USERPROFILE);
+    const cwd = this.ctx.sessionManager.getCwd();
+    const url = pathToFileURL(resolve(cwd));
+    let text = linkText(formatCwd(cwd, homedir()), url.href);
 
     const branch = this.footerData.getGitBranch();
     if (branch) text = `${text} [${branch}]`;
@@ -88,18 +92,6 @@ class FooterComponent implements Component {
     if (percent && percent > 70) return this.theme.fg("warning", contextUsageText);
     return this.theme.fg("dim", contextUsageText);
   }
-}
-
-function formatCwd(cwd: string, home?: string): string {
-  if (!home) return cwd;
-
-  const resolvedCwd = resolve(cwd);
-  const resolvedHome = resolve(home);
-  const relativeToHome = relative(resolvedHome, resolvedCwd);
-  const isInsideHome = relativeToHome === "" || (relativeToHome !== ".." && !relativeToHome.startsWith(`..${sep}`) && !isAbsolute(relativeToHome));
-  if (!isInsideHome) return cwd;
-
-  return relativeToHome === "" ? "~" : `~${sep}${relativeToHome}`;
 }
 
 export default function (pi: ExtensionAPI) {

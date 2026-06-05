@@ -1,3 +1,5 @@
+import { isAbsolute, relative, resolve, sep } from "node:path";
+
 import type { Provider } from "@earendil-works/pi-ai";
 import type { ContextUsage } from "@earendil-works/pi-coding-agent";
 
@@ -24,6 +26,32 @@ export function formatContextUsage(contextUsage: ContextUsage | undefined): stri
 
 export function formatCost(cost: number, isSubscription: boolean): string {
   return `$${cost.toFixed(2)}${isSubscription ? " (sub)" : ""}`;
+}
+
+export function formatCwd(cwd: string, home: string): string {
+  const resolvedCwd = resolve(cwd);
+  const resolvedHome = resolve(home);
+  const relativeToHome = relative(resolvedHome, resolvedCwd);
+  const isInsideHome = relativeToHome === "" || (relativeToHome !== ".." && !relativeToHome.startsWith(`..${sep}`) && !isAbsolute(relativeToHome));
+  const displayCwd = isInsideHome ? (relativeToHome === "" ? "~" : `~${sep}${relativeToHome}`) : resolvedCwd;
+
+  return shortenPath(displayCwd);
+}
+
+/** Shorten every path component except the first and last to one character, like fish `prompt_pwd`. */
+function shortenPath(path: string): string {
+  const parts = path.split(sep);
+  const lastIndex = parts.length - 1;
+
+  return parts.map((part, index) => {
+    if (!part || index === 0 || index === lastIndex) return part;
+    return Array.from(part)[0] ?? part;
+  }).join(sep);
+}
+
+/** Wrap text in an OSC 8 hyperlink while preserving the visible text. */
+export function linkText(text: string, url: string): string {
+  return `\x1b]8;;${url}\x07${text}\x1b]8;;\x07`;
 }
 
 /** Replace newlines, tabs, carriage returns with space, then collapse multiple spaces */
