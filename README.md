@@ -6,11 +6,11 @@ A small, opinionated collection of [pi](https://pi.dev/) extensions.
 
 ## Extensions
 
-- **Editor**: replaces the default editor with a compact working indicator (inspired by [Amp](https://ampcode.com/)) and current model info.
-- **Footer**: shows session information, extension statuses, cost, and context usage on one line.
-- **Fullscreen**: clears the screen and scrollback on session start and pins the editor and footer to the bottom for a full-screen session.
-- **Presets**: switches named model presets with `/preset`, `--preset`, and quick cycle shortcuts.
-- **Recap**: generates a short idle-session recap and exposes a `/recap` command for manual generation, inspired by [Claude Code's session recap](https://code.claude.com/docs/en/interactive-mode#session-recap).
+- **Editor:** replaces the default editor with a compact working indicator (inspired by [Amp](https://ampcode.com/)) and current model info.
+- **Footer:** shows session information, extension statuses, cost, and context usage on one line.
+- **Fullscreen:** clears the screen and scrollback on session start and pins the editor and footer to the bottom for a full-screen session.
+- **Presets:** switches named model presets with `/preset`, `--preset`, and quick cycle shortcuts.
+- **Recap:** generates a short idle-session recap and exposes a `/recap` command for manual generation, inspired by [Claude Code's session recap](https://code.claude.com/docs/en/interactive-mode#session-recap).
 
 ![Screenshot](./assets/screenshot.png)
 
