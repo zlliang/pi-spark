@@ -6,6 +6,7 @@ A small, opinionated collection of [pi](https://pi.dev/) extensions.
 
 ## Extensions
 
+- **Codex usage:** shows your OpenAI Codex (ChatGPT) rate-limit usage as a footer status when a Codex model is active.
 - **Editor:** replaces the default editor with a compact working indicator (inspired by [Amp](https://ampcode.com/)) and current model info.
 - **Footer:** shows session information, extension statuses, cost, and context usage on one line.
 - **Fullscreen:** clears the screen and scrollback on session start, pins the editor and footer to the bottom for a full-screen session, and clears again on exit.
@@ -63,6 +64,10 @@ Example:
   }
 }
 ```
+
+### Codex usage
+
+- pi-spark queries the ChatGPT backend and shows your Codex 5-hour (`5h`) and 7-day (`7d`) rate-limit usage as a footer status, refreshing on session start, model change, and after billable turns. The status appears only while a Codex (`openai-codex`) model is active and uses its stored OAuth credential.
 
 ### Editor
 
