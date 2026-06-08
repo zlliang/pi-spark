@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/zlliang/pi-spark/compare/v0.5.0...v0.5.1) (2026-06-08)
+
+
+### Bug Fixes
+
+* **codex-usage:** polish usage error message ([99edccf](https://github.com/zlliang/pi-spark/commit/99edccf6d19b3fdb334414b46f59a25d542bc03d))
+
 ## [0.5.0](https://github.com/zlliang/pi-spark/compare/v0.4.0...v0.5.0) (2026-06-08)
 
 
