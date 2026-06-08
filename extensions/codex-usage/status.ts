@@ -23,7 +23,7 @@ export function renderError(theme: Theme, message: string): string {
 }
 
 function renderLane(theme: Theme, label: string, percent: number | undefined): string {
-  const text = `${label} ${percent === undefined ? "?" : percent.toFixed(1)}%`;
+  const text = `${label} ${percent === undefined ? "?" : percent.toFixed(0)}%`;
 
   if (percent && percent > 90) return theme.fg("error", text);
   if (percent && percent > 70) return theme.fg("warning", text);
