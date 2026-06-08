@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/zlliang/pi-spark/compare/v0.3.1...v0.4.0) (2026-06-08)
+
+
+### Features
+
+* **set-session-name:** add session naming tool ([bc60e90](https://github.com/zlliang/pi-spark/commit/bc60e9049e17e1b82fc0d936731235f2bd4e94dd))
+
 ## [0.3.1](https://github.com/zlliang/pi-spark/compare/v0.3.0...v0.3.1) (2026-06-08)
 
 
