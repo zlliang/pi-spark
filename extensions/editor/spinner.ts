@@ -29,8 +29,8 @@ const SPINNER_PRESETS: Record<SpinnerPreset, SpinnerParams> = {
     random: false,
   },
   pulse: {
-    frames: ["·", "•", "●", "•"],
-    interval: 120,
+    frames: ["·", "•", "●", "•", "·"],
+    interval: 100,
     random: false,
   },
 };
