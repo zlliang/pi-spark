@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/zlliang/pi-spark/compare/v0.5.1...v0.5.2) (2026-06-08)
+
+
+### Bug Fixes
+
+* **codex-usage:** round status percentages ([a641329](https://github.com/zlliang/pi-spark/commit/a64132919bd99d67d2dd039206ab80a41cfab720))
+
 ## [0.5.1](https://github.com/zlliang/pi-spark/compare/v0.5.0...v0.5.1) (2026-06-08)
 
 
