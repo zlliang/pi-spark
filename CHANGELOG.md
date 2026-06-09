@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/zlliang/pi-spark/compare/v0.6.1...v0.6.2) (2026-06-09)
+
+
+### Code Refactoring
+
+* adjust set-session-name reason handling ([6d1b0b8](https://github.com/zlliang/pi-spark/commit/6d1b0b8ba3859b0a8b991758f01582caf65d6c8c))
+
 ## [0.6.1](https://github.com/zlliang/pi-spark/compare/v0.6.0...v0.6.1) (2026-06-09)
 
 
