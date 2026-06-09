@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.6.0](https://github.com/zlliang/pi-spark/compare/v0.5.2...v0.6.0) (2026-06-09)
+
+
+### Features
+
+* add trust-all extension ([2784e47](https://github.com/zlliang/pi-spark/commit/2784e4719689280029864c45455bdac1d515669a))
+* **codex-usage:** refresh after usage events ([bc53364](https://github.com/zlliang/pi-spark/commit/bc533646d085966376278ec6672b7d51d11c3e2d))
+* **editor:** add pulse spinner preset ([9033de9](https://github.com/zlliang/pi-spark/commit/9033de9552630b16481dcb37aa9556bd37ab1bc7))
+
 ## [0.5.2](https://github.com/zlliang/pi-spark/compare/v0.5.1...v0.5.2) (2026-06-08)
 
 
