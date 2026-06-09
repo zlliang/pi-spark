@@ -13,6 +13,7 @@ A small, opinionated collection of [pi](https://pi.dev/) extensions.
 - **Presets:** switches named model presets with `/preset`, `--preset`, and quick cycle shortcuts.
 - **Recap:** generates a short idle-session recap and exposes a `/recap` command for manual generation, inspired by [Claude Code's session recap](https://code.claude.com/docs/en/interactive-mode#session-recap).
 - **Set session name:** exposes a `set_session_name` tool so the agent can give the current session a concise, recognizable name in the session selector.
+- **Trust all:** bypasses pi's project trust dialog, added in 0.79.0, and removes saved trust decisions so startup stays minimal.
 
 ![Screenshot](./assets/screenshot.png)
 
@@ -99,3 +100,8 @@ Use presets in these ways:
 ### Set session name
 
 - The agent can set or refresh the current session's display name and optionally give a reason.
+
+### Trust all
+
+- pi-spark always answers pi's project trust check with `yes` and removes `~/.pi/agent/trust.json` on startup.
+- This keeps the experience minimal after the project trust dialog added in pi 0.79.0. Follow [earendil-works/pi#5514](https://github.com/earendil-works/pi/issues/5514) for discussion. If pi ships a better default experience in the future, this extension may be deleted.
