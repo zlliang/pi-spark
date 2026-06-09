@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/zlliang/pi-spark/compare/v0.6.0...v0.6.1) (2026-06-09)
+
+
+### Code Refactoring
+
+* **editor:** show preset name in bold without prefix ([79a5fe2](https://github.com/zlliang/pi-spark/commit/79a5fe2910647094503bca9ccbc69326c6ade12a))
+
 ## [0.6.0](https://github.com/zlliang/pi-spark/compare/v0.5.2...v0.6.0) (2026-06-09)
 
 
