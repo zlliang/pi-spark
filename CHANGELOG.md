@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.3](https://github.com/zlliang/pi-spark/compare/v0.6.2...v0.6.3) (2026-06-09)
+
+
+### Code Refactoring
+
+* rename session naming tool ([49f8502](https://github.com/zlliang/pi-spark/commit/49f850226a175e280b0337f96fbaa649276d1153))
+
 ## [0.6.2](https://github.com/zlliang/pi-spark/compare/v0.6.1...v0.6.2) (2026-06-09)
 
 
