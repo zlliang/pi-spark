@@ -46,13 +46,13 @@ Example:
   "footer": false,
   "presets": {
     "claude-opus": {
-      "model": "claude-opus-4-8",
       "provider": "anthropic",
+      "model": "claude-opus-4-8",
       "thinkingLevel": "high"
     },
     "gpt": {
-      "model": "gpt-5.5",
       "provider": "openai-codex",
+      "model": "gpt-5.5",
       "thinkingLevel": "medium"
     }
   },
