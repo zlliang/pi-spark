@@ -1,5 +1,5 @@
 import { CreditsManager } from "./src/manager";
-import { isUsage } from "./src/usage";
+import { isUsage } from "./src/utils";
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
