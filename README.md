@@ -19,3 +19,7 @@ Install from git:
 ```bash
 pi install git:github.com/zlliang/pi-credits
 ```
+
+## Other pi packages
+
+- [pi-spark](https://github.com/zlliang/pi-spark): a small, opinionated collection of pi extensions.
