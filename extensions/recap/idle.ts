@@ -1,6 +1,32 @@
+import { ms } from "ms";
 import * as z from "zod";
 
-export const idleTimeoutSchema = z.number().min(5000);
+import type { StringValue } from "ms";
+
+const MIN_IDLE_MS = 5_000;
+
+/** Accept a millisecond number or a human-readable duration (e.g. "3m"), normalized to milliseconds. */
+export const idleTimeoutSchema = z
+  .union([z.number(), z.string()])
+  .transform((value, ctx) => {
+    if (typeof value === "number") return value;
+
+    let parsed: number;
+    try {
+      parsed = ms(value as StringValue);
+    } catch (error) {
+      ctx.addIssue({ code: "custom", message: error instanceof Error ? error.message : String(error) });
+      return z.NEVER;
+    }
+
+    if (Number.isNaN(parsed)) {
+      ctx.addIssue({ code: "custom", message: `Value is not a valid duration. value=${JSON.stringify(value)}` });
+      return z.NEVER;
+    }
+
+    return parsed;
+  })
+  .pipe(z.number().min(MIN_IDLE_MS));
 
 type IdleTimeout = z.infer<typeof idleTimeoutSchema>;
 type IdleHash = string | number | boolean;

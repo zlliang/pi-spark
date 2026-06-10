@@ -57,7 +57,7 @@ Example:
     }
   },
   "recap": {
-    "idle": 180000,
+    "idle": "5m",
     "model": "gpt-5.4-mini",
     "provider": "openai-codex",
     "thinkingLevel": "off"
@@ -98,7 +98,8 @@ Use presets in these ways:
 ### Recap
 
 - pi-spark can generate a short recap after the session has been idle or when you run `/recap` manually.
-- The `recap.idle` value is in milliseconds and must be at least `5000`. The recap model can be customized with `provider`, `model`, and `thinkingLevel`.
+- The `recap.idle` value sets how long the session must stay idle before a recap is generated. It accepts either a millisecond number or a human-readable duration string parsed by [vercel/ms](https://github.com/vercel/ms) (e.g. `"3m"`, `"30s"`, `"2 minutes"`), and must resolve to at least 5000ms.
+- The recap model can be customized with `provider`, `model`, and `thinkingLevel`.
 
 ## Recommended pi settings
 

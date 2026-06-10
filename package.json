@@ -28,6 +28,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "ms": "4.0.0-nightly.202508271359",
     "zod": "^4.4.3"
   },
   "peerDependencies": {
