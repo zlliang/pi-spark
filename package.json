@@ -1,0 +1,27 @@
+{
+  "name": "pi-credits",
+  "version": "0.0.0",
+  "description": "A pi extension that shows the active provider's credit balance or rate-limit usage",
+  "keywords": ["pi-coding-agent", "pi-package"],
+  "repository": { "type": "git", "url": "git+https://github.com/zlliang/pi-credits.git" },
+  "license": "MIT",
+  "type": "module",
+  "files": ["extensions", "README.md", "LICENSE"],
+  "pi": { "extensions": ["./extensions"] },
+  "scripts": { "typecheck": "tsc --noEmit" },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@types/node": "*",
+    "typescript": "^6.0.3"
+  }
+}
