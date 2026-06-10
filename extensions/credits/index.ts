@@ -1,4 +1,4 @@
-import { CodexUsageManager } from "./manager";
+import { CreditsManager } from "./manager";
 import { loadConfig } from "../shared/config";
 import { isUsage } from "../shared/usage";
 
@@ -13,39 +13,39 @@ function hasCost(message: AgentMessage): boolean {
 }
 
 export default function (pi: ExtensionAPI) {
-  let codexUsageManager: CodexUsageManager | undefined = undefined;
+  let creditsManager: CreditsManager | undefined = undefined;
 
   pi.on("session_start", (_event, ctx) => {
     if (!ctx.hasUI) return;
 
-    const config = loadConfig(ctx, "codexUsage");
+    const config = loadConfig(ctx, "credits");
     if (!config) return;
 
-    codexUsageManager = new CodexUsageManager();
-    codexUsageManager.refresh(ctx);
+    creditsManager = new CreditsManager();
+    creditsManager.refresh(ctx);
   });
 
   pi.on("model_select", (_event, ctx) => {
-    codexUsageManager?.refresh(ctx);
+    creditsManager?.refresh(ctx);
   });
 
   pi.on("turn_end", (event, ctx) => {
     if (!hasCost(event.message)) return;
 
-    codexUsageManager?.refresh(ctx);
+    creditsManager?.refresh(ctx);
   });
 
   pi.on("session_compact", (_event, ctx) => {
-    codexUsageManager?.refresh(ctx);
+    creditsManager?.refresh(ctx);
   });
 
   pi.on("session_tree", (event, ctx) => {
     if (!event.summaryEntry) return;
 
-    codexUsageManager?.refresh(ctx);
+    creditsManager?.refresh(ctx);
   });
 
   pi.on("session_shutdown", () => {
-    codexUsageManager = undefined;
+    creditsManager = undefined;
   });
 }

@@ -6,7 +6,7 @@ A small, opinionated collection of [pi](https://pi.dev/) extensions.
 
 ## Extensions
 
-- **Codex usage:** shows your OpenAI Codex (ChatGPT) rate-limit usage as a footer status when a Codex model is active.
+- **Credits:** shows the active provider's credit balance or rate-limit usage as a footer status.
 - **Editor:** replaces the default editor with a compact working indicator (inspired by [Amp](https://ampcode.com/)) and current model info.
 - **Footer:** shows session information, extension statuses, cost, and context usage on one line.
 - **Fullscreen:** clears the screen and scrollback on session start, pins the editor and footer to the bottom for a full-screen session, and clears again on exit.
@@ -65,9 +65,10 @@ Example:
 }
 ```
 
-### Codex usage
+### Credits
 
-- pi-spark queries the ChatGPT backend and shows your Codex 5-hour (`5h`) and 7-day (`7d`) rate-limit usage as a footer status, refreshing on session start, model change, and after billable turns. The status appears only while a Codex (`openai-codex`) model is active and uses its stored OAuth credential.
+- pi-spark shows the active model provider's credits as a footer status. The status appears only while a supported provider is active and uses that provider's stored credential or API key.
+- Supported providers: OpenAI Codex, OpenRouter, and Vercel AI Gateway.
 
 ### Editor
 
@@ -98,7 +99,7 @@ Use presets in these ways:
 ### Recap
 
 - pi-spark can generate a short recap after the session has been idle or when you run `/recap` manually.
-- The `recap.idle` value sets how long the session must stay idle before a recap is generated. It accepts either a millisecond number or a human-readable duration string parsed by [vercel/ms](https://github.com/vercel/ms) (e.g. `"3m"`, `"30s"`, `"2 minutes"`), and must resolve to at least 5000ms.
+- The `recap.idle` value sets how long the session must stay idle before a recap is generated. It accepts either a millisecond number or a human-readable duration string parsed by [vercel/ms](https://github.com/vercel/ms) (e.g., `"3m"`, `"30s"`, `"2 minutes"`), and must resolve to at least 5000ms.
 - The recap model can be customized with `provider`, `model`, and `thinkingLevel`.
 
 ## Recommended pi settings

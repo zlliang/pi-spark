@@ -5,7 +5,7 @@ import type { StringValue } from "ms";
 
 const MIN_IDLE_MS = 5_000;
 
-/** Accept a millisecond number or a human-readable duration (e.g. "3m"), normalized to milliseconds. */
+/** Accept a millisecond number or a human-readable duration (e.g., "3m"), normalized to milliseconds. */
 export const idleTimeoutSchema = z
   .union([z.number(), z.string()])
   .transform((value, ctx) => {
