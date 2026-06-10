@@ -13,7 +13,6 @@ A small, opinionated collection of [pi](https://pi.dev/) extensions.
 - **Name:** exposes a `name` tool so the agent can give the current session a concise, recognizable name in the session selector.
 - **Presets:** switches named model presets with `/preset`, `--preset`, and quick cycle shortcuts.
 - **Recap:** generates a short idle-session recap and exposes a `/recap` command for manual generation, inspired by [Claude Code's session recap](https://code.claude.com/docs/en/interactive-mode#session-recap).
-- **Trust all:** bypasses pi's project trust dialog, added in 0.79.0, and removes saved trust decisions so startup stays minimal.
 
 ![Screenshot](./assets/screenshot.png)
 
@@ -101,7 +100,14 @@ Use presets in these ways:
 - pi-spark can generate a short recap after the session has been idle or when you run `/recap` manually.
 - The `recap.idle` value is in milliseconds and must be at least `5000`. The recap model can be customized with `provider`, `model`, and `thinkingLevel`.
 
-### Trust all
+## Recommended pi settings
 
-- pi-spark always answers pi's project trust check with `yes` and removes `~/.pi/agent/trust.json` on startup.
-- This keeps the experience minimal after the project trust dialog added in pi 0.79.0. Follow [earendil-works/pi#5514](https://github.com/earendil-works/pi/issues/5514) for discussion. If pi ships a better default experience in the future, this extension may be deleted.
+[Pi 0.79.0](https://pi.dev/news/releases/0.79.0) added a project trust dialog that asks before loading project-local resources ([earendil-works/pi#5514](https://github.com/earendil-works/pi/issues/5514)), and [pi 0.79.1](https://pi.dev/news/releases/0.79.1) made the default behavior configurable via `defaultProjectTrust`. To keep startup minimal, set it to `"always"` in `~/.pi/agent/settings.json` (or change it with `/settings`):
+
+```json
+{
+  "defaultProjectTrust": "always"
+}
+```
+
+Project trust is an [input-loading guard](https://pi.dev/docs/latest/security#project-trust), so use `"always"` only if you trust the projects you open.
