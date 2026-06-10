@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0](https://github.com/zlliang/pi-spark/compare/v0.7.0...v0.8.0) (2026-06-10)
+
+
+### Features
+
+* **credits:** generalize codex-usage into multi-provider credits ([84ffc8e](https://github.com/zlliang/pi-spark/commit/84ffc8e25256619a6b82759095be554433de15d0))
+* move credits extension to the dedicated pi-credits package ([2d1e868](https://github.com/zlliang/pi-spark/commit/2d1e868f2c541c3707c9564ccdedaf80f40a7be5))
+
 ## [0.7.0](https://github.com/zlliang/pi-spark/compare/v0.6.3...v0.7.0) (2026-06-10)
 
 
