@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/zlliang/pi-credits/compare/v0.2.0...v0.3.0) (2026-06-11)
+
+
+### Features
+
+* add Moonshot (Kimi API) credits provider ([09c107f](https://github.com/zlliang/pi-credits/commit/09c107f91ee2695ad17f7b31d05ad2065b0eb4a5))
+
 ## [0.2.0](https://github.com/zlliang/pi-credits/compare/v0.1.2...v0.2.0) (2026-06-11)
 
 
