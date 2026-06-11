@@ -15,7 +15,7 @@ interface DeepSeekBalanceInfo {
 }
 
 export const deepseekProvider: CreditsProvider = {
-  provider: PROVIDER,
+  id: PROVIDER,
   label: "DeepSeek",
 
   async fetch(_ctx, apiKey, signal): Promise<Credits> {

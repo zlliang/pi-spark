@@ -18,7 +18,7 @@ export interface CreditsLane {
 
 /** A credits source for a pi provider, shown in the status line while that provider is active. */
 export interface CreditsProvider {
-  readonly provider: Provider;
+  readonly id: Provider;
   readonly label: string;
   fetch(ctx: ExtensionContext, apiKey: string, signal: AbortSignal): Promise<Credits>;
 }

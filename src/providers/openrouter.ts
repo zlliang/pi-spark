@@ -13,7 +13,7 @@ interface OpenRouterCreditsResponse {
 }
 
 export const openrouterProvider: CreditsProvider = {
-  provider: PROVIDER,
+  id: PROVIDER,
   label: "OpenRouter",
 
   async fetch(_ctx, apiKey, signal): Promise<Credits> {

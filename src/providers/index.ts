@@ -18,5 +18,5 @@ const PROVIDERS: CreditsProvider[] = [
 ];
 
 export function findProvider(provider?: string): CreditsProvider | undefined {
-  return PROVIDERS.find((entry) => entry.provider === provider);
+  return PROVIDERS.find((entry) => entry.id === provider);
 }

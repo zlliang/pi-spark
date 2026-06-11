@@ -9,6 +9,7 @@ const REQUEST_TIMEOUT_MS = 30_000;
 
 export class CreditsManager {
   private inflight: AbortController | undefined = undefined;
+  private currentProvider: string | undefined = undefined;
 
   async refresh(ctx: ExtensionContext): Promise<void> {
     this.inflight?.abort();
@@ -16,8 +17,15 @@ export class CreditsManager {
     const provider = findProvider(ctx.model?.provider);
     if (!provider) {
       this.inflight = undefined;
+      this.currentProvider = undefined;
       ctx.ui.setStatus(STATUS_KEY, undefined);
       return;
+    }
+
+    // Clear stale credits from another provider while the new fetch is in flight.
+    if (this.currentProvider !== provider.id) {
+      this.currentProvider = provider.id;
+      ctx.ui.setStatus(STATUS_KEY, undefined);
     }
 
     const controller = new AbortController();
@@ -30,7 +38,7 @@ export class CreditsManager {
 
   private async fetch(ctx: ExtensionContext, provider: CreditsProvider, signal: AbortSignal): Promise<void> {
     try {
-      const apiKey = await ctx.modelRegistry.getApiKeyForProvider(provider.provider);
+      const apiKey = await ctx.modelRegistry.getApiKeyForProvider(provider.id);
       if (!apiKey) {
         ctx.ui.setStatus(STATUS_KEY, undefined);
         return;
@@ -42,12 +50,12 @@ export class CreditsManager {
       const credits = await provider.fetch(ctx, apiKey, AbortSignal.any(signals));
 
       // The active model may have changed while the request was in flight.
-      if (ctx.model?.provider !== provider.provider) return;
+      if (ctx.model?.provider !== provider.id) return;
 
       ctx.ui.setStatus(STATUS_KEY, renderCredits(ctx.ui.theme, provider.label, credits));
     } catch (error) {
       if (signal.aborted || ctx.signal?.aborted) return;
-      if (ctx.model?.provider !== provider.provider) return;
+      if (ctx.model?.provider !== provider.id) return;
 
       const message = error instanceof Error ? error.message : String(error);
       ctx.ui.setStatus(STATUS_KEY, renderError(ctx.ui.theme, provider.label, message));

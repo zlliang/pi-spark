@@ -13,9 +13,9 @@ interface MoonshotBalanceResponse {
  * different currencies (USD vs CNY), which the endpoint does not report, so each pi provider ID
  * fixes both host and currency.
  */
-function createMoonshotProvider(provider: string, host: string, currency: string): CreditsProvider {
+function createMoonshotProvider(id: string, host: string, currency: string): CreditsProvider {
   return {
-    provider,
+    id,
     label: "Moonshot",
 
     async fetch(_ctx, apiKey, signal): Promise<Credits> {

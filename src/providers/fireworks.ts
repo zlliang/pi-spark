@@ -99,7 +99,7 @@ function moneyToNumber(money: Money | null | undefined): number | undefined {
 }
 
 export const fireworksProvider: CreditsProvider = {
-  provider: PROVIDER,
+  id: PROVIDER,
   label: "Fireworks",
 
   async fetch(_ctx, apiKey, signal): Promise<Credits> {

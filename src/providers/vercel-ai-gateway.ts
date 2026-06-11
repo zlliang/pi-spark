@@ -10,7 +10,7 @@ interface VercelCreditsResponse {
 }
 
 export const vercelAiGatewayProvider: CreditsProvider = {
-  provider: PROVIDER,
+  id: PROVIDER,
   label: "Vercel",
 
   async fetch(_ctx, apiKey, signal): Promise<Credits> {
