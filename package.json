@@ -15,6 +15,7 @@
   "files": [
     "index.ts",
     "src",
+    "docs",
     "assets",
     "README.md",
     "LICENSE"
@@ -27,6 +28,10 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.4",
+    "@grpc/proto-loader": "^0.8.1"
   },
   "peerDependencies": {
     "@earendil-works/pi-agent-core": "*",

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+// Minimal slice of the Fireworks control-plane gateway API (`gateway.Gateway`), reconstructed from
+// the `firectl` binary. Only the messages and RPCs needed to read an account's credit balance are
+// declared here.
+package gateway;
+
+// Mirrors google.type.Money.
+message Money {
+  string currency_code = 1;
+  int64 units = 2;
+  int32 nanos = 3;
+}
+
+message Balance {
+  Money money = 1;
+}
+
+message GetBalanceRequest {
+  string name = 1; // resource name, e.g., "accounts/<account_id>"
+}
+
+message Account {
+  string name = 1; // resource name, e.g., "accounts/<account_id>"
+  string display_name = 2;
+}
+
+message ListAccountsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+}
+
+message ListAccountsResponse {
+  repeated Account accounts = 1;
+  string next_page_token = 2;
+  int32 total_size = 3;
+}
+
+service Gateway {
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse);
+  rpc GetBalance(GetBalanceRequest) returns (Balance);
+}

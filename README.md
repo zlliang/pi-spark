@@ -11,11 +11,12 @@ A [pi](https://pi.dev/) extension that shows the active model provider's credit 
 ## Supported providers
 
 - DeepSeek
+- Fireworks
 - OpenAI Codex
 - OpenRouter
 - Vercel AI Gateway
 
-The provider-specific fetching approaches are strongly inspired by [CodexBar](https://github.com/steipete/codexbar).
+Most provider-specific fetching approaches references [CodexBar](https://github.com/steipete/codexbar). Fireworks is an exception: its balance lives behind an internal gRPC API, so the approach was reverse-engineered from the `firectl` binary — see [docs/fireworks.md](./docs/fireworks.md).
 
 ## Install
 
