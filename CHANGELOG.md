@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.3](https://github.com/zlliang/pi-spark/compare/v0.9.2...v0.9.3) (2026-06-12)
+
+
+### Bug Fixes
+
+* **models:** align action description order ([3de17c1](https://github.com/zlliang/pi-spark/commit/3de17c1d5f341eeb8673c70060a8dcb8febe8f5c))
+* update model and name extension exports ([68b5191](https://github.com/zlliang/pi-spark/commit/68b51916c89717ac26ccafb863d420d16dd0423c))
+
 ## [0.9.2](https://github.com/zlliang/pi-spark/compare/v0.9.1...v0.9.2) (2026-06-12)
 
 
