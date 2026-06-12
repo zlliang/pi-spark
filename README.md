@@ -80,8 +80,8 @@ Example:
 ### Models
 
 - The agent can call the `model` tool with two actions:
-  - `list`: lists models with their metadata, with optional `scope`, `provider` and `model` substring filters, and `offset`/`limit` paging.
-  - `current`: gets the active provider, model, and thinking level.
+  - `active`: gets the active provider, model, and thinking level.
+  - `list`: lists models with their metadata, with an optional [Liqe](https://github.com/gajus/liqe) (Lucene-like) `query` over model fields and `offset`/`limit` paging.
 
 ### Name
 
