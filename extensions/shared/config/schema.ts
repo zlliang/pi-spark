@@ -3,6 +3,7 @@ import * as z from "zod";
 import { editorConfigSchema } from "../../editor/config";
 import { footerConfigSchema } from "../../footer/config";
 import { fullscreenConfigSchema } from "../../fullscreen/config";
+import { modelsConfigSchema } from "../../models/config";
 import { nameConfigSchema } from "../../name/config";
 import { presetsConfigSchema } from "../../presets/config";
 import { recapConfigSchema } from "../../recap/config";
@@ -11,6 +12,7 @@ export const configSchemas = {
   editor: editorConfigSchema,
   footer: footerConfigSchema,
   fullscreen: fullscreenConfigSchema,
+  models: modelsConfigSchema,
   name: nameConfigSchema,
   presets: presetsConfigSchema,
   recap: recapConfigSchema,

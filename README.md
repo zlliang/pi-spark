@@ -9,6 +9,7 @@ A small, opinionated collection of [pi](https://pi.dev/) extensions.
 - **Editor:** replaces the default editor with a compact working indicator (inspired by [Amp](https://ampcode.com/)) and current model info.
 - **Footer:** shows session information, extension statuses, cost, and context usage on one line.
 - **Fullscreen:** clears the screen and scrollback on session start, pins the editor and footer to the bottom for a full-screen session, and clears again on exit.
+- **Models:** exposes a `model` tool so the agent can list the models the user can use currently and inspect the provider, model, and thinking level in use.
 - **Name:** exposes a `name` tool so the agent can give the current session a concise, recognizable name in the session selector.
 - **Presets:** switches named model presets with `/preset`, `--preset`, and quick cycle shortcuts.
 - **Recap:** generates a short idle-session recap and exposes a `/recap` command for manual generation, inspired by [Claude Code's session recap](https://code.claude.com/docs/en/interactive-mode#session-recap).
@@ -75,6 +76,12 @@ Example:
 ### Fullscreen
 
 - pi-spark clears the screen and scrollback at session start and exit, pins the editor and footer to the bottom, and enables pi's `clearOnShrink` behavior programmatically so pinned UI stays aligned after taller components close.
+
+### Models
+
+- The agent can call the `model` tool with two actions:
+  - `list`: gets all currently usable models with their metadata, with optional `provider` and `model` substring filters and `offset`/`limit` paging.
+  - `current`: gets the active provider, model, and thinking level.
 
 ### Name
 
