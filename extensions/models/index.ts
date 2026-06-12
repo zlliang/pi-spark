@@ -1,5 +1,5 @@
 import { clampThinkingLevel, getSupportedThinkingLevels, StringEnum } from "@earendil-works/pi-ai";
-import { DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, truncateHead } from "@earendil-works/pi-coding-agent";
+import { DEFAULT_MAX_BYTES, DEFAULT_MAX_LINES, keyText, truncateHead } from "@earendil-works/pi-coding-agent";
 import { Container, Spacer, Text } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
 
@@ -70,13 +70,15 @@ export default function (pi: ExtensionAPI) {
           description: "For list: maximum number of models to return"
         })),
       }),
-      renderCall(args, theme) {
+      renderCall(args, theme, { expanded }) {
         let text = `${theme.bold(theme.fg("toolTitle", "model"))} ${theme.fg("accent", args.action)}`;
 
         if (args.provider) text += theme.fg("muted", ` provider:${args.provider}`);
         if (args.model) text += theme.fg("muted", ` model:${args.model}`);
         if (args.offset !== undefined || args.limit !== undefined) text += theme.fg("warning", ` from:${args.offset ?? 1}`);
         if (args.limit !== undefined) text += theme.fg("warning", ` to:${(args.offset ?? 1) + args.limit - 1}`);
+
+        if (!expanded) text += theme.fg("dim", ` (${keyText("app.tools.expand")} to expand)`);
 
         return new Text(text, 0, 0);
       },
