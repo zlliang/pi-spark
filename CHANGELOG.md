@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/zlliang/pi-spark/compare/v0.9.0...v0.9.1) (2026-06-12)
+
+
+### Bug Fixes
+
+* **models:** polish model tool prompt guideline ([eb01e6b](https://github.com/zlliang/pi-spark/commit/eb01e6b5a3b5dd180d32b9a9c8e06e4b90f42036))
+
 ## [0.9.0](https://github.com/zlliang/pi-spark/compare/v0.8.0...v0.9.0) (2026-06-12)
 
 
