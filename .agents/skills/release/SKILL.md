@@ -1,85 +1,55 @@
 ---
 name: release
-description: Releases one or more packages from the pi-packages monorepo via Release Please. Use when asked to release pi-credits, pi-spark, publish a new version, or apply a patch/minor/major or explicit version release.
+description: Releases pi packages to npm via Release Please. Use when asked to publish a new version or apply a patch/minor/major or explicit-version release.
 ---
 
 # Release
 
-This monorepo releases through [Release Please](https://github.com/googleapis/release-please) in manifest mode. The workflow `.github/workflows/release.yml` runs on every push to `main`. It:
+This monorepo publishes to npm via [Release Please](https://github.com/googleapis/release-please) (manifest mode). Pushing to `main` runs `.github/workflows/release.yml`.
 
-1. Parses conventional commits and changed paths for each package.
-2. Opens or updates a release PR that bumps package versions, package changelogs, and `.release-please-manifest.json`.
-3. On merge, creates component tags and GitHub releases, then publishes the released package workspaces to npm with provenance.
+Package paths, components, tag format, and current versions live in `release-please-config.json` and `.release-please-manifest.json`.
 
-Packages:
+## Choose the version
 
-- `pi-credits` at `packages/pi-credits`
-- `pi-spark` at `packages/pi-spark`
+- Releasable `feat`/`fix` commits are already on `main` → Release Please computes the next version. Skip to "Merge the release PR".
+- Otherwise (docs/chore-only changes, or to force a specific version) → drive the release with a `Release-As` footer.
 
-Tags include the component name, for example `pi-credits-v0.3.2` or `pi-spark-v0.10.3`.
+## Commit with `Release-As`
 
-## Decide the package and version
+Use one commit per package being released, each carrying a `Release-As: x.y.z` footer that sets that package's next version:
 
-Determine what the user asked for:
-
-- **No package given** → inspect the release PR and report which packages Release Please plans to release.
-- **Package given** (`pi-credits` or `pi-spark`) → verify the release PR changes only that package unless the user requested multiple packages.
-- **No version and no type given** → use the default version Release Please computed from conventional commits.
-- **Explicit version given** (for example `0.10.3`) → use it verbatim for the named package.
-- **Bump type given** (`patch`, `minor`, `major`) → compute the target version from that package's current `package.json` version.
-
-When a version or type is given, confirm the target package and version if there is any ambiguity before pushing.
-
-## Record a `Release-As` override
-
-Only for an explicit version or bump type. Add a `Release-As: x.y.z` footer to a commit. The commit must touch the target package path so Release Please associates the release with the right component.
-
-Prefer attaching the footer to a real change for that package. When releasing several packages at once, use one commit per package so each `Release-As` footer maps to a single component, for example:
+- The commit has real changes for the package → put the footer on that same commit (scoped to the package path).
+- You only need to trigger a release → use an empty commit, scoped to the package.
 
 ```bash
-git commit -m "chore(pi-spark): refine metadata" -m "Release-As: 0.11.0" -- packages/pi-spark
-git commit -m "chore(pi-credits): refine metadata" -m "Release-As: 0.4.0" -- packages/pi-credits
-git push
+# alongside real changes
+git commit -m "docs(pi-spark): polish README" -m "Release-As: 0.11.1" -- packages/pi-spark
+
+# release-only, nothing else to change
+git commit --allow-empty -m "chore(pi-credits): release 0.4.1" -m "Release-As: 0.4.1"
 ```
 
-If there is no code change to carry the footer, make an empty-content commit that still touches the package path (for example, a one-line note in the package README) rather than introducing a throwaway trigger file. After the workflow updates the release PR, verify the PR. Do not hand-edit release PR version bumps unless Release Please failed.
+Commit shared or CI changes separately, without a footer. Then `git push origin main`.
 
-## Merge and pull the release PR
+## Merge the release PR
 
-Find the open release PR:
-
-```bash
-gh pr list --label "autorelease: pending" --state open --json number,title,headRefName
-```
-
-If none is open, Release Please has not produced one yet. There may be no releasable commits, or the workflow from a `Release-As` push is still running. Re-check after the run finishes; do not hand-create the PR.
-
-Inspect the release PR:
+Release Please opens or updates a single PR labeled `autorelease: pending`. If none appears, the run is still going or there are no releasable commits — re-check after the run; don't hand-create it.
 
 ```bash
-gh pr view <number> --json title,body,files
-```
-
-Verify that the changed files match the intended release. Expected files include:
-
-- `.release-please-manifest.json`
-- `pnpm-lock.yaml`
-- `packages/pi-credits/CHANGELOG.md`
-- `packages/pi-credits/package.json`
-- `packages/pi-spark/CHANGELOG.md`
-- `packages/pi-spark/package.json`
-
-Then squash merge the PR and update local `main`:
-
-```bash
+gh pr list --label "autorelease: pending" --state open --json number,title
+gh pr view <number> --json files   # expect only the manifest, CHANGELOGs, and package.json bumps
 gh pr merge <number> --squash
 git checkout main && git pull
 ```
 
-Merging triggers the workflow again to create component tags, create GitHub releases, and publish changed packages to npm. Optionally watch it:
+Don't hand-edit the version bumps. Merging triggers the workflow again to tag, create GitHub releases, and publish to npm.
+
+## Verify
+
+Watch the publish run triggered by the merge:
 
 ```bash
 gh run watch "$(gh run list --workflow=release.yml --branch=main --limit=1 --json databaseId -q '.[0].databaseId')"
 ```
 
-Report the released package versions and release URLs when done.
+Report the released versions and release URLs.
