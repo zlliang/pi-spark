@@ -11,10 +11,6 @@
     "url": "git+https://github.com/zlliang/pi-packages.git",
     "directory": "packages/pi-credits"
   },
-  "homepage": "https://github.com/zlliang/pi-packages/tree/main/packages/pi-credits#readme",
-  "bugs": {
-    "url": "https://github.com/zlliang/pi-packages/issues"
-  },
   "license": "MIT",
   "type": "module",
   "files": [
@@ -29,9 +25,6 @@
       "./index.ts"
     ],
     "image": "https://raw.githubusercontent.com/zlliang/pi-packages/main/packages/pi-credits/assets/cover.png"
-  },
-  "scripts": {
-    "typecheck": "pnpm --dir ../.. typecheck"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.4",

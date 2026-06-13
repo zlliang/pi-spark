@@ -2,7 +2,7 @@
 
 # pi-spark
 
-A small, opinionated collection of [pi](https://pi.dev/) extensions.
+A collection of [pi](https://pi.dev/) extensions that polish the daily pi experience.
 
 ## Extensions
 

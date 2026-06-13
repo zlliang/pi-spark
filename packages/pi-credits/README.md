@@ -35,4 +35,4 @@ pi install /path/to/pi-packages/packages/pi-credits
 
 ## Other pi packages
 
-- [pi-spark](https://github.com/zlliang/pi-packages/tree/main/packages/pi-spark): a small, opinionated collection of pi extensions.
+- [pi-spark](https://github.com/zlliang/pi-packages/tree/main/packages/pi-spark): a collection of pi extensions that polish the daily pi experience.

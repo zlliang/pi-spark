@@ -1,7 +1,7 @@
 {
   "name": "pi-spark",
   "version": "0.10.5",
-  "description": "A small, opinionated collection of pi extensions",
+  "description": "A collection of pi extensions that polish the daily pi experience",
   "keywords": [
     "pi-coding-agent",
     "pi-package"
@@ -10,10 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/zlliang/pi-packages.git",
     "directory": "packages/pi-spark"
-  },
-  "homepage": "https://github.com/zlliang/pi-packages/tree/main/packages/pi-spark#readme",
-  "bugs": {
-    "url": "https://github.com/zlliang/pi-packages/issues"
   },
   "license": "MIT",
   "type": "module",
@@ -27,9 +23,6 @@
       "./extensions"
     ],
     "image": "https://raw.githubusercontent.com/zlliang/pi-packages/main/packages/pi-spark/assets/cover.png"
-  },
-  "scripts": {
-    "typecheck": "pnpm --dir ../.. typecheck"
   },
   "dependencies": {
     "liqe": "^3.8.7",
