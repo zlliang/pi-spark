@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.1](https://github.com/zlliang/pi-packages/compare/pi-credits-v0.4.0...pi-credits-v0.4.1) (2026-06-13)
+
+
+### Documentation
+
+* **pi-credits:** polish README and metadata ([8a7aef9](https://github.com/zlliang/pi-packages/commit/8a7aef91ebdac2bdbdd6d38a69d9e72a8a520e61))
+
 ## [0.4.0](https://github.com/zlliang/pi-packages/compare/pi-credits-v0.3.4...pi-credits-v0.4.0) (2026-06-13)
 
 

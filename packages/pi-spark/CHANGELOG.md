@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.11.0...pi-spark-v0.11.1) (2026-06-13)
+
+
+### Documentation
+
+* **pi-spark:** polish README and metadata ([382de1a](https://github.com/zlliang/pi-packages/commit/382de1aeaa48de7d874d088cba60b6ff1e60d42d))
+
 ## [0.11.0](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.5...pi-spark-v0.11.0) (2026-06-13)
 
 
