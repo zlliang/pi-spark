@@ -1,6 +1,6 @@
 {
   "name": "pi-spark",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "A collection of pi extensions that polish the daily pi experience",
   "keywords": [
     "pi-coding-agent",
