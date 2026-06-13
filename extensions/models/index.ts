@@ -16,6 +16,9 @@ const DEFAULT_THINKING_LEVEL: ModelThinkingLevel = "medium";
 /** Maximum number of models returned per list call; byte size is unrestricted. */
 const LIST_MAX_LINES = 200;
 
+/** Maximum number of model rows shown when the result is collapsed. */
+const COLLAPSED_MAX_ROWS = 10;
+
 type ModelMetadata = Omit<Model<Api>, "headers" | "compat"> & {
   thinkingLevels: ModelThinkingLevel[];
   defaultThinkingLevel: ModelThinkingLevel;
@@ -57,6 +60,16 @@ function toModelRow(model: ModelMetadata, thinkingLevel?: ModelThinkingLevel): M
 /** Round to at most 2 decimals and trim float noise: 0.7999... -> 0.8, 0.0983 -> 0.1, 15 -> 15. */
 function formatPrice(value: number): string {
   return String(parseFloat(value.toFixed(2)));
+}
+
+/** Notice line describing truncation or remaining pages, shared by the text result and the TUI. */
+function formatListNotice(truncated: boolean, startIndex: number, endDisplay: number, total: number): string | undefined {
+  const nextOffset = endDisplay + 1;
+
+  if (truncated) return `[Truncated: showing models ${startIndex + 1}-${endDisplay} of ${total}. Use offset=${nextOffset} to continue.]`;
+  if (endDisplay < total) return `[${total - endDisplay} more models in list. Use offset=${nextOffset} to continue.]`;
+
+  return undefined;
 }
 
 export default function (pi: ExtensionAPI) {
@@ -162,15 +175,27 @@ export default function (pi: ExtensionAPI) {
         const models = details.models ?? [];
         const total = details.total ?? models.length;
 
-        if (models.length > 0 && expanded) {
-          addRows(models.map((model) => toModelRow(model)));
+        if (models.length > 0) {
+          const maxRows = expanded ? models.length : Math.min(models.length, COLLAPSED_MAX_ROWS);
+          addRows(models.slice(0, maxRows).map((model) => toModelRow(model)));
+
+          const hiddenRows = models.length - maxRows;
+          if (hiddenRows > 0) container.addChild(new Text(theme.fg("dim", `... (${hiddenRows} more, ${keyText("app.tools.expand")} to expand)`), 0, 0));
           container.addChild(new Spacer(1));
         }
 
-        const summary = total > 0 ? `${models.length !== total ? `${models.length} of ` : ""}${total} ${filtered ? "matched " : ""}model${total === 1 ? "" : "s"} listed.` : `No models ${filtered ? "matched" : "found"}.`;
-        const truncatedHint = details.truncation?.truncated ? theme.fg("warning", " (truncated)") : "";
-        const expandHint = models.length > 0 && !expanded ? theme.fg("dim", ` (${keyText("app.tools.expand")} to expand)`) : "";
-        container.addChild(new Text(theme.fg("muted", summary) + truncatedHint + expandHint, 0, 0));
+        if (details.truncation?.truncated) {
+          const startIndex = context.args.offset ? Math.max(0, context.args.offset - 1) : 0;
+          const endDisplay = startIndex + models.length;
+          const notice = formatListNotice(true, startIndex, endDisplay, total);
+          if (notice) {
+            container.addChild(new Text(theme.fg("warning", notice), 0, 0));
+            container.addChild(new Spacer(1));
+          }
+        }
+
+        const summary = `${models.length !== total ? `${models.length} of ` : ""}${total} ${filtered ? "matched " : ""}model${total === 1 ? "" : "s"} listed.`;
+        container.addChild(new Text(theme.fg("muted", total > 0 ? summary : `No models ${filtered ? "matched" : "found"}.`), 0, 0));
 
         return container;
       },
@@ -200,8 +225,7 @@ export default function (pi: ExtensionAPI) {
           }
         }
 
-        const models = ctx.modelRegistry.getAll()
-          .map((model) => toMetadata(model, ctx.modelRegistry.hasConfiguredAuth(model)));
+        const models = ctx.modelRegistry.getAll().map((model) => toMetadata(model, ctx.modelRegistry.hasConfiguredAuth(model)));
         const matched = listQuery ? filter(listQuery, models) : models;
         const total = matched.length;
 
@@ -229,14 +253,10 @@ export default function (pi: ExtensionAPI) {
 
         const delivered = truncation.truncated ? selected.slice(0, truncation.outputLines) : selected;
         const endDisplay = startIndex + delivered.length;
-        const nextOffset = endDisplay + 1;
 
         let text = truncation.content;
-        if (truncation.truncated) {
-          text += `\n\n[Truncated: showing models ${startIndex + 1}-${endDisplay} of ${total}. Use offset=${nextOffset} to continue.]`;
-        } else if (endDisplay < total) {
-          text += `\n\n[${total - endDisplay} more models in list. Use offset=${nextOffset} to continue.]`;
-        }
+        const notice = formatListNotice(truncation.truncated, startIndex, endDisplay, total);
+        if (notice) text += `\n\n${notice}`;
 
         return {
           content: [{ type: "text", text }],
