@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.4](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.3...pi-spark-v0.10.4) (2026-06-13)
+
+
+### Bug Fixes
+
+* add npm package homepage metadata ([9ff2e39](https://github.com/zlliang/pi-packages/commit/9ff2e39d609c3c0a39c45a6c6b456bde964fbaa8))
+
 ## [0.10.3](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.2...pi-spark-v0.10.3) (2026-06-13)
 
 

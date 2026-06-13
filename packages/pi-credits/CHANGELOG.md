@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/zlliang/pi-packages/compare/pi-credits-v0.3.2...pi-credits-v0.3.3) (2026-06-13)
+
+
+### Bug Fixes
+
+* add npm package homepage metadata ([9ff2e39](https://github.com/zlliang/pi-packages/commit/9ff2e39d609c3c0a39c45a6c6b456bde964fbaa8))
+
 ## [0.3.2](https://github.com/zlliang/pi-packages/compare/pi-credits-v0.3.1...pi-credits-v0.3.2) (2026-06-13)
 
 
