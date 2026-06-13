@@ -1,7 +1,7 @@
 {
   "name": "pi-credits",
   "version": "0.4.0",
-  "description": "A pi extension that shows the active provider's credit balance or rate-limit usage",
+  "description": "A pi extension that shows the active provider's credit balance or rate-limit usage.",
   "keywords": [
     "pi-coding-agent",
     "pi-package"
@@ -24,7 +24,7 @@
     "extensions": [
       "./index.ts"
     ],
-    "image": "https://raw.githubusercontent.com/zlliang/pi-packages/main/packages/pi-credits/assets/cover.png"
+    "image": "https://raw.githubusercontent.com/zlliang/pi-packages/main/assets/cover.png"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.4",

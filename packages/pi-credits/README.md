@@ -1,8 +1,6 @@
-![Cover](./assets/cover.png)
-
 # pi-credits
 
-A [pi](https://pi.dev/) extension that shows the active model provider's credit balance or rate-limit usage in the footer. It appears only for supported providers and uses the provider's stored credential or API key.
+A [pi](https://pi.dev/) extension that shows the active provider's credit balance or rate-limit usage.
 
 ![Screenshot](./assets/screenshot.png)
 
@@ -35,4 +33,4 @@ pi install /path/to/pi-packages/packages/pi-credits
 
 ## Other pi packages
 
-- [pi-spark](https://github.com/zlliang/pi-packages/tree/main/packages/pi-spark): a collection of pi extensions that polish the daily pi experience.
+See my [pi-packages](https://github.com/zlliang/pi-packages) repo for the full list.
