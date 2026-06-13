@@ -4,16 +4,9 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
-    inputs:
-      paths:
-        description: JSON array of package paths to publish
-        required: true
-        default: '["packages/pi-credits","packages/pi-spark"]'
 
 jobs:
   release-please:
-    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -29,30 +22,9 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  prepare-publish:
-    needs: release-please
-    if: ${{ always() }}
-    runs-on: ubuntu-latest
-    outputs:
-      should_publish: ${{ steps.prepare.outputs.should_publish }}
-      paths: ${{ steps.prepare.outputs.paths }}
-    steps:
-      - id: prepare
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo 'should_publish=true' >> "$GITHUB_OUTPUT"
-            echo 'paths=${{ inputs.paths }}' >> "$GITHUB_OUTPUT"
-          elif [[ "${{ needs.release-please.outputs.releases_created }}" == "true" ]]; then
-            echo 'should_publish=true' >> "$GITHUB_OUTPUT"
-            echo 'paths=${{ needs.release-please.outputs.paths_released }}' >> "$GITHUB_OUTPUT"
-          else
-            echo 'should_publish=false' >> "$GITHUB_OUTPUT"
-            echo 'paths=[]' >> "$GITHUB_OUTPUT"
-          fi
-
   publish:
-    needs: prepare-publish
-    if: ${{ always() && needs.prepare-publish.outputs.should_publish == 'true' }}
+    needs: release-please
+    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
     runs-on: ubuntu-latest
     environment: npm
     permissions:
@@ -61,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        path: ${{ fromJson(needs.prepare-publish.outputs.paths) }}
+        path: ${{ fromJson(needs.release-please.outputs.paths_released) }}
     steps:
       - uses: actions/checkout@v6
 
@@ -79,6 +51,5 @@ jobs:
 
       - run: pnpm typecheck
 
-      - run: |
-          cd "${{ matrix.path }}"
-          pnpm publish --provenance --access public
+      - run: pnpm publish --provenance --access public
+        working-directory: ${{ matrix.path }}
