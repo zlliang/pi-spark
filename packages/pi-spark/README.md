@@ -1,6 +1,6 @@
 # pi-spark
 
-A collection of [pi](https://pi.dev/) extensions that polish the daily pi experience.
+[Pi](https://pi.dev/) extensions that polish the daily experience.
 
 ## Extensions
 
