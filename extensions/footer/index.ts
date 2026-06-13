@@ -62,20 +62,10 @@ class FooterComponent implements Component {
   }
 
   private getStyledCostText(): string {
-    const cost = this.ctx.sessionManager.getBranch().reduce((acc, entry) => {
-      const entryUsage = getEntryUsage(this.ctx, entry);
-      if (entryUsage) acc[entryUsage.type] += entryUsage.usage.cost.total;
-      return acc;
-    }, { subscription: 0, paid: 0 });
+    const totalCost = this.ctx.sessionManager.getBranch().reduce((acc, entry) => acc + (getEntryUsage(entry)?.cost.total ?? 0), 0);
+    const costText = formatCost(totalCost);
 
-    const isSubscription = this.ctx.model ? this.ctx.modelRegistry.isUsingOAuth(this.ctx.model) : false;
-    const subscriptionCostText = isSubscription || cost.subscription >= 0.005 ? formatCost(cost.subscription, true) : undefined;
-    const paidCostText = !isSubscription || cost.paid >= 0.005 ? formatCost(cost.paid, false) : undefined;
-    const costText = [subscriptionCostText, paidCostText].filter(Boolean).join(" + ");
-
-    const totalCost = cost.subscription + cost.paid;
     if (totalCost > 20) return this.theme.fg("warning", costText);
-
     return this.theme.fg("dim", costText);
   }
 

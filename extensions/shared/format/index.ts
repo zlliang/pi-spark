@@ -24,8 +24,8 @@ export function formatContextUsage(contextUsage: ContextUsage | undefined): stri
   return `${tokens === null ? "?" : formatTokens(tokens)}/${contextWindow === null ? "?" : formatTokens(contextWindow)} (${percentText})`;
 }
 
-export function formatCost(cost: number, isSubscription: boolean): string {
-  return `$${cost.toFixed(2)}${isSubscription ? " (sub)" : ""}`;
+export function formatCost(cost: number): string {
+  return `$${cost.toFixed(2)}`;
 }
 
 export function formatCwd(cwd: string, home: string): string {

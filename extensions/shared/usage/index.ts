@@ -1,5 +1,5 @@
 import type { Usage } from "@earendil-works/pi-ai";
-import type { ExtensionContext, SessionEntry } from "@earendil-works/pi-coding-agent";
+import type { SessionEntry } from "@earendil-works/pi-coding-agent";
 
 /** Structural type guard for the pi `Usage` shape. */
 export function isUsage(value: unknown): value is Usage {
@@ -44,20 +44,17 @@ export function addUsage(a: Usage, b: Usage): Usage {
 }
 
 /**
- * Extract usage from a session entry, classifying it as subscription or paid.
+ * Extract usage from a session entry.
  *
- * `usage`/`provider`/`model` live in different fields depending on the entry type:
+ * `usage` live in different fields depending on the entry type:
  *
- * - `message` carries them on `.message`
- * - `custom` on `.data`
- * - `custom_message` on `.details`.
+ * - `message` carries them on `message`.
+ * - `custom` on `data`.
+ * - `custom_message` on `details`.
  *
  * Other entry types carry no usage. Returns `undefined` when the resolved field has no `usage`.
- *
- * An entry counts as subscription only when its `provider`/`model` resolve to an OAuth model in the
- * registry; everything else (including entries without `provider`/`model`) is treated as paid.
  */
-export function getEntryUsage(ctx: ExtensionContext, entry: SessionEntry): { type: "subscription" | "paid"; usage: Usage } | undefined {
+export function getEntryUsage(entry: SessionEntry): Usage | undefined {
   let source: unknown;
   if (entry.type === "message") source = entry.message;
   else if (entry.type === "custom") source = entry.data;
@@ -65,15 +62,8 @@ export function getEntryUsage(ctx: ExtensionContext, entry: SessionEntry): { typ
   else return;
 
   if (typeof source !== "object" || source === null) return;
-  const data = source as { usage?: unknown; provider?: unknown; model?: unknown };
+  const data = source as { usage?: unknown };
   if (!isUsage(data.usage)) return;
 
-  const type = isSubscription(ctx, data.provider, data.model) ? "subscription" : "paid";
-  return { type, usage: data.usage };
-}
-
-function isSubscription(ctx: ExtensionContext, provider: unknown, model: unknown): boolean {
-  if (typeof provider !== "string" || typeof model !== "string") return false;
-  const resolved = ctx.modelRegistry.find(provider, model);
-  return resolved ? ctx.modelRegistry.isUsingOAuth(resolved) : false;
+  return data.usage;
 }
