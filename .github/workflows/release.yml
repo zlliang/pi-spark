@@ -79,4 +79,6 @@ jobs:
 
       - run: pnpm typecheck
 
-      - run: pnpm --dir "${{ matrix.path }}" publish --provenance --access public
+      - run: |
+          cd "${{ matrix.path }}"
+          pnpm publish --provenance --access public
