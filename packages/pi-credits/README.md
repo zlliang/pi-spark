@@ -1,6 +1,6 @@
 # pi-credits
 
-A [pi](https://pi.dev/) extension that shows the active provider's credit balance or rate-limit usage.
+[Pi](https://pi.dev/) extension that shows the active provider's credit balance or rate-limit usage.
 
 ![Screenshot](./assets/screenshot.png)
 

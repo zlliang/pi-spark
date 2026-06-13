@@ -1,7 +1,7 @@
 {
   "name": "pi-credits",
   "version": "0.4.1",
-  "description": "A pi extension that shows the active provider's credit balance or rate-limit usage.",
+  "description": "Pi extension that shows the active provider's credit balance or rate-limit usage.",
   "keywords": [
     "pi-coding-agent",
     "pi-package"
