@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.12.0](https://github.com/zlliang/pi-spark/compare/v0.11.2...v0.12.0) (2026-06-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* fold pi-credits into pi-spark and revert to single package
+
+### Miscellaneous Chores
+
+* release 0.12.0 ([e80081a](https://github.com/zlliang/pi-spark/commit/e80081a2d352da108feea446d44fb63f9ecc68ff))
+
+
+### Code Refactoring
+
+* fold pi-credits into pi-spark and revert to single package ([3a1cbe3](https://github.com/zlliang/pi-spark/commit/3a1cbe360feeab02a1d8b8313eaf6b06b4f8d400))
+
 ## [0.11.2](https://github.com/zlliang/pi-spark/compare/v0.11.1...v0.11.2) (2026-06-13)
 
 
