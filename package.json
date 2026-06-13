@@ -1,11 +1,45 @@
 {
-  "name": "pi-packages",
-  "description": "A collection of my pi packages",
-  "private": true,
+  "name": "pi-spark",
+  "version": "0.11.2",
+  "description": "Pi extensions that polish the daily experience.",
+  "keywords": [
+    "pi-coding-agent",
+    "pi-package"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zlliang/pi-spark.git"
+  },
+  "license": "MIT",
   "type": "module",
-  "packageManager": "pnpm@11.6.0",
+  "files": [
+    "extensions",
+    "assets",
+    "README.md",
+    "LICENSE"
+  ],
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ],
+    "image": "https://raw.githubusercontent.com/zlliang/pi-spark/main/assets/cover.png"
+  },
   "scripts": {
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.4",
+    "@grpc/proto-loader": "^0.8.1",
+    "liqe": "^3.8.7",
+    "ms": "4.0.0-nightly.202508271359",
+    "zod": "^4.4.3"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*",
+    "typebox": "*"
   },
   "devDependencies": {
     "@earendil-works/pi-agent-core": "*",

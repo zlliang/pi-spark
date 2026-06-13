@@ -5,54 +5,43 @@ on:
     branches:
       - main
 
-concurrency:
-  group: release
-  cancel-in-progress: false
-
 jobs:
   release-please:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      issues: write
       pull-requests: write
     outputs:
-      releases_created: ${{ steps.release.outputs.releases_created }}
-      paths_released: ${{ steps.release.outputs.paths_released }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - id: release
         uses: googleapis/release-please-action@v5
         with:
-          config-file: release-please-config.json
-          manifest-file: .release-please-manifest.json
+          release-type: node
 
   publish:
     needs: release-please
-    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
     runs-on: ubuntu-latest
     environment: npm
     permissions:
       contents: read
       id-token: write
-    strategy:
-      fail-fast: false
-      matrix:
-        path: ${{ fromJson(needs.release-please.outputs.paths_released) }}
     steps:
       - uses: actions/checkout@v6
-
-      - uses: pnpm/action-setup@v6
         with:
-          run_install: false
+          ref: ${{ needs.release-please.outputs.tag_name }}
 
       - uses: actions/setup-node@v6
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-          cache: pnpm
+          cache: npm
 
-      - run: pnpm install --frozen-lockfile
+      - run: npm ci
 
-      - run: pnpm typecheck
+      - run: npm run typecheck
 
-      - run: pnpm publish --provenance
-        working-directory: ${{ matrix.path }}
+      - run: npm publish --provenance --access public

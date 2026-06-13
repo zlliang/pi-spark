@@ -1,5 +1,0 @@
-packages:
-  - packages/*
-
-dangerouslyAllowAllBuilds: true
-minimumReleaseAge: 0

@@ -1,46 +1,46 @@
 # Changelog
 
-## [0.11.2](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.11.1...pi-spark-v0.11.2) (2026-06-13)
+## [0.11.2](https://github.com/zlliang/pi-spark/compare/v0.11.1...v0.11.2) (2026-06-13)
 
 
 ### Documentation
 
-* **pi-spark:** simplify description ([ede2299](https://github.com/zlliang/pi-packages/commit/ede2299cee377401c066bd76d8e795c9f96d4f1d))
+* **pi-spark:** simplify description ([ede2299](https://github.com/zlliang/pi-spark/commit/ede2299cee377401c066bd76d8e795c9f96d4f1d))
 
-## [0.11.1](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.11.0...pi-spark-v0.11.1) (2026-06-13)
+## [0.11.1](https://github.com/zlliang/pi-spark/compare/v0.11.0...v0.11.1) (2026-06-13)
 
 
 ### Documentation
 
-* **pi-spark:** polish README and metadata ([382de1a](https://github.com/zlliang/pi-packages/commit/382de1aeaa48de7d874d088cba60b6ff1e60d42d))
+* **pi-spark:** polish README and metadata ([382de1a](https://github.com/zlliang/pi-spark/commit/382de1aeaa48de7d874d088cba60b6ff1e60d42d))
 
-## [0.11.0](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.5...pi-spark-v0.11.0) (2026-06-13)
-
-
-### Miscellaneous Chores
-
-* **pi-spark:** release 0.11.0 ([c5124d4](https://github.com/zlliang/pi-packages/commit/c5124d4070c7caa96e0e1fc37e0a23b45232e38c))
-
-## [0.10.5](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.4...pi-spark-v0.10.5) (2026-06-13)
-
-
-### Bug Fixes
-
-* **pi-spark:** reassert clearOnShrink each render in fullscreen ([55604b5](https://github.com/zlliang/pi-packages/commit/55604b59742b5300ef80102f9fbc3fc1c7a798cd))
-
-## [0.10.4](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.3...pi-spark-v0.10.4) (2026-06-13)
-
-
-### Bug Fixes
-
-* add npm package homepage metadata ([9ff2e39](https://github.com/zlliang/pi-packages/commit/9ff2e39d609c3c0a39c45a6c6b456bde964fbaa8))
-
-## [0.10.3](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.2...pi-spark-v0.10.3) (2026-06-13)
+## [0.11.0](https://github.com/zlliang/pi-spark/compare/v0.10.5...v0.11.0) (2026-06-13)
 
 
 ### Miscellaneous Chores
 
-* **pi-spark:** release 0.10.3 ([c253364](https://github.com/zlliang/pi-packages/commit/c2533641a4c9fe3b91ad6d0a52077d65036a95f0))
+* **pi-spark:** release 0.11.0 ([c5124d4](https://github.com/zlliang/pi-spark/commit/c5124d4070c7caa96e0e1fc37e0a23b45232e38c))
+
+## [0.10.5](https://github.com/zlliang/pi-spark/compare/v0.10.4...v0.10.5) (2026-06-13)
+
+
+### Bug Fixes
+
+* **pi-spark:** reassert clearOnShrink each render in fullscreen ([55604b5](https://github.com/zlliang/pi-spark/commit/55604b59742b5300ef80102f9fbc3fc1c7a798cd))
+
+## [0.10.4](https://github.com/zlliang/pi-spark/compare/v0.10.3...v0.10.4) (2026-06-13)
+
+
+### Bug Fixes
+
+* add npm package homepage metadata ([9ff2e39](https://github.com/zlliang/pi-spark/commit/9ff2e39d609c3c0a39c45a6c6b456bde964fbaa8))
+
+## [0.10.3](https://github.com/zlliang/pi-spark/compare/v0.10.2...v0.10.3) (2026-06-13)
+
+
+### Miscellaneous Chores
+
+* **pi-spark:** release 0.10.3 ([c253364](https://github.com/zlliang/pi-spark/commit/c2533641a4c9fe3b91ad6d0a52077d65036a95f0))
 
 ## [0.10.2](https://github.com/zlliang/pi-spark/compare/v0.10.1...v0.10.2) (2026-06-13)
 

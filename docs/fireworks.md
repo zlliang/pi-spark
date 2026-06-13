@@ -86,9 +86,9 @@ The amount is `units + nanos / 1e9` (the standard `google.type.Money` encoding),
 
 ## How the provider is implemented in pi-credits
 
-The provider lives in [`src/providers/fireworks.ts`](../src/providers/fireworks.ts) and follows the same `CreditsProvider` contract as the HTTP-based providers; only the transport differs.
+The provider lives in [`extensions/credits/providers/fireworks.ts`](../extensions/credits/providers/fireworks.ts) and follows the same `CreditsProvider` contract as the HTTP-based providers; only the transport differs.
 
-- **Transport.** A single, reused `@grpc/grpc-js` client dials `gateway.fireworks.ai:443` over TLS. The service is declared in [`fireworks.proto`](../src/providers/fireworks.proto) — the minimal slice needed, loaded at runtime with `@grpc/proto-loader`. The `.proto` is resolved relative to the module via `import.meta.url`, so it ships and loads from the package directory.
+- **Transport.** A single, reused `@grpc/grpc-js` client dials `gateway.fireworks.ai:443` over TLS. The service is declared in [`fireworks.proto`](../extensions/credits/providers/fireworks.proto) — the minimal slice needed, loaded at runtime with `@grpc/proto-loader`. The `.proto` is resolved relative to the module via `import.meta.url`, so it ships and loads from the package directory.
 - **Auth.** Each call sends `x-api-key: <key>` in gRPC metadata. The key comes from pi's `modelRegistry.getApiKeyForProvider("fireworks")` (env `FIREWORKS_API_KEY`), handled by the manager.
 - **Account resolution.** `ListAccounts` is called once and the resolved `accounts/<id>` is cached per API key, so steady-state refreshes are a single `GetBalance` round trip.
 - **Cancellation.** The shared `AbortSignal` cancels the in-flight gRPC call, and a defensive deadline bounds each request.
