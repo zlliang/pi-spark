@@ -32,18 +32,17 @@ When a version or type is given, confirm the target package and version if there
 
 ## Record a `Release-As` override
 
-Only for an explicit version or bump type. The override commit must touch the target package path so Release Please associates the release with the right component.
+Only for an explicit version or bump type. Add a `Release-As: x.y.z` footer to a commit. The commit must touch the target package path so Release Please associates the release with the right component.
 
-Example for `pi-spark`:
+Prefer attaching the footer to a real change for that package. When releasing several packages at once, use one commit per package so each `Release-As` footer maps to a single component, for example:
 
 ```bash
-printf '%s\n' "Release-As: 0.10.3" > packages/pi-spark/.release-trigger
-git add packages/pi-spark/.release-trigger
-git commit -m "chore(pi-spark): release 0.10.3" -m "Release-As: 0.10.3"
+git commit -m "chore(pi-spark): refine metadata" -m "Release-As: 0.11.0" -- packages/pi-spark
+git commit -m "chore(pi-credits): refine metadata" -m "Release-As: 0.4.0" -- packages/pi-credits
 git push
 ```
 
-Use `packages/pi-credits/.release-trigger` for `pi-credits`. After the workflow updates the release PR, verify the PR and remove or keep the trigger file according to the PR contents. Do not hand-edit release PR version bumps unless Release Please failed.
+If there is no code change to carry the footer, make an empty-content commit that still touches the package path (for example, a one-line note in the package README) rather than introducing a throwaway trigger file. After the workflow updates the release PR, verify the PR. Do not hand-edit release PR version bumps unless Release Please failed.
 
 ## Merge and pull the release PR
 
