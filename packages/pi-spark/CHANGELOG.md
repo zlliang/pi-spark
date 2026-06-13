@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.5](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.4...pi-spark-v0.10.5) (2026-06-13)
+
+
+### Bug Fixes
+
+* **pi-spark:** reassert clearOnShrink each render in fullscreen ([55604b5](https://github.com/zlliang/pi-packages/commit/55604b59742b5300ef80102f9fbc3fc1c7a798cd))
+
 ## [0.10.4](https://github.com/zlliang/pi-packages/compare/pi-spark-v0.10.3...pi-spark-v0.10.4) (2026-06-13)
 
 
