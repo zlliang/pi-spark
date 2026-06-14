@@ -1,6 +1,6 @@
-import { defineActionFor, registerComposedTool } from "../../utils/tools";
+import { defineActionFor, registerComposedTool } from "../../utils/tool";
 
-import type { Action } from "../../utils/tools";
+import type { Action } from "../../utils/tool";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 
 interface PiActionContext {

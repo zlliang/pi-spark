@@ -1,7 +1,7 @@
-import { defineActionFor, registerComposedTool } from "../../utils/tools";
+import { defineActionFor, registerComposedTool } from "../../utils/tool";
 
 import type { ExaClient } from "./client";
-import type { Action } from "../../utils/tools";
+import type { Action } from "../../utils/tool";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 interface WebActionContext {

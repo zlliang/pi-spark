@@ -10,6 +10,7 @@ interface SearchDetails {
 export const searchAction = defineAction({
   name: "search",
   summary: "finds current information across the web and returns ready-to-use content",
+  showTiming: true,
   fields: {
     query: Type.Optional(Type.String({
       description:

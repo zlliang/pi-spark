@@ -28,6 +28,11 @@ export function formatCost(cost: number): string {
   return `$${cost.toFixed(2)}`;
 }
 
+/** Format a duration in ms as `1.2s`, like the built-in bash tool. */
+export function formatDuration(ms: number): string {
+  return `${(ms / 1000).toFixed(1)}s`;
+}
+
 export function formatCwd(cwd: string, home: string): string {
   const resolvedCwd = resolve(cwd);
   const resolvedHome = resolve(home);

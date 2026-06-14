@@ -10,6 +10,7 @@ interface FetchDetails {
 export const fetchAction = defineAction({
   name: "fetch",
   summary: "reads the full content of known URLs as clean markdown",
+  showTiming: true,
   fields: {
     urls: Type.Optional(Type.Array(Type.String(), {
       description: "For \"fetch\": List the URLs to read. Batch multiple URLs in one call.",
