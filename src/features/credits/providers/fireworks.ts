@@ -1,11 +1,8 @@
 import { fileURLToPath } from "node:url";
 
-import { credentials, loadPackageDefinition, Metadata } from "@grpc/grpc-js";
-import { loadSync } from "@grpc/proto-loader";
-
 import { toNumber } from "../../../utils/format";
 
-import type { ClientUnaryCall, ServiceClientConstructor, ServiceError } from "@grpc/grpc-js";
+import type { ClientUnaryCall, Metadata, ServiceClientConstructor, ServiceError } from "@grpc/grpc-js";
 import type { Credits, CreditsProvider } from "../types";
 
 type GatewayClient = InstanceType<ServiceClientConstructor>;
@@ -43,8 +40,15 @@ let client: GatewayClient | undefined;
 /** The API key maps to a fixed account, so cache the resolved resource name. */
 const accountByKey = new Map<string, string>();
 
-function getClient(): GatewayClient {
+async function getClient(): Promise<GatewayClient> {
   if (client) return client;
+
+  // @grpc/* is heavy to import (~45 ms cold); load it lazily so startup never pays for it unless
+  // Fireworks credits are actually fetched.
+  const [{ credentials, loadPackageDefinition }, { loadSync }] = await Promise.all([
+    import("@grpc/grpc-js"),
+    import("@grpc/proto-loader"),
+  ]);
 
   const protoPath = fileURLToPath(new URL("./fireworks.proto", import.meta.url));
   const definition = loadSync(protoPath, { keepCase: true, longs: String, defaults: true });
@@ -55,12 +59,14 @@ function getClient(): GatewayClient {
 }
 
 async function unary<T>(method: string, request: object, apiKey: string, signal: AbortSignal): Promise<T> {
+  const grpc = await import("@grpc/grpc-js");
+  const gateway = await getClient();
+
   return new Promise<T>((resolve, reject) => {
-    const metadata = new Metadata();
+    const metadata = new grpc.Metadata();
     metadata.set("x-api-key", apiKey);
 
     const deadline = new Date(Date.now() + DEADLINE_MS);
-    const gateway = getClient();
     const invoke = gateway[method] as (
       request: object,
       metadata: Metadata,

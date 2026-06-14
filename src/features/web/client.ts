@@ -1,6 +1,4 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-
+import type { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import type { TextContent } from "@earendil-works/pi-ai";
 
 /** Exa's hosted MCP endpoint (Streamable HTTP). No API key required for the free tier. */
@@ -56,6 +54,13 @@ export class ExaClient {
 
     if (!this.connecting) {
       this.connecting = (async () => {
+        // The MCP SDK is heavy to import (~40 ms cold); load it lazily so startup never pays for
+        // it unless a web action actually runs.
+        const [{ Client }, { StreamableHTTPClientTransport }] = await Promise.all([
+          import("@modelcontextprotocol/sdk/client/index.js"),
+          import("@modelcontextprotocol/sdk/client/streamableHttp.js"),
+        ]);
+
         const next = new Client({ name: "pi-spark", version: "0" });
         const transport = new StreamableHTTPClientTransport(new URL(EXA_MCP_URL));
         await next.connect(transport as Parameters<Client["connect"]>[0]);
