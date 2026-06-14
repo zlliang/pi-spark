@@ -55,11 +55,11 @@ The `pi` tool lets the pi coding agent inspect and manipulate itself (~740 token
 
 - `models` lists and searches the model catalog.
 - `name` sets or updates the current session's name.
-- `whoami` shows the current pi state with session name, active model with metadata, and thinking level.
+- `whoami` shows the current pi state, including session name, active model, and thinking level.
 
 The `web` tool gives the agent live web access, backed by the free [Exa MCP](https://exa.ai/mcp) (~350 tokens). No separate MCP setup or API key is needed.
 
-- `search` finds current information across the web and returns clean, ready-to-use content.
+- `search` finds current information across the web and returns ready-to-use content.
 - `fetch` reads the full content of known URLs as clean markdown, and can batch several URLs in one call.
 
 ![Agent tools](./assets/screenshot-tools.png)

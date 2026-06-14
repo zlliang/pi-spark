@@ -15,7 +15,7 @@ interface WhoamiDetails {
 
 export const whoamiAction = defineAction({
   name: "whoami",
-  summary: "shows the current pi state with session name, active model with metadata, and thinking level",
+  summary: "shows the current pi state, including session name, active model, and thinking level",
   fields: {},
   promptGuidelines: [
     "Use the pi tool's \"whoami\" action when you need the current session's name or the active model and thinking level.",

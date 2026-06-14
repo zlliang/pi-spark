@@ -38,8 +38,8 @@ export class ExaClient {
       throw new Error(`Exa request failed: ${text}`);
     }
 
-    if (result.isError) throw new Error(`Exa request failed: no content returned.`);
-    if (content.length === 0) throw new Error(`No content returned.`);
+    if (result.isError) throw new Error(`Exa request failed: no content returned`);
+    if (content.length === 0) throw new Error(`No content returned`);
 
     return content;
   }

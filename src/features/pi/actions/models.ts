@@ -25,35 +25,34 @@ export const modelsAction = defineAction({
   fields: {
     query: Type.Optional(Type.String({
       description:
-        "For \"models\": filter models with a Liqe (Lucene-like) query. Bare terms match any " +
+        "For \"models\": Filter models with a Liqe (Lucene-like) query. Bare terms match any " +
         "field, and unquoted terms are case-insensitive substrings. The syntax supports " +
         "AND/OR/NOT, grouping, wildcards, and numeric comparisons; quote values containing " +
         "special characters (e.g., id:\"deepseek/deepseek-v4\"). Filterable fields are id, name, " +
         "provider, api, reasoning (boolean), input (modalities), cost.input and cost.output " +
         "(USD per 1M tokens), contextWindow, maxTokens, thinkingLevels, and available " +
-        "(boolean, true when auth is configured). The catalog is large, so include " +
-        "available:true unless every model is needed (e.g., \"claude available:true\", " +
-        "\"provider:openrouter cost.input:<1\").",
+        "(boolean, true when auth is configured). Examples: \"claude available:true\", " +
+        "\"provider:openrouter cost.input:<1\".",
     })),
-    offset: Type.Optional(Type.Number({ description: "For \"models\": start from this model number (1-indexed)." })),
+    offset: Type.Optional(Type.Number({ description: "For \"models\": Start from this model number (1-indexed)." })),
     limit: Type.Optional(Type.Number({ description: "For \"models\": Return at most this many models." })),
   },
   promptGuidelines: [
     "Use the pi tool's \"models\" action when you need metadata of pi models; include available:true in the query unless unavailable models are needed.",
   ],
-  renderCall(args, theme) {
-    let text = `${theme.bold(theme.fg("toolTitle", "pi"))} ${theme.fg("accent", "models")}`;
+  renderParams(args, theme) {
+    const params: string[] = [];
 
     const query = args.query?.trim();
-    if (query) text += theme.fg("muted", ` ${query}`);
+    if (query) params.push(theme.fg("muted", query));
 
     if (args.offset !== undefined || args.limit !== undefined) {
       const start = args.offset ?? 1;
       const end = args.limit !== undefined ? start + args.limit - 1 : "end";
-      text += theme.fg("warning", ` ${start}-${end}`);
+      params.push(theme.fg("warning", `${start}-${end}`));
     }
 
-    return new Text(text, 0, 0);
+    return params;
   },
   renderResult(result, { expanded }, theme, context) {
     const details = result.details as ModelsDetails | undefined;
@@ -139,7 +138,7 @@ export const modelsAction = defineAction({
     // Convert from 1-indexed offset to 0-indexed array access.
     const startIndex = args.offset ? Math.max(0, args.offset - 1) : 0;
     if (startIndex >= total) {
-      throw new Error(`Offset ${args.offset} is beyond the end of the list (${total} models total).`);
+      throw new Error(`Offset ${args.offset} is beyond the end of the list (${total} models total)`);
     }
 
     const endIndex = args.limit !== undefined ? Math.min(startIndex + args.limit, total) : total;

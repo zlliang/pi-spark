@@ -1,4 +1,4 @@
-import { Container, Spacer, Text } from "@earendil-works/pi-tui";
+import { Text } from "@earendil-works/pi-tui";
 import { Type } from "typebox";
 
 import { sanitizeText } from "../../../utils/format";
@@ -34,19 +34,11 @@ export const nameAction = defineAction({
   promptGuidelines: [
     "Use the pi tool's \"name\" action to give the current session a concise, recognizable name, especially after a long, vague, or pasted opening prompt, or after a substantial shift in the conversation's focus.",
   ],
-  renderCall(args, theme) {
-    const name = sanitizeText(args.name ?? "");
+  renderParams(args, theme) {
+    const name = theme.fg("muted", sanitizeText(args.name ?? ""));
     const reason = sanitizeText(args.reason ?? "");
 
-    const container = new Container();
-    container.addChild(new Text(`${theme.bold(theme.fg("toolTitle", "pi"))} ${theme.fg("accent", "name")} ${theme.fg("muted", name)}`, 0, 0));
-
-    if (reason) {
-      container.addChild(new Spacer(1));
-      container.addChild(new Text(theme.fg("muted", reason), 0, 0));
-    }
-
-    return container;
+    return [reason ? name + theme.fg("muted", "\n\n" + reason) : name];
   },
   renderResult() {
     // "name" has no success UI; errors are rendered by the registry's fallback.
@@ -54,7 +46,7 @@ export const nameAction = defineAction({
   },
   async execute(args, { pi }) {
     const name = sanitizeText(args.name);
-    if (!name) throw new Error("Session name was empty after normalization; provide a short, non-empty phrase.");
+    if (!name) throw new Error("Session name was empty after normalization; provide a short, non-empty phrase");
 
     const previous = pi.getSessionName() ?? null;
     if (previous === name) {
