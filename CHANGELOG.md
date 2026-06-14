@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.1](https://github.com/zlliang/pi-spark/compare/v0.14.0...v0.14.1) (2026-06-14)
+
+
+### Miscellaneous Chores
+
+* trigger release 0.14.1 ([b966f0e](https://github.com/zlliang/pi-spark/commit/b966f0ecb4739cbf250051de652fc0f51fa9d5f9))
+
 ## [0.14.0](https://github.com/zlliang/pi-spark/compare/v0.13.1...v0.14.0) (2026-06-14)
 
 
