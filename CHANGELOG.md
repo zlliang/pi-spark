@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.3](https://github.com/zlliang/pi-spark/compare/v0.14.2...v0.14.3) (2026-06-14)
+
+
+### Code Refactoring
+
+* **tools:** share composed-tool architecture across pi and web ([12e563b](https://github.com/zlliang/pi-spark/commit/12e563b357f9e5cf83fef04943c66feffd16c26f))
+
 ## [0.14.2](https://github.com/zlliang/pi-spark/compare/v0.14.1...v0.14.2) (2026-06-14)
 
 
