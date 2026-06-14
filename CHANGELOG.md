@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.5](https://github.com/zlliang/pi-spark/compare/v0.14.4...v0.14.5) (2026-06-14)
+
+
+### Bug Fixes
+
+* **startup:** defer heavy gRPC and MCP imports to first use ([2080906](https://github.com/zlliang/pi-spark/commit/2080906515452d3ad4464b6cf2892dc765025458))
+
 ## [0.14.4](https://github.com/zlliang/pi-spark/compare/v0.14.3...v0.14.4) (2026-06-14)
 
 
