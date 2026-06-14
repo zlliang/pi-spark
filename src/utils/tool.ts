@@ -4,7 +4,7 @@ import { Type } from "typebox";
 
 import { formatDuration, joinTextContent } from "./format";
 
-import type { AgentToolResult, ExtensionAPI, ExtensionContext, Theme, ToolDefinition } from "@earendil-works/pi-coding-agent";
+import type { AgentToolResult, AgentToolUpdateCallback, ExtensionAPI, ExtensionContext, Theme, ToolDefinition } from "@earendil-works/pi-coding-agent";
 import type { Component } from "@earendil-works/pi-tui";
 import type { Static, TObject, TProperties, TSchema } from "typebox";
 
@@ -28,8 +28,9 @@ export interface Action<C, F extends TProperties = TProperties, D extends Action
   showTiming?: boolean;
   /** Styled segments shown after the `<tool> <action>` prefix. */
   renderParams?: (args: Static<TObject<F>>, theme: Theme) => string[];
+  /** Only handles successful output; error output is handled centrally. */
   renderResult?: NonNullable<ToolDefinition<TObject<F>, D>["renderResult"]>;
-  execute(args: Static<TObject<F>>, context: C, signal: AbortSignal | undefined): Promise<AgentToolResult<D>>;
+  execute(args: Static<TObject<F>>, context: C, signal: AbortSignal | undefined, onUpdate: AgentToolUpdateCallback<D> | undefined): Promise<AgentToolResult<D>>;
 }
 
 /** Identity helper bound to context `C`, so actions infer their field/details types while sharing one context shape. */
@@ -75,7 +76,6 @@ export function registerComposedTool<C>(pi: ExtensionAPI, config: ComposedToolCo
 
   const activeTiming = new ActiveTiming();
   const noTiming = new NoTiming();
-  // Resolve per-action timing from the stable call args, so error results (no details) still settle.
   const timingFor = (action: string | undefined): Timing => (byName.get(action ?? "")?.showTiming ? activeTiming : noTiming);
 
   const renderActionResult: NonNullable<ToolDefinition["renderResult"]> = (result, options, theme, context) => {
@@ -111,7 +111,7 @@ export function registerComposedTool<C>(pi: ExtensionAPI, config: ComposedToolCo
 
       return timingFor(context.args.action).renderResult(inner, options, theme, context);
     },
-    async execute(_toolCallId, params, signal, _onUpdate, ctx) {
+    async execute(_toolCallId, params, signal, onUpdate, ctx) {
       const action = byName.get(params.action);
       if (!action) throw new Error(`Unknown ${config.name} action "${params.action}"`);
 
@@ -121,7 +121,7 @@ export function registerComposedTool<C>(pi: ExtensionAPI, config: ComposedToolCo
         }
       }
 
-      return action.execute(params as never, config.createContext(ctx), signal);
+      return action.execute(params as any, config.createContext(ctx), signal, onUpdate);
     },
   });
 }
