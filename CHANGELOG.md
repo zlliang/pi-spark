@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/zlliang/pi-spark/compare/v0.13.1...v0.14.0) (2026-06-14)
+
+
+### Features
+
+* add unified pi and web agent tools ([1229d93](https://github.com/zlliang/pi-spark/commit/1229d93e1beffd444767781c3c1332e26706dc8a))
+
 ## [0.13.1](https://github.com/zlliang/pi-spark/compare/v0.13.0...v0.13.1) (2026-06-14)
 
 
