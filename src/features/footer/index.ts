@@ -39,7 +39,7 @@ class FooterComponent implements Component {
     const branch = this.footerData.getGitBranch();
     const sessionName = this.ctx.sessionManager.getSessionName();
 
-    return this.theme.fg("dim", [cwdText, branch, sessionName].filter(Boolean).join(" • "));
+    return this.theme.fg("dim", [cwdText, branch, sessionName].filter(Boolean).join(" · "));
   }
 
   private getRight(): string {
@@ -47,7 +47,7 @@ class FooterComponent implements Component {
     const styledCostText = this.getStyledCostText();
     const styledContextUsageText = this.getStyledContextUsageText();
 
-    return [statusesText, styledCostText, styledContextUsageText].filter(Boolean).join(this.theme.fg("dim", " • "));
+    return [statusesText, styledCostText, styledContextUsageText].filter(Boolean).join(this.theme.fg("dim", " · "));
   }
 
   /** Get extension statuses, sorted by key alphabetically. */
@@ -58,7 +58,7 @@ class FooterComponent implements Component {
     return Array.from(extensionStatuses.entries())
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([, text]) => sanitizeText(text))
-      .join(this.theme.fg("dim", " • "));
+      .join(this.theme.fg("dim", " · "));
   }
 
   private getStyledCostText(): string {

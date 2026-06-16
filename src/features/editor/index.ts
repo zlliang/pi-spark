@@ -78,7 +78,7 @@ class Editor extends CustomEditor {
     const modelBeforeText = this.slots.modelBefore;
     const modelText = formatModel(this.ctx.model?.provider, this.ctx.model?.id, this.pi.getThinkingLevel());
 
-    return theme.fg("dim", [modelBeforeText, modelText].filter(Boolean).join(" • "));
+    return theme.fg("dim", [modelBeforeText, modelText].filter(Boolean).join(" · "));
   }
 }
 
