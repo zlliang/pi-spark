@@ -2,8 +2,8 @@ import { CreditsManager } from "./manager";
 import { loadConfig } from "../../config";
 import { isUsage } from "../../utils/usage";
 
-import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import type { AgentMessage } from "@earendil-works/pi-agent-core";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
 function hasCost(message: AgentMessage): boolean {
   const usage = (message as { usage?: unknown }).usage;
