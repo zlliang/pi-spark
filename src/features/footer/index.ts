@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 import { SplitLine } from "../../components/split-line";
 import { loadConfig } from "../../config";
 import { formatContextUsage, formatCost, formatCwd, linkText, sanitizeText } from "../../utils/format";
+import { isFreeModel } from "../../utils/model";
 import { getEntryUsage } from "../../utils/usage";
 
 import type { ExtensionContext, ExtensionAPI, ReadonlyFooterDataProvider, Theme } from "@earendil-works/pi-coding-agent";
@@ -63,6 +64,10 @@ class FooterComponent implements Component {
 
   private getStyledCostText(): string {
     const totalCost = this.ctx.sessionManager.getBranch().reduce((acc, entry) => acc + (getEntryUsage(entry)?.cost.total ?? 0), 0);
+
+    // Hide cost when it's zero and the current model is free.
+    if (totalCost === 0 && this.ctx.model && isFreeModel(this.ctx.model)) return "";
+
     const costText = formatCost(totalCost);
 
     if (totalCost > 20) return this.theme.fg("warning", costText);
