@@ -14,7 +14,7 @@ export function renderCredits(theme: Theme, label: string, credits: Credits): st
 }
 
 export function renderError(theme: Theme, label: string, message: string): string {
-  return theme.fg("error", `${label} credits unavailable: ${message}`);
+  return theme.fg("error", `${label} ${message}`);
 }
 
 function renderWindows(theme: Theme, credits: Extract<Credits, { type: "windows" }>): string {
