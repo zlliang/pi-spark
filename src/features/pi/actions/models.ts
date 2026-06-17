@@ -92,7 +92,7 @@ export const modelsAction = defineAction({
       addRows(models.slice(0, maxRows).map((model) => toModelRow(model)));
 
       const hiddenRows = models.length - maxRows;
-      if (hiddenRows > 0) container.addChild(new Text(theme.fg("dim", `... (${hiddenRows} more, `) + keyHint("app.tools.expand", "to expand") + theme.fg("dim", ")"), 0, 0));
+      if (hiddenRows > 0) container.addChild(new Text(theme.fg("muted", `... (${hiddenRows} more, `) + keyHint("app.tools.expand", "to expand") + theme.fg("muted", ")"), 0, 0));
       container.addChild(new Spacer(1));
     }
 
