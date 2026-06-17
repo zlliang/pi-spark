@@ -1,4 +1,4 @@
-import { keyText, truncateHead } from "@earendil-works/pi-coding-agent";
+import { keyHint, truncateHead } from "@earendil-works/pi-coding-agent";
 import { Container, Spacer, Text } from "@earendil-works/pi-tui";
 import { filter, parse } from "liqe";
 import { Type } from "typebox";
@@ -92,7 +92,7 @@ export const modelsAction = defineAction({
       addRows(models.slice(0, maxRows).map((model) => toModelRow(model)));
 
       const hiddenRows = models.length - maxRows;
-      if (hiddenRows > 0) container.addChild(new Text(theme.fg("dim", `... (${hiddenRows} more, ${keyText("app.tools.expand")} to expand)`), 0, 0));
+      if (hiddenRows > 0) container.addChild(new Text(theme.fg("dim", `... (${hiddenRows} more, `) + keyHint("app.tools.expand", "to expand") + theme.fg("dim", ")"), 0, 0));
       container.addChild(new Spacer(1));
     }
 

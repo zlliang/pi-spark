@@ -1,4 +1,4 @@
-import { keyText } from "@earendil-works/pi-coding-agent";
+import { keyHint } from "@earendil-works/pi-coding-agent";
 import { Container, Spacer, Text } from "@earendil-works/pi-tui";
 
 import { joinTextContent } from "../../utils/format";
@@ -28,7 +28,7 @@ export function renderWebResult(result: AgentToolResult<unknown>, expanded: bool
   container.addChild(new Text(theme.fg("muted", lines.slice(0, maxLines).join("\n")), 0, 0));
 
   const hidden = lines.length - maxLines;
-  if (hidden > 0) container.addChild(new Text(theme.fg("dim", `... (${hidden} more lines, ${keyText("app.tools.expand")} to expand)`), 0, 0));
+  if (hidden > 0) container.addChild(new Text(theme.fg("dim", `... (${hidden} more lines, `) + keyHint("app.tools.expand", "to expand") + theme.fg("dim", ")"), 0, 0));
 
   return container;
 }

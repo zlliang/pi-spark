@@ -1,4 +1,4 @@
-import { keyText, DynamicBorder } from "@earendil-works/pi-coding-agent";
+import { keyHint, rawKeyHint, DynamicBorder } from "@earendil-works/pi-coding-agent";
 import { Box, Container, SelectList, Spacer, Text } from "@earendil-works/pi-tui";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
@@ -39,11 +39,11 @@ export async function showPresetSelector(ctx: ExtensionContext, presetManager: P
     box.addChild(new Spacer(1));
 
     const keyHints = [
-      ["↑↓", "navigate"],
-      [keyText("tui.select.confirm"), "select"],
-      [keyText("tui.select.cancel"), "cancel"],
-    ] as const;
-    box.addChild(new Text(keyHints.map((item) => `${theme.fg("dim", item[0])} ${theme.fg("muted", item[1])}`).join("  "), 0, 0));
+      rawKeyHint("↑↓", "navigate"),
+      keyHint("tui.select.confirm", "select"),
+      keyHint("tui.select.cancel", "cancel"),
+    ];
+    box.addChild(new Text(keyHints.join("  "), 0, 0));
 
     container.addChild(box);
     container.addChild(new DynamicBorder((s: string) => theme.fg("accent", s)));
