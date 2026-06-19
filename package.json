@@ -32,6 +32,7 @@
     "@grpc/grpc-js": "^1.14.4",
     "@grpc/proto-loader": "^0.8.1",
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "defu": "^6.1.7",
     "liqe": "^3.8.7",
     "ms": "4.0.0-nightly.202508271359",
     "zod": "^4.4.3"
