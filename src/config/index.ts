@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { getAgentDir } from "@earendil-works/pi-coding-agent";
+import { CONFIG_DIR_NAME, getAgentDir } from "@earendil-works/pi-coding-agent";
 
 import { featureSchemas } from "./schema";
 
@@ -59,7 +59,7 @@ export function loadConfig(ctx: ExtensionContext, fileName: string = "spark.json
 }
 
 function getConfigPaths(cwd: string, fileName: string): [globalPath: string, projectPath: string] {
-  return [join(getAgentDir(), fileName), join(cwd, ".pi", fileName)];
+  return [join(getAgentDir(), fileName), join(cwd, CONFIG_DIR_NAME, fileName)];
 }
 
 function loadMergedJson(paths: string[]): JsonObject | undefined {
