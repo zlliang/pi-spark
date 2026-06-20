@@ -95,7 +95,7 @@ export class PresetManager {
     if (!preset) return;
 
     return this.keys.find((key) => {
-      const p = this.presets[key]!;
+      const p = this.presets[key];
 
       return p.provider === preset.provider && p.model === preset.model && p.thinkingLevel === preset.thinkingLevel;
     });
