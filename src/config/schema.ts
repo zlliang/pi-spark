@@ -4,10 +4,8 @@ import { creditsConfigSchema } from "../features/credits/config";
 import { editorConfigSchema } from "../features/editor/config";
 import { footerConfigSchema } from "../features/footer/config";
 import { fullscreenConfigSchema } from "../features/fullscreen/config";
-import { piConfigSchema } from "../features/pi/config";
 import { presetsConfigSchema } from "../features/presets/config";
 import { recapConfigSchema } from "../features/recap/config";
-import { webConfigSchema } from "../features/web/config";
 
 /**
  * Raw option shape for each feature. The enable/disable/default policy lives in `loadConfig`:
@@ -19,10 +17,8 @@ export const featureSchemas = {
   editor: editorConfigSchema,
   footer: footerConfigSchema,
   fullscreen: fullscreenConfigSchema,
-  pi: piConfigSchema,
   presets: presetsConfigSchema,
   recap: recapConfigSchema,
-  web: webConfigSchema,
 } as const;
 
 /** Resolved config for every feature; `false` means the feature is disabled. */

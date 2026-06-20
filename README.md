@@ -61,23 +61,6 @@ pi-spark generates a short recap of the current session after it goes idle, or o
 
 ![Recap](./assets/screenshot-recap.png)
 
-### Agent tools: `pi` and `web`
-
-pi-spark adds two agent tools:
-
-The `pi` tool lets the Pi coding agent inspect and manipulate itself (~740 tokens).
-
-- `models` lists and searches the model catalog.
-- `name` sets or updates the current session's name.
-- `whoami` shows the current Pi state, including session name, active model, and thinking level.
-
-The `web` tool gives the agent live web access, backed by the free [Exa MCP](https://exa.ai/mcp) (~350 tokens). No separate MCP setup or API key is needed.
-
-- `search` finds current information across the web and returns ready-to-use content.
-- `fetch` reads the full content of known URLs as clean markdown, and can batch several URLs in one call.
-
-![Agent tools](./assets/screenshot-tools.png)
-
 ## Configuration
 
 pi-spark reads config from `~/.pi/agent/spark.json` and from the current project's `.pi/spark.json`. Project config overrides matching global fields.
@@ -121,10 +104,8 @@ All fields are optional. Each top-level feature runs with the defaults below unl
 | `editor` | `EditorConfig` | Shows a working indicator and the current model on the editor's top border. |
 | `footer` | `{}` | Shows session info, extension statuses, cost, and context usage on one line. |
 | `fullscreen` | `{}` | Clears the screen and scrollback on start and exit, and pins the editor and footer to the bottom. |
-| `pi` | `{}` | Exposes the `pi` agent tool (`models`, `name`, `whoami` actions). |
 | `presets` | `{ [name]: Preset }` | Defines named model presets, keyed by name. |
 | `recap` | `RecapConfig` | Generates a session recap when idle or on demand. |
-| `web` | `{}` | Exposes the `web` agent tool (`search`, `fetch` actions) via Exa's hosted MCP server. |
 
 #### `EditorConfig`
 

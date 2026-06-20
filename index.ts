@@ -3,10 +3,8 @@ import { registerCredits } from "./src/features/credits";
 import { registerEditor } from "./src/features/editor";
 import { registerFooter } from "./src/features/footer";
 import { registerFullscreen } from "./src/features/fullscreen";
-import { registerPi } from "./src/features/pi";
 import { registerPresets } from "./src/features/presets";
 import { registerRecap } from "./src/features/recap";
-import { registerWeb } from "./src/features/web";
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
@@ -24,8 +22,6 @@ export default function (pi: ExtensionAPI) {
   registerEditor(pi, events);
   registerFooter(pi);
   registerFullscreen(pi);
-  registerPi(pi);
   registerPresets(pi);
   registerRecap(pi);
-  registerWeb(pi);
 }

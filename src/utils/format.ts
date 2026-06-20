@@ -1,6 +1,6 @@
 import { isAbsolute, relative, resolve, sep } from "node:path";
 
-import type { ImageContent, Provider, TextContent } from "@earendil-works/pi-ai";
+import type { Provider } from "@earendil-works/pi-ai";
 import type { ContextUsage } from "@earendil-works/pi-coding-agent";
 
 export function formatModel(provider?: Provider, model?: string, thinkingLevel?: string): string {
@@ -26,11 +26,6 @@ export function formatContextUsage(contextUsage: ContextUsage | undefined): stri
 
 export function formatCost(cost: number): string {
   return `$${cost.toFixed(2)}`;
-}
-
-/** Format a duration in ms as `1.2s`, like the built-in bash tool. */
-export function formatDuration(ms: number): string {
-  return `${(ms / 1000).toFixed(1)}s`;
 }
 
 export function formatCwd(cwd: string, home: string): string {
@@ -65,14 +60,6 @@ export function sanitizeText(text: string): string {
     .replace(/[\r\n\t]/g, " ")
     .replace(/ +/g, " ")
     .trim();
-}
-
-/** Join the text blocks of tool result content into a single newline-separated string. */
-export function joinTextContent(content: (TextContent | ImageContent)[]): string {
-  return content
-    .filter((block) => block.type === "text")
-    .map((block) => block.text)
-    .join("\n");
 }
 
 /** Coerce a possibly-stringified numeric value to a finite number, or `undefined`. */
