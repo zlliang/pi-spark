@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.1](https://github.com/zlliang/pi-spark/compare/v0.15.0...v0.15.1) (2026-06-29)
+
+
+### Bug Fixes
+
+* update pi-ai provider imports ([ccf7f6d](https://github.com/zlliang/pi-spark/commit/ccf7f6dc292c0c11f114f19a48f3b72f58016345))
+
 ## [0.15.0](https://github.com/zlliang/pi-spark/compare/v0.14.7...v0.15.0) (2026-06-20)
 
 
