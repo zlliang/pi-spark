@@ -49,11 +49,6 @@ function shortenPath(path: string): string {
   }).join(sep);
 }
 
-/** Wrap text in an OSC 8 hyperlink while preserving the visible text. */
-export function linkText(text: string, url: string): string {
-  return `\x1b]8;;${url}\x07${text}\x1b]8;;\x07`;
-}
-
 /** Replace newlines, tabs, carriage returns with space, then collapse multiple spaces */
 export function sanitizeText(text: string): string {
   return text

@@ -4,9 +4,11 @@ import { pathToFileURL } from "node:url";
 
 import { SplitLine } from "../../components/split-line";
 import { loadConfig } from "../../config";
-import { formatContextUsage, formatCost, formatCwd, linkText, sanitizeText } from "../../utils/format";
+import { formatContextUsage, formatCost, formatCwd, sanitizeText } from "../../utils/format";
 import { isFreeModel } from "../../utils/model";
 import { getEntryUsage } from "../../utils/usage";
+
+import { hyperlink } from "@earendil-works/pi-tui";
 
 import type { ExtensionContext, ExtensionAPI, ReadonlyFooterDataProvider, Theme } from "@earendil-works/pi-coding-agent";
 import type { Component } from "@earendil-works/pi-tui";
@@ -36,7 +38,7 @@ class FooterComponent implements Component {
   private getLeft(): string {
     const cwd = this.ctx.sessionManager.getCwd();
     const url = pathToFileURL(resolve(cwd));
-    const cwdText = linkText(formatCwd(cwd, homedir()), url.href);
+    const cwdText = hyperlink(formatCwd(cwd, homedir()), url.href);
     const branch = this.footerData.getGitBranch();
     const sessionName = this.ctx.sessionManager.getSessionName();
 
