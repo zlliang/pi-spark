@@ -1,5 +1,6 @@
 import { deepseekProvider } from "./deepseek";
 import { fireworksProvider } from "./fireworks";
+import { kimiCodingProvider } from "./kimi-code";
 import { moonshotProvider, moonshotCnProvider } from "./moonshot";
 import { openaiCodexProvider } from "./openai-codex";
 import { openrouterProvider } from "./openrouter";
@@ -10,6 +11,7 @@ import type { CreditsProvider } from "../types";
 const PROVIDERS: CreditsProvider[] = [
   deepseekProvider,
   fireworksProvider,
+  kimiCodingProvider,
   moonshotProvider,
   moonshotCnProvider,
   openaiCodexProvider,
