@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.17.0](https://github.com/zlliang/pi-spark/compare/v0.16.0...v0.17.0) (2026-07-09)
+
+
+### Features
+
+* add kimi code provider ([#56](https://github.com/zlliang/pi-spark/issues/56)) ([8950df3](https://github.com/zlliang/pi-spark/commit/8950df3c8ac58158a817d7e4cc8a26d315c5a534))
+
+
+### Bug Fixes
+
+* **credits:** always show Kimi Code weekly usage lane ([985ba89](https://github.com/zlliang/pi-spark/commit/985ba8974fa07490941c7eb77a076ace20566d1f)), closes [#56](https://github.com/zlliang/pi-spark/issues/56)
+* **credits:** fix Kimi Code weekly lane always rendering ([76e9227](https://github.com/zlliang/pi-spark/commit/76e922751d09e81f3619f4493c895306c255c34d)), closes [#56](https://github.com/zlliang/pi-spark/issues/56)
+
 ## [0.16.0](https://github.com/zlliang/pi-spark/compare/v0.15.0...v0.16.0) (2026-07-09)
 
 
