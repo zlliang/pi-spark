@@ -6,6 +6,7 @@ import { footerConfigSchema } from "../features/footer/config";
 import { fullscreenConfigSchema } from "../features/fullscreen/config";
 import { presetsConfigSchema } from "../features/presets/config";
 import { recapConfigSchema } from "../features/recap/config";
+import { titleConfigSchema } from "../features/title/config";
 
 /**
  * Raw option shape for each feature. The enable/disable/default policy lives in `loadConfig`:
@@ -19,6 +20,7 @@ export const featureSchemas = {
   fullscreen: fullscreenConfigSchema,
   presets: presetsConfigSchema,
   recap: recapConfigSchema,
+  title: titleConfigSchema,
 } as const;
 
 /** Resolved config for every feature; `false` means the feature is disabled. */

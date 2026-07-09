@@ -57,9 +57,18 @@ pi-spark generates a short recap of the current session after it goes idle, or o
 
 - A recap is generated automatically once the session stays idle past `recap.idle` in `spark.json`.
 - Run `/recap` to generate one manually at any time.
-- The recap can use its own model, configured separately from your working model.
+- The recap generation can use its own model, configured separately from your working model.
 
 ![Recap](./assets/screenshot-recap.png)
+
+### Title
+
+pi-spark names the session automatically after the first exchange, so it's easy to find later in the session selector.
+
+- After the first message is sent and the agent replies, pi-spark generates a short title from the conversation and sets it as the session name.
+- Generation is silent: nothing is shown in the UI, and the usage is recorded in a session entry like the recap.
+- Sessions that already have a name are left untouched.
+- The title generation can use its own model, configured separately from your working model.
 
 ## Configuration
 
@@ -90,6 +99,11 @@ For example:
     "provider": "openai-codex",
     "model": "gpt-5.4-mini",
     "thinkingLevel": "off"
+  },
+  "title": {
+    "provider": "openai-codex",
+    "model": "gpt-5.4-mini",
+    "thinkingLevel": "off"
   }
 }
 ```
@@ -106,6 +120,7 @@ All fields are optional. Each top-level feature runs with the defaults below unl
 | `fullscreen` | `{}` | Clears the screen and scrollback on start and exit, and pins the editor and footer to the bottom. |
 | `presets` | `{ [name]: Preset }` | Defines named model presets, keyed by name. |
 | `recap` | `RecapConfig` | Generates a session recap when idle or on demand. |
+| `title` | `TitleConfig` | Names the session automatically after the first exchange. |
 
 #### `EditorConfig`
 
@@ -130,14 +145,24 @@ Each preset must set all three fields.
 
 #### `RecapConfig`
 
-All fields are optional, including `thinkingLevel`. If the recap model configuration is incomplete, pi-spark falls back to the session's main model.
+All fields are optional. If the recap model configuration is incomplete, pi-spark falls back to the session's main model. `thinkingLevel` defaults to `off` (clamped to the model), so recap stays cheap regardless of your working thinking level.
 
 | Field | Value | Description |
 | --- | --- | --- |
 | `idle` | number (ms) or duration string | How long the session must stay idle before a recap is generated. Accepts a millisecond number or a [vercel/ms](https://github.com/vercel/ms) string (e.g., `"5m"`); minimum 5000 ms, defaults to 5 minutes. |
 | `provider` | string | Provider ID for the recap model. |
 | `model` | string | Model ID for the recap model. |
-| `thinkingLevel` | `ModelThinkingLevel` | Thinking level for the recap model. |
+| `thinkingLevel` | `ModelThinkingLevel` | Thinking level for the recap model. Defaults to `off`. |
+
+#### `TitleConfig`
+
+All fields are optional. If the title model configuration is incomplete, pi-spark falls back to the session's main model. `thinkingLevel` defaults to `off` (clamped to the model), so title generation stays cheap regardless of your working thinking level.
+
+| Field | Value | Description |
+| --- | --- | --- |
+| `provider` | string | Provider ID for the title model. |
+| `model` | string | Model ID for the title model. |
+| `thinkingLevel` | `ModelThinkingLevel` | Thinking level for the title model. Defaults to `off`. |
 
 #### `ModelThinkingLevel`
 

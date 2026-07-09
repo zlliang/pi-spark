@@ -5,6 +5,7 @@ import { registerFooter } from "./src/features/footer";
 import { registerFullscreen } from "./src/features/fullscreen";
 import { registerPresets } from "./src/features/presets";
 import { registerRecap } from "./src/features/recap";
+import { registerTitle } from "./src/features/title";
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
@@ -24,4 +25,5 @@ export default function (pi: ExtensionAPI) {
   registerFullscreen(pi);
   registerPresets(pi);
   registerRecap(pi);
+  registerTitle(pi);
 }

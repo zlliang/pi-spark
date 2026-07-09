@@ -1,84 +1,67 @@
 import { completeSimple } from "@earendil-works/pi-ai/compat";
 import { convertToLlm, serializeConversation } from "@earendil-works/pi-coding-agent";
 
-import { clearRecapWidget, setRecapLoadingWidget, setRecapTextWidget } from "./widget";
 import { sanitizeText } from "../../utils/format";
 import { resolveModelSettings } from "../../utils/model";
 
 import type { Api, Model, ModelThinkingLevel, SimpleStreamOptions, Usage } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-import type { RecapConfig } from "./config";
+import type { TitleConfig } from "./config";
 
 const SYSTEM_PROMPT = [
-  "You write concise idle session recaps for a terminal coding agent.",
-  "Use only transcript-supported facts; do not invent progress, intent, files, or next steps.",
-  "Prefer the latest active task if the session changed direction.",
-  "Summarize the user's goal, what was done, current state, and any clearly supported next step.",
-  "Respond in the conversation's primary language. Address the user in the second person.",
-  "Output 1-2 plain-text sentences under 40 words. No heading, markdown, bullets, or quotes.",
+  "You write a concise title for a terminal coding agent session.",
+  "Base the title only on the transcript; do not invent topics, files, or intent.",
+  "Capture the user's main goal or the session's central task.",
+  "Respond in the conversation's primary language.",
+  "Output a single title of 3-8 words. No trailing punctuation, quotes, markdown, or prefix like 'Title:'.",
 ].join(" ");
 
-const MAX_TOKENS = 80;
+const MAX_TOKENS = 32;
+const MAX_TITLE_CHARS = 80;
 const MAX_CONVERSATION_CHARS = 8_000;
 
-export class RecapManager {
+export class TitleManager {
   private pi: ExtensionAPI;
-  private config: RecapConfig;
+  private config: TitleConfig;
   private inflight: AbortController | undefined;
-  private active = false;
 
-  constructor(pi: ExtensionAPI, config: RecapConfig) {
+  constructor(pi: ExtensionAPI, config: TitleConfig) {
     this.pi = pi;
     this.config = config;
   }
 
-  async run(ctx: ExtensionContext, options: { force?: boolean } = {}): Promise<void> {
-    if (this.active && !options.force) return;
+  /** Generate and set the session title once, silently, from the current context. */
+  async run(ctx: ExtensionContext): Promise<void> {
+    if (this.pi.getSessionName()) return;
 
     this.cancelInflight();
     const controller = new AbortController();
     this.inflight = controller;
 
     try {
-      const modelSettings = await resolveModelSettings(ctx, this.config, "recap");
+      const modelSettings = await resolveModelSettings(ctx, this.config, "title", { notifyOnMissingModel: false });
       if (controller.signal.aborted || this.inflight !== controller || !modelSettings) return;
 
-      const { model, thinkingLevel, warning } = modelSettings;
-
-      setRecapLoadingWidget(ctx, warning);
-      this.active = false;
-
+      const { model, thinkingLevel } = modelSettings;
       const result = await this.generate(ctx, model, thinkingLevel, controller.signal);
-      if (controller.signal.aborted || this.inflight !== controller) return;
-      if (!result.content) {
-        clearRecapWidget(ctx);
-        return;
-      }
+      if (controller.signal.aborted || this.inflight !== controller || !result.content) return;
 
-      setRecapTextWidget(ctx, result.content, warning);
-      this.active = true;
-
-      this.pi.appendEntry("recap", {
+      this.pi.setSessionName(result.content);
+      this.pi.appendEntry("title", {
         provider: model.provider,
         model: model.id,
         usage: result.usage,
         content: result.content,
       });
-    } catch (error) {
-      if (controller.signal.aborted || this.inflight !== controller) return;
-
-      const message = error instanceof Error ? error.message : String(error);
-      setRecapTextWidget(ctx, "Unable to generate recap.", message);
-      this.active = false;
+    } catch {
+      // Title generation is best-effort and silent; ignore failures.
     } finally {
       if (this.inflight === controller) this.inflight = undefined;
     }
   }
 
-  clear(ctx: ExtensionContext): void {
+  dispose(): void {
     this.cancelInflight();
-    clearRecapWidget(ctx);
-    this.active = false;
   }
 
   private async generate(ctx: ExtensionContext, model: Model<Api>, thinkingLevel: ModelThinkingLevel, signal: AbortSignal): Promise<{ content: string; usage: Usage }> {
@@ -105,22 +88,26 @@ export class RecapManager {
       .join("\n")
       .trim();
 
-    return { content: sanitizeText(content), usage: response.usage };
+    return { content: this.normalizeTitle(content), usage: response.usage };
   }
 
   private buildPrompt(ctx: ExtensionContext): string {
     const messages = ctx.sessionManager.getBranch().filter((entry) => entry.type === "message").map((entry) => entry.message);
     const text = serializeConversation(convertToLlm(messages));
-    const conversation = text.length > MAX_CONVERSATION_CHARS ? text.slice(-MAX_CONVERSATION_CHARS) : text;
+    const conversation = text.length > MAX_CONVERSATION_CHARS ? text.slice(0, MAX_CONVERSATION_CHARS) : text;
 
     return [
-      "Create a short recap from this transcript, ordered oldest to newest.",
-      "It may be truncated from the beginning; focus on the latest coherent task.",
+      "Write a short title for this session, based on the transcript below.",
       "",
       "<conversation>",
       conversation,
       "</conversation>",
     ].join("\n");
+  }
+
+  private normalizeTitle(content: string): string {
+    const title = sanitizeText(content).replace(/^["'`]+|["'`]+$/g, "").replace(/[.。!！?？]+$/g, "").trim();
+    return title.length > MAX_TITLE_CHARS ? title.slice(0, MAX_TITLE_CHARS).trim() : title;
   }
 
   private cancelInflight(): void {
