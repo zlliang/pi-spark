@@ -61,8 +61,8 @@ export const kimiCodeProvider: CreditsProvider = {
       lanes.push(buildLane(label, item.detail));
     });
 
-    const weeklyLane = payload.usage ? buildLane("7d", payload.usage) : undefined;
-    if (weeklyLane) lanes.push(weeklyLane);
+    const weeklyLane = buildLane("7d", payload.usage);
+    lanes.push(weeklyLane);
 
     return { type: "windows", lanes };
   },
