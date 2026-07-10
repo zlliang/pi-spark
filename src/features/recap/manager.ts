@@ -85,7 +85,13 @@ export class RecapManager {
     const auth = await ctx.modelRegistry.getApiKeyAndHeaders(model);
     if (!auth.ok) throw new Error(auth.error);
 
-    const options: SimpleStreamOptions = { maxTokens: MAX_TOKENS, signal };
+    const options: SimpleStreamOptions = {
+      maxTokens: MAX_TOKENS,
+      // Codex uses the session ID for request routing; without it, background calls may be
+      // routed to an unavailable model.
+      sessionId: ctx.sessionManager.getSessionId(),
+      signal,
+    };
     if (auth.apiKey) options.apiKey = auth.apiKey;
     if (auth.headers) options.headers = auth.headers;
     if (thinkingLevel !== "off") options.reasoning = thinkingLevel;
@@ -98,6 +104,10 @@ export class RecapManager {
         timestamp: Date.now(),
       }],
     }, options);
+
+    if (response.stopReason === "error") {
+      throw new Error(response.errorMessage ?? "Recap generation failed");
+    }
 
     const content = response.content
       .filter((block) => block.type === "text")
