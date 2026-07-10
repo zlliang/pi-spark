@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/zlliang/pi-spark/compare/v0.17.1...v0.18.0) (2026-07-10)
+
+
+### Features
+
+* **config:** support max thinking level ([3d58e28](https://github.com/zlliang/pi-spark/commit/3d58e28a5da00c95a33bc5735b8f8e0bb1b66fad))
+
 ## [0.17.1](https://github.com/zlliang/pi-spark/compare/v0.17.0...v0.17.1) (2026-07-10)
 
 
