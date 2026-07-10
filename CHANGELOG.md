@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.18.1](https://github.com/zlliang/pi-spark/compare/v0.18.0...v0.18.1) (2026-07-10)
+
+
+### Bug Fixes
+
+* **lockfile:** normalize pi-ai binary path ([9d9a641](https://github.com/zlliang/pi-spark/commit/9d9a64155105b114f1d6f3576622144ab18505fc))
+* **model:** isolate background Codex sessions ([b240e53](https://github.com/zlliang/pi-spark/commit/b240e53672ef452ea17b962fb683a552c5ca3904))
+
 ## [0.18.0](https://github.com/zlliang/pi-spark/compare/v0.17.1...v0.18.0) (2026-07-10)
 
 
