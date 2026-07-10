@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.1](https://github.com/zlliang/pi-spark/compare/v0.17.0...v0.17.1) (2026-07-10)
+
+
+### Bug Fixes
+
+* preserve routing for background model calls ([27b2c12](https://github.com/zlliang/pi-spark/commit/27b2c12f3d3c179dca4ce44978a34725d6f4db60))
+
 ## [0.17.0](https://github.com/zlliang/pi-spark/compare/v0.16.0...v0.17.0) (2026-07-09)
 
 
