@@ -16,6 +16,7 @@
     "index.ts",
     "src",
     "assets",
+    "docs",
     "README.md",
     "LICENSE"
   ],
