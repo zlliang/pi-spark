@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.19.0](https://github.com/zlliang/pi-spark/compare/v0.18.1...v0.19.0) (2026-07-11)
+
+
+### Features
+
+* **credits:** add Codex reset redemption ([1c56eea](https://github.com/zlliang/pi-spark/commit/1c56eeae9fb3ed46f859fbe8c88e8ce78a388950))
+
+
+### Bug Fixes
+
+* **lifecycle:** wait for agent settlement ([7653b51](https://github.com/zlliang/pi-spark/commit/7653b513f8b6a91354fa1ba70f688639b142a206))
+* **package:** include docs in published files ([14d96f9](https://github.com/zlliang/pi-spark/commit/14d96f9b5cb1aefda7d5d06ee9fb0cd3ccdf8d62))
+* **title:** use sentence case for English titles ([747e41d](https://github.com/zlliang/pi-spark/commit/747e41db088ba80d617363e8f237f2ad505292a5))
+
 ## [0.18.1](https://github.com/zlliang/pi-spark/compare/v0.18.0...v0.18.1) (2026-07-10)
 
 
