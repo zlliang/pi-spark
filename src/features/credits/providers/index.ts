@@ -6,7 +6,8 @@ import { openaiCodexProvider } from "./openai-codex";
 import { openrouterProvider } from "./openrouter";
 import { vercelAiGatewayProvider } from "./vercel-ai-gateway";
 
-import type { CreditsProvider } from "../types";
+import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
+import type { CreditsProvider, RefreshCredits } from "../types";
 
 const PROVIDERS: CreditsProvider[] = [
   deepseekProvider,
@@ -21,4 +22,8 @@ const PROVIDERS: CreditsProvider[] = [
 
 export function findProvider(provider?: string): CreditsProvider | undefined {
   return PROVIDERS.find((entry) => entry.id === provider);
+}
+
+export function registerProviderExtensions(pi: ExtensionAPI, ctx: ExtensionContext, refresh: RefreshCredits): void {
+  for (const provider of PROVIDERS) provider.register?.(pi, ctx, refresh);
 }

@@ -1,4 +1,5 @@
 import { CreditsManager } from "./manager";
+import { registerProviderExtensions } from "./providers";
 import { loadConfig } from "../../config";
 import { isUsage } from "../../utils/usage";
 
@@ -20,6 +21,8 @@ export function registerCredits(pi: ExtensionAPI): void {
     if (!ctx.hasUI || !config) return;
 
     creditsManager = new CreditsManager();
+    registerProviderExtensions(pi, ctx, async (ctx) => await creditsManager?.refresh(ctx));
+
     creditsManager.refresh(ctx);
   });
 

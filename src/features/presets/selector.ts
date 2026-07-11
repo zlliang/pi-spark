@@ -38,11 +38,7 @@ export async function showPresetSelector(ctx: ExtensionContext, presetManager: P
     box.addChild(selectList);
     box.addChild(new Spacer(1));
 
-    const keyHints = [
-      rawKeyHint("↑↓", "navigate"),
-      keyHint("tui.select.confirm", "select"),
-      keyHint("tui.select.cancel", "cancel"),
-    ];
+    const keyHints = [rawKeyHint("↑↓", "navigate"), keyHint("tui.select.confirm", "select"), keyHint("tui.select.cancel", "cancel")];
     box.addChild(new Text(keyHints.join("  "), 0, 0));
 
     container.addChild(box);

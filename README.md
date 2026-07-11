@@ -41,6 +41,12 @@ pi-spark shows the active provider's credit balance or rate-limit usage in the s
 
 ![Credits](./assets/screenshot-credits.png)
 
+#### OpenAI Codex banked resets
+
+Banked rate-limit resets are saved benefits that can reset eligible Codex usage windows when redeemed. When available, their count appears after the usage windows. Run `/codex-reset` to inspect each reset and its expiration date, then select one to redeem. See [OpenAI Codex Banked Rate-Limit Resets](./docs/openai-codex-banked-rate-limit-resets.md) for the underlying behavior and internal APIs.
+
+![Codex resets](./assets/screenshot-codex-resets.png)
+
 ### Presets
 
 pi-spark lets you define named model presets in `spark.json` (see [Configuration](#configuration)), so you can switch between models and thinking levels without retyping provider details. The active preset is shown on the editor's top border.

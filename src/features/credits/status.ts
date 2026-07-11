@@ -7,10 +7,11 @@ const BALANCE_WARNING = 10;
 const BALANCE_ERROR = 5;
 
 export function renderCredits(theme: Theme, label: string, credits: Credits): string {
-  const styledLabel = theme.fg("dim", label);
+  const styledLabel = theme.fg("dim", label ? `${label} ` : "");
+  const value = credits.type === "windows" ? renderWindows(theme, credits) : renderBalance(theme, credits);
+  const suffix = credits.suffix ? ` ${theme.fg("dim", credits.suffix)}` : "";
 
-  if (credits.type === "windows") return `${styledLabel} ${renderWindows(theme, credits)}`;
-  return `${styledLabel} ${renderBalance(theme, credits)}`;
+  return `${styledLabel}${value}${suffix}`;
 }
 
 export function renderError(theme: Theme, label: string, message: string): string {
