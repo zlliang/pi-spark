@@ -1,7 +1,5 @@
-import { ms } from "ms";
+import parseDuration from "parse-duration";
 import * as z from "zod";
-
-import type { StringValue } from "ms";
 
 const MIN_IDLE_MS = 5_000;
 
@@ -11,20 +9,11 @@ export const idleTimeoutSchema = z
   .transform((value, ctx) => {
     if (typeof value === "number") return value;
 
-    let parsed: number;
-    try {
-      parsed = ms(value as StringValue);
-    } catch (error) {
-      ctx.addIssue({ code: "custom", message: error instanceof Error ? error.message : String(error) });
-      return z.NEVER;
-    }
+    const parsed = parseDuration(value);
+    if (parsed !== null) return parsed;
 
-    if (Number.isNaN(parsed)) {
-      ctx.addIssue({ code: "custom", message: `Value is not a valid duration. value=${JSON.stringify(value)}` });
-      return z.NEVER;
-    }
-
-    return parsed;
+    ctx.addIssue({ code: "custom", message: `Value is not a valid duration. value=${JSON.stringify(value)}` });
+    return z.NEVER;
   })
   .pipe(z.number().min(MIN_IDLE_MS));
 

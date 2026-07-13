@@ -155,7 +155,7 @@ All fields are optional. If the recap model configuration is incomplete, pi-spar
 
 | Field | Value | Description |
 | --- | --- | --- |
-| `idle` | number (ms) or duration string | How long the session must stay idle before a recap is generated. Accepts a millisecond number or a [vercel/ms](https://github.com/vercel/ms) string (e.g., `"5m"`); minimum 5000 ms, defaults to 5 minutes. |
+| `idle` | number (ms) or duration string | How long the session must stay idle before a recap is generated. Accepts a millisecond number or a [parse-duration](https://github.com/jkroso/parse-duration) string (e.g., `"5m"`); minimum 5000 ms, defaults to 5 minutes. |
 | `provider` | string | Provider ID for the recap model. |
 | `model` | string | Model ID for the recap model. |
 | `thinkingLevel` | `ModelThinkingLevel` | Thinking level for the recap model. Defaults to `off`. |

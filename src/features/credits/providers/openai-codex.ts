@@ -1,11 +1,12 @@
 import { uuidv7 } from "@earendil-works/pi-agent-core";
+import prettyMilliseconds from "pretty-ms";
 
 import { confirmCodexReset, formatAvailableResets, showCodexResetLoader, showCodexResetSelector } from "./openai-codex-panel";
 import { toNumber } from "../../../utils/format";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { CodexResetPanelData } from "./openai-codex-panel";
-import type { Credits, CreditsProvider, RefreshCredits } from "../types";
+import type { Credits, CreditsLane, CreditsProvider, RefreshCredits } from "../types";
 
 const PROVIDER = "openai-codex";
 const BASE_URL = "https://chatgpt.com/backend-api";
@@ -24,6 +25,7 @@ interface CodexUsageResponse {
 }
 
 interface CodexRateWindow {
+  limit_window_seconds: number;
   used_percent?: number | string;
 }
 
@@ -126,11 +128,17 @@ function toCredits(usage: CodexUsageResponse, suffix?: string): Credits {
   return {
     type: "windows",
     unlimited: usage.credits?.unlimited === true,
-    lanes: [
-      { label: "5h", percent: parseUsedPercent(usage.rate_limit?.primary_window) },
-      { label: "7d", percent: parseUsedPercent(usage.rate_limit?.secondary_window) },
-    ],
+    lanes: [usage.rate_limit?.primary_window, usage.rate_limit?.secondary_window]
+      .filter((window): window is CodexRateWindow => window != null)
+      .map(toLane),
     suffix,
+  };
+}
+
+function toLane(window: CodexRateWindow): CreditsLane {
+  return {
+    label: prettyMilliseconds(window.limit_window_seconds * 1_000, { compact: true }),
+    percent: parseUsedPercent(window),
   };
 }
 
