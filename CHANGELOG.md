@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.1](https://github.com/zlliang/pi-spark/compare/v0.19.0...v0.19.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* **credits:** derive Codex window labels from limits ([65e7900](https://github.com/zlliang/pi-spark/commit/65e7900a22803c9e0db18837100bb11c6557a617))
+
 ## [0.19.0](https://github.com/zlliang/pi-spark/compare/v0.18.1...v0.19.0) (2026-07-11)
 
 
