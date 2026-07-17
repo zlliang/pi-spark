@@ -66,7 +66,7 @@ function buildLane(label: string, detail: KimiCodeUsage): CreditsLane | undefine
   return percent === undefined ? undefined : { label, percent };
 }
 
-function formatBoosterSuffix(wallet?: KimiCodeBoosterWallet | null): string | undefined {
+function formatSuffix(wallet?: KimiCodeBoosterWallet | null): string | undefined {
   if (wallet?.balance?.type !== "BOOSTER") return undefined;
 
   const amount = toNumber(wallet.balance.amount);
@@ -74,7 +74,7 @@ function formatBoosterSuffix(wallet?: KimiCodeBoosterWallet | null): string | un
 
   const amountLeft = Math.max(0, toNumber(wallet.balance.amountLeft) ?? 0);
   const remaining = Math.round(amountLeft / BOOSTER_FIXED_POINT_CENTS) / 100;
-  return `(Booster $${remaining.toFixed(2)})`;
+  return `(Extra Usage $${remaining.toFixed(2)})`;
 }
 
 export const kimiCodeProvider: CreditsProvider = {
@@ -107,6 +107,6 @@ export const kimiCodeProvider: CreditsProvider = {
 
     if (lanes.length === 0) throw new Error("no usage data");
 
-    return { type: "windows", lanes, suffix: formatBoosterSuffix(payload.boosterWallet) };
+    return { type: "windows", lanes, suffix: formatSuffix(payload.boosterWallet) };
   },
 };
