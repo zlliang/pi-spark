@@ -13,7 +13,7 @@ export const vercelAiGatewayProvider: CreditsProvider = {
   id: PROVIDER,
   label: "Vercel",
 
-  async fetch(_ctx, apiKey, signal): Promise<Credits> {
+  async fetch(apiKey, signal): Promise<Credits> {
     const headers: Record<string, string> = {
       Accept: "application/json",
       Authorization: `Bearer ${apiKey}`,

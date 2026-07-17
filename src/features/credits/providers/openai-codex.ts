@@ -1,4 +1,5 @@
 import { uuidv7 } from "@earendil-works/pi-agent-core";
+import { readStoredCredential } from "@earendil-works/pi-coding-agent";
 import prettyMilliseconds from "pretty-ms";
 
 import { confirmCodexReset, formatAvailableResets, showCodexResetLoader, showCodexResetSelector } from "./openai-codex-panel";
@@ -52,7 +53,7 @@ async function runCodexReset(ctx: ExtensionContext, refresh: RefreshCredits): Pr
   const apiKey = await ctx.modelRegistry.getApiKeyForProvider(PROVIDER);
   if (!apiKey) return;
 
-  const headers = buildHeaders(ctx, apiKey);
+  const headers = buildHeaders(apiKey);
 
   const credit = await showCodexResetSelector(ctx, async (signal) => {
     const requestSignal = AbortSignal.any([signal, AbortSignal.timeout(REQUEST_TIMEOUT_MS)]);
@@ -76,15 +77,15 @@ async function redeemReset(ctx: ExtensionContext, headers: Record<string, string
   }).finally(() => refresh(ctx));
 }
 
-function buildHeaders(ctx: ExtensionContext, apiKey: string): Record<string, string> {
+function buildHeaders(apiKey: string): Record<string, string> {
   const headers: Record<string, string> = {
     Accept: "application/json",
     Authorization: `Bearer ${apiKey}`,
   };
 
-  const credential = ctx.modelRegistry.authStorage.get(PROVIDER);
-  const accountId = credential?.type === "oauth" ? (credential.accountId as string | undefined) : undefined;
-  if (accountId) headers["ChatGPT-Account-ID"] = accountId;
+  const credential = readStoredCredential(PROVIDER);
+  const accountId = credential?.type === "oauth" ? credential.accountId : undefined;
+  if (typeof accountId === "string" && accountId.length > 0) headers["ChatGPT-Account-ID"] = accountId;
 
   return headers;
 }
@@ -151,8 +152,8 @@ export const openaiCodexProvider: CreditsProvider = {
   id: PROVIDER,
   label: "Codex",
 
-  async fetch(ctx, apiKey, signal): Promise<Credits> {
-    const headers = buildHeaders(ctx, apiKey);
+  async fetch(apiKey, signal): Promise<Credits> {
+    const headers = buildHeaders(apiKey);
     const usage = await fetchUsage(headers, signal);
     const availableCount = usage.rate_limit_reset_credits?.available_count ?? 0;
     const suffix = availableCount > 0 ? `(${formatAvailableResets(availableCount)})` : undefined;
@@ -160,9 +161,8 @@ export const openaiCodexProvider: CreditsProvider = {
     return toCredits(usage, suffix);
   },
 
-  register(pi, ctx, refresh): void {
-    const credential = ctx.modelRegistry.authStorage.get(PROVIDER);
-    if (credential?.type !== "oauth") return;
+  register(pi, _ctx, refresh): void {
+    if (readStoredCredential(PROVIDER)?.type !== "oauth") return;
 
     pi.registerCommand("codex-reset", {
       description: "Select and redeem a banked OpenAI Codex rate-limit reset",

@@ -18,7 +18,7 @@ function createMoonshotProvider(id: string, host: string, currency: string): Cre
     id,
     label: "Moonshot",
 
-    async fetch(_ctx, apiKey, signal): Promise<Credits> {
+    async fetch(apiKey, signal): Promise<Credits> {
       const headers: Record<string, string> = {
         Accept: "application/json",
         Authorization: `Bearer ${apiKey}`,

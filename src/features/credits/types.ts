@@ -23,6 +23,6 @@ export type RefreshCredits = (ctx: ExtensionContext) => Promise<void>;
 export interface CreditsProvider {
   readonly id: ProviderId;
   readonly label: string;
-  fetch(ctx: ExtensionContext, apiKey: string, signal: AbortSignal): Promise<Credits>;
+  fetch(apiKey: string, signal: AbortSignal): Promise<Credits>;
   register?(pi: ExtensionAPI, ctx: ExtensionContext, refresh: RefreshCredits): void;
 }

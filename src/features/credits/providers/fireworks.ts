@@ -108,7 +108,7 @@ export const fireworksProvider: CreditsProvider = {
   id: PROVIDER,
   label: "Fireworks",
 
-  async fetch(_ctx, apiKey, signal): Promise<Credits> {
+  async fetch(apiKey, signal): Promise<Credits> {
     const name = await resolveAccount(apiKey, signal);
     const balance = await unary<Balance>("GetBalance", { name }, apiKey, signal);
 

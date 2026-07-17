@@ -51,7 +51,7 @@ export class CreditsManager {
       }
 
       const signals = AbortSignal.any([AbortSignal.timeout(REQUEST_TIMEOUT_MS), signal]);
-      const credits = await provider.fetch(ctx, apiKey, signals);
+      const credits = await provider.fetch(apiKey, signals);
 
       // The active model may have changed while the request was in flight.
       if (ctx.model?.provider !== provider.id) return;
