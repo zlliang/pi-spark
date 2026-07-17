@@ -35,7 +35,7 @@ function formatWindowLabel(window?: { duration?: number; timeUnit?: string } | n
 }
 
 function buildLane(label: string, detail?: KimiCodeUsageResponse["usage"]): CreditsLane {
-  return { label, percent: toPercent(toNumber(detail?.used)) };
+  return { label, percent: toPercent(toNumber(detail?.used ?? 0)) };
 }
 
 export const kimiCodeProvider: CreditsProvider = {
