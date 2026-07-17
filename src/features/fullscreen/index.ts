@@ -50,14 +50,17 @@ export function registerFullscreen(pi: ExtensionAPI): void {
     ctx.ui.setWidget(WIDGET_KEY, (capturedTui) => {
       tui = capturedTui;
 
-      // Defer the entry clear to a microtask: the filler isn't in the render tree until
-      // `setWidget` returns, and `session_start` has no TUI to repaint with yet.
-      if (pendingClear) {
-        pendingClear = false;
-        queueMicrotask(() => capturedTui.requestRender(true));
-      }
+      const filler = new BottomFiller(capturedTui);
+      const shouldClear = pendingClear;
+      pendingClear = false;
 
-      return new BottomFiller(capturedTui);
+      // Defer setup until `setWidget` has mounted the filler in the render tree.
+      queueMicrotask(() => {
+        filler.suppressIdleStatus();
+        if (shouldClear) capturedTui.requestRender(true);
+      });
+
+      return filler;
     });
   });
 
@@ -76,6 +79,7 @@ export function registerFullscreen(pi: ExtensionAPI): void {
       tui.terminal.write(`${line}\r\n`);
     }
 
+    ctx.ui.setWidget(WIDGET_KEY, undefined);
     tui = undefined;
     enabled = false;
     pendingClear = false;
