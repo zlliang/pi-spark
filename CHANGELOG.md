@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.2](https://github.com/zlliang/pi-spark/compare/v0.19.1...v0.19.2) (2026-07-17)
+
+
+### Bug Fixes
+
+* support Pi 0.80.8 ([3f786a1](https://github.com/zlliang/pi-spark/commit/3f786a1db1c60ceb9a4563cab34e35ca55dba232))
+
 ## [0.19.1](https://github.com/zlliang/pi-spark/compare/v0.19.0...v0.19.1) (2026-07-13)
 
 
