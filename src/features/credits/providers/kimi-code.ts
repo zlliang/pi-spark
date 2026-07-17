@@ -4,18 +4,45 @@ import type { Credits, CreditsLane, CreditsProvider } from "../types";
 
 const PROVIDER = "kimi-coding";
 const URL = "https://api.kimi.com/coding/v1/usages";
+const BOOSTER_FIXED_POINT_CENTS = 1_000_000;
 
-interface KimiCodeUsageResponse {
-  usage?: { used?: string | number } | null;
-  limits?: {
-    window?: { duration?: number; timeUnit?: string } | null;
-    detail?: { used?: string | number } | null;
-  }[] | null;
+interface KimiCodeUsage {
+  limit?: string | number;
+  used?: string | number;
+  remaining?: string | number;
 }
 
-function toPercent(used: number | undefined): number | undefined {
-  if (used === undefined) return undefined;
-  return Math.min(100, Math.max(0, used));
+interface KimiCodeLimit {
+  window?: { duration?: number; timeUnit?: string } | null;
+  detail?: KimiCodeUsage | null;
+}
+
+interface KimiCodeBoosterWallet {
+  balance?: {
+    type?: string;
+    amount?: string | number;
+    amountLeft?: string | number;
+  } | null;
+}
+
+interface KimiCodeUsageResponse {
+  usage?: KimiCodeUsage | null;
+  limits?: KimiCodeLimit[] | null;
+  boosterWallet?: KimiCodeBoosterWallet | null;
+}
+
+function toPercent(detail: KimiCodeUsage): number | undefined {
+  const limit = toNumber(detail.limit);
+  let used = toNumber(detail.used);
+
+  if (used === undefined && limit !== undefined) {
+    const remaining = toNumber(detail.remaining);
+    if (remaining !== undefined) used = limit - remaining;
+  }
+
+  if (used === undefined || limit === undefined || limit <= 0) return undefined;
+
+  return Math.min(100, Math.max(0, (used / limit) * 100));
 }
 
 function formatWindowLabel(window?: { duration?: number; timeUnit?: string } | null): string {
@@ -34,8 +61,20 @@ function formatWindowLabel(window?: { duration?: number; timeUnit?: string } | n
   return `${duration}${unit.replace("TIME_UNIT_", "").toLowerCase()}`;
 }
 
-function buildLane(label: string, detail?: KimiCodeUsageResponse["usage"]): CreditsLane {
-  return { label, percent: toPercent(toNumber(detail?.used ?? 0)) };
+function buildLane(label: string, detail: KimiCodeUsage): CreditsLane | undefined {
+  const percent = toPercent(detail);
+  return percent === undefined ? undefined : { label, percent };
+}
+
+function formatBoosterSuffix(wallet?: KimiCodeBoosterWallet | null): string | undefined {
+  if (wallet?.balance?.type !== "BOOSTER") return undefined;
+
+  const amount = toNumber(wallet.balance.amount);
+  if (amount === undefined || amount <= 0) return undefined;
+
+  const amountLeft = Math.max(0, toNumber(wallet.balance.amountLeft) ?? 0);
+  const remaining = Math.round(amountLeft / BOOSTER_FIXED_POINT_CENTS) / 100;
+  return `(Booster $${remaining.toFixed(2)})`;
 }
 
 export const kimiCodeProvider: CreditsProvider = {
@@ -55,15 +94,19 @@ export const kimiCodeProvider: CreditsProvider = {
     const lanes: CreditsLane[] = [];
 
     payload.limits?.forEach((item) => {
-      if (!item) return;
+      if (!item.detail) return;
 
-      const label = formatWindowLabel(item.window);
-      lanes.push(buildLane(label, item.detail));
+      const lane = buildLane(formatWindowLabel(item.window), item.detail);
+      if (lane) lanes.push(lane);
     });
 
-    const weeklyLane = buildLane("7d", payload.usage);
-    lanes.push(weeklyLane);
+    if (payload.usage) {
+      const weeklyLane = buildLane("7d", payload.usage);
+      if (weeklyLane) lanes.push(weeklyLane);
+    }
 
-    return { type: "windows", lanes };
+    if (lanes.length === 0) throw new Error("no usage data");
+
+    return { type: "windows", lanes, suffix: formatBoosterSuffix(payload.boosterWallet) };
   },
 };
