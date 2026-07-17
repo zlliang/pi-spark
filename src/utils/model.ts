@@ -26,11 +26,6 @@ type ThinkingLevelSelection = {
   warning: string | undefined;
 };
 
-/** Check if a model has zero costs for all categories. */
-export function isFreeModel(model: Model<Api>): boolean {
-  return model.cost.input === 0 && model.cost.output === 0 && model.cost.cacheRead === 0 && model.cost.cacheWrite === 0;
-}
-
 /**
  * Complete a one-shot background request, using an isolated session for OpenAI Codex models.
  * See [the investigation](../../docs/background-model-calls-and-openai-codex-sessions.md).
