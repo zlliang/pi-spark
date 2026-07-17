@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.19.3](https://github.com/zlliang/pi-spark/compare/v0.19.2...v0.19.3) (2026-07-17)
+
+
+### Bug Fixes
+
+* **credits:** handle missing used value in Kimi Code lane ([5eb86f8](https://github.com/zlliang/pi-spark/commit/5eb86f8f0606ef88e0adda73b65e2ec29b9ae57d))
+* **footer:** hide cost below half a cent ([04c0f17](https://github.com/zlliang/pi-spark/commit/04c0f17f07ba6400b7a37d797b1d02dd7faf7c06))
+
 ## [0.19.2](https://github.com/zlliang/pi-spark/compare/v0.19.1...v0.19.2) (2026-07-17)
 
 
