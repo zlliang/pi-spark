@@ -120,13 +120,32 @@ All fields are optional. Each top-level feature runs with the defaults below unl
 
 | Field | Value (or `false`) | Description |
 | --- | --- | --- |
-| `credits` | `{}` | Shows the active provider's credit balance or rate-limit usage in the status line. |
+| `credits` | `CreditsConfig` | Shows the active provider's credit balance or rate-limit usage in the status line. |
 | `editor` | `EditorConfig` | Shows a working indicator and the current model on the editor's top border. |
 | `footer` | `FooterConfig` | Shows session info, extension statuses, cost, and context usage. |
 | `fullscreen` | `{}` | Clears the screen and scrollback on start and exit, and pins the editor and footer to the bottom. |
 | `presets` | `{ [name]: Preset }` | Defines named model presets, keyed by name. |
 | `recap` | `RecapConfig` | Generates a session recap when idle or on demand. |
 | `title` | `TitleConfig` | Names the session automatically after the first exchange. |
+
+#### `CreditsConfig`
+
+All supported providers are enabled by default. Set a provider to `false` to disable its credits status, or to `true` to override a global `false` in project config.
+
+```json
+{
+  "credits": {
+    "providers": {
+      "fireworks": false,
+      "openai-codex": true
+    }
+  }
+}
+```
+
+| Field | Value | Description |
+| --- | --- | --- |
+| `providers` | partial map of provider IDs to booleans | Enables or disables credits for individual providers. Valid IDs: `deepseek`, `fireworks`, `kimi-coding`, `moonshotai`, `moonshotai-cn`, `openai-codex`, `openrouter`, and `vercel-ai-gateway`. |
 
 #### `EditorConfig`
 

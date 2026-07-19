@@ -9,12 +9,17 @@ const REQUEST_TIMEOUT_MS = 30_000;
 
 export class CreditsManager {
   private inflight: AbortController | undefined = undefined;
+  private providers: CreditsProvider[];
   private currentProvider: string | undefined = undefined;
+
+  constructor(providers: CreditsProvider[]) {
+    this.providers = providers;
+  }
 
   async refresh(ctx: ExtensionContext): Promise<void> {
     this.inflight?.abort();
 
-    const provider = findProvider(ctx.model?.provider);
+    const provider = findProvider(this.providers, ctx.model?.provider);
     if (!provider) {
       this.inflight = undefined;
       this.currentProvider = undefined;

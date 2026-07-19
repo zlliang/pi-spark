@@ -1,5 +1,5 @@
 import { CreditsManager } from "./manager";
-import { registerProviderExtensions } from "./providers";
+import { getEnabledProviders, registerProviderExtensions } from "./providers";
 import { loadConfig } from "../../config";
 import { isUsage } from "../../utils/usage";
 
@@ -20,8 +20,11 @@ export function registerCredits(pi: ExtensionAPI): void {
     const config = loadConfig(ctx).credits;
     if (!ctx.hasUI || !config) return;
 
-    creditsManager = new CreditsManager();
-    registerProviderExtensions(pi, ctx, async (ctx) => await creditsManager?.refresh(ctx));
+    const providers = getEnabledProviders(config);
+    if (providers.length === 0) return;
+
+    creditsManager = new CreditsManager(providers);
+    registerProviderExtensions(pi, ctx, providers, async (ctx) => await creditsManager?.refresh(ctx));
 
     creditsManager.refresh(ctx);
   });

@@ -2,7 +2,7 @@ import { PRESET_CHANGE } from "../../events";
 import { formatModel } from "../../utils/format";
 
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-import type { PresetsConfig, PresetConfig } from "./config";
+import type { PresetConfig, PresetsConfig } from "./config";
 
 export class PresetManager {
   private pi: ExtensionAPI;

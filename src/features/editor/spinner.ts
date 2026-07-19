@@ -1,10 +1,5 @@
-import * as z from "zod";
-
 import type { TUI } from "@earendil-works/pi-tui";
-
-export const spinnerPresetSchema = z.enum(["dots", "lights", "tildes", "pulse"]);
-
-type SpinnerPreset = z.infer<typeof spinnerPresetSchema>;
+import type { SpinnerPreset } from "./config";
 
 interface SpinnerParams {
   frames: string[];

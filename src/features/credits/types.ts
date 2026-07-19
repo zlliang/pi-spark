@@ -1,5 +1,5 @@
-import type { ProviderId } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
+import type { CreditsProviderId } from "./config";
 
 /**
  * Normalized credits/usage for a provider.
@@ -21,7 +21,7 @@ export type RefreshCredits = (ctx: ExtensionContext) => Promise<void>;
 
 /** A credits source for a Pi provider, shown in the status line while that provider is active. */
 export interface CreditsProvider {
-  readonly id: ProviderId;
+  readonly id: CreditsProviderId;
   readonly label: string;
   fetch(apiKey: string, signal: AbortSignal): Promise<Credits>;
   register?(pi: ExtensionAPI, ctx: ExtensionContext, refresh: RefreshCredits): void;
