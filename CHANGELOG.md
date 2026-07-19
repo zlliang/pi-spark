@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.20.0](https://github.com/zlliang/pi-spark/compare/v0.19.3...v0.20.0) (2026-07-19)
+
+
+### Features
+
+* **credits:** add per-provider enable/disable config ([ec800ef](https://github.com/zlliang/pi-spark/commit/ec800ef0cc44abcfebb0f54577c648c2ab8f3a86))
+* **credits:** improve Kimi usage reporting ([675d5f0](https://github.com/zlliang/pi-spark/commit/675d5f077e9cb16e491d25e243f5641fc11861b1))
+* **footer:** add statusPosition config for inline/below extension statuses ([4bfec49](https://github.com/zlliang/pi-spark/commit/4bfec49c7bbe656404dd75f2e335939f3ec88d8c))
+
+
+### Bug Fixes
+
+* **credits:** clarify Kimi extra usage balance ([685052c](https://github.com/zlliang/pi-spark/commit/685052c1e04e1ffbfdecd876305eb00f08dacb97))
+* **fullscreen:** suppress idle status gap ([02cc41d](https://github.com/zlliang/pi-spark/commit/02cc41d522512b3c5fdf2111032f1d1d8b07ce56))
+
 ## [0.19.3](https://github.com/zlliang/pi-spark/compare/v0.19.2...v0.19.3) (2026-07-17)
 
 
