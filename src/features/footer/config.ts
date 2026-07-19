@@ -1,3 +1,9 @@
 import * as z from "zod";
 
-export const footerConfigSchema = z.object({});
+const statusPositionSchema = z.enum(["inline", "below"]);
+
+export type StatusPosition = z.infer<typeof statusPositionSchema>;
+
+export const footerConfigSchema = z.object({
+  statusPosition: statusPositionSchema.optional(),
+});

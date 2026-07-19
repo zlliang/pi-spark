@@ -1,26 +1,30 @@
 import { homedir } from "node:os";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { hyperlink, Text } from "@earendil-works/pi-tui";
 
 import { SplitLine } from "../../components/split-line";
 import { loadConfig } from "../../config";
 import { formatContextUsage, formatCost, formatCwd, sanitizeText } from "../../utils/format";
 import { getEntryUsage } from "../../utils/usage";
 
-import { hyperlink } from "@earendil-works/pi-tui";
-
 import type { ExtensionContext, ExtensionAPI, ReadonlyFooterDataProvider, Theme } from "@earendil-works/pi-coding-agent";
 import type { Component } from "@earendil-works/pi-tui";
+import type { StatusPosition } from "./config";
+
+const DEFAULT_STATUS_POSITION: StatusPosition = "inline";
 
 class FooterComponent implements Component {
   private ctx: ExtensionContext;
   private theme: Theme;
   private footerData: ReadonlyFooterDataProvider;
+  private statusPosition: StatusPosition;
 
-  constructor(ctx: ExtensionContext, theme: Theme, footerData: ReadonlyFooterDataProvider) {
+  constructor(ctx: ExtensionContext, theme: Theme, footerData: ReadonlyFooterDataProvider, statusPosition: StatusPosition = DEFAULT_STATUS_POSITION) {
     this.ctx = ctx;
     this.theme = theme;
     this.footerData = footerData;
+    this.statusPosition = statusPosition;
   }
 
   invalidate(): void {
@@ -31,7 +35,14 @@ class FooterComponent implements Component {
     const left = this.getLeft();
     const right = this.getRight();
 
-    return new SplitLine(left, right, { primarySide: "right", ellipsis: this.theme.fg("dim", "…") }).render(width);
+    const lines = new SplitLine(left, right, { primarySide: "right", ellipsis: this.theme.fg("dim", "…") }).render(width);
+
+    if (this.statusPosition === "below") {
+      const statusesText = this.getStatusesText();
+      if (statusesText) lines.push(...new Text(statusesText, 0, 0).render(width));
+    }
+
+    return lines;
   }
 
   private getLeft(): string {
@@ -45,7 +56,7 @@ class FooterComponent implements Component {
   }
 
   private getRight(): string {
-    const statusesText = this.getStatusesText();
+    const statusesText = this.statusPosition === "inline" ? this.getStatusesText() : "";
     const styledCostText = this.getStyledCostText();
     const styledContextUsageText = this.getStyledContextUsageText();
 
@@ -91,6 +102,6 @@ export function registerFooter(pi: ExtensionAPI): void {
     const config = loadConfig(ctx).footer;
     if (!ctx.hasUI || !config) return;
 
-    ctx.ui.setFooter((_tui, theme, footerData) => new FooterComponent(ctx, theme, footerData));
+    ctx.ui.setFooter((_tui, theme, footerData) => new FooterComponent(ctx, theme, footerData, config.statusPosition));
   });
 }

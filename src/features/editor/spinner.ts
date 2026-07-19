@@ -35,7 +35,7 @@ const SPINNER_PRESETS: Record<SpinnerPreset, SpinnerParams> = {
   },
 };
 
-const DEFAULT_SPINNER_PRESET = "tildes";
+const DEFAULT_SPINNER_PRESET: SpinnerPreset = "tildes";
 
 export class Spinner {
   private tui: TUI | undefined;
