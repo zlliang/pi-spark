@@ -15,6 +15,7 @@
   "files": [
     "index.ts",
     "src",
+    "themes",
     "assets",
     "docs",
     "README.md",
@@ -23,6 +24,9 @@
   "pi": {
     "extensions": [
       "./index.ts"
+    ],
+    "themes": [
+      "./themes"
     ],
     "image": "https://raw.githubusercontent.com/zlliang/pi-spark/main/assets/cover.png"
   },

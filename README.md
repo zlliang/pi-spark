@@ -213,3 +213,18 @@ For example, to disable the customized footer:
   "footer": false
 }
 ```
+
+## Themes
+
+pi-spark ships with two custom themes inspired by [GitHub's VS Code themes](https://github.com/primer/github-vscode-theme):
+
+- [`github-light-default`](themes/github-light-default.json)
+- [`github-dark-default`](themes/github-dark-default.json)
+
+Select either theme in `/settings`, or configure automatic switching between them:
+
+```json
+{
+  "theme": "github-light-default/github-dark-default"
+}
+```
