@@ -73,13 +73,13 @@
     "syntaxOperator": "text",
     "syntaxPunctuation": "text",
 
-    "thinkingOff": "borderMuted",
-    "thinkingMinimal": "dim",
-    "thinkingLow": "accent",
-    "thinkingMedium": "success",
-    "thinkingHigh": "purple",
-    "thinkingXhigh": "pink",
-    "thinkingMax": "error",
+    "thinkingOff": "dim",
+    "thinkingMinimal": "muted",
+    "thinkingLow": "#547da7",
+    "thinkingMedium": "#5a8080",
+    "thinkingHigh": "#875f87",
+    "thinkingXhigh": "#8b008b",
+    "thinkingMax": "#af005f",
 
     "bashMode": "success"
   },

@@ -149,7 +149,7 @@ All supported providers are enabled by default. Set a provider to `false` to dis
 
 #### `EditorConfig`
 
-The `spinner` field is optional and defaults to `tildes`.
+The `spinner` field is optional and defaults to `tildes`. `thinkingLevelIndicator` is also optional and defaults to `border`.
 
 | Field | Value | Description |
 | --- | --- | --- |
@@ -157,6 +157,8 @@ The `spinner` field is optional and defaults to `tildes`.
 |  | `lights` | `○, ●` |
 |  | `tildes` (default) | `∼, ≈, ≋, ≈, ∼` |
 |  | `pulse` | `·, •, ●, •, ·` |
+| `thinkingLevelIndicator` | `border` (default) | Uses the thinking-level color for the editor border. |
+|  | `model` | Uses the thinking-level color for the model name and the dim color for the editor border. |
 
 #### `FooterConfig`
 

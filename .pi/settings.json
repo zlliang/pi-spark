@@ -1,6 +1,6 @@
 {
   "packages": [
-    { "source": "git:github.com/zlliang/pi-spark", "autoload": false, "extensions": ["-index.ts"] },
+    { "source": "git:github.com/zlliang/pi-spark", "autoload": false, "extensions": ["-index.ts"], "themes": ["-themes/github-dark-default.json", "-themes/github-light-default.json"] },
     ".."
   ]
 }

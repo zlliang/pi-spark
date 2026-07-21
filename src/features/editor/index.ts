@@ -9,16 +9,18 @@ import { formatModel } from "../../utils/format";
 import type { ExtensionAPI, ExtensionContext, KeybindingsManager } from "@earendil-works/pi-coding-agent";
 import type { TUI, EditorTheme } from "@earendil-works/pi-tui";
 import type { EventCollector } from "../../events";
+import type { ThinkingLevelIndicator } from "./config";
 
 class Editor extends CustomEditor {
   private pi: ExtensionAPI;
   private ctx: ExtensionContext;
 
   private spinner: Spinner;
+  private thinkingLevelIndicator: ThinkingLevelIndicator;
   private workingMessage: string | undefined;
   private slots: { modelBefore: string | undefined };
 
-  constructor(pi: ExtensionAPI, ctx: ExtensionContext, tui: TUI, theme: EditorTheme, keybindings: KeybindingsManager, spinner: Spinner = new Spinner()) {
+  constructor(pi: ExtensionAPI, ctx: ExtensionContext, tui: TUI, theme: EditorTheme, keybindings: KeybindingsManager, spinner: Spinner = new Spinner(), thinkingLevelIndicator: ThinkingLevelIndicator = "border") {
     super(tui, theme, keybindings);
 
     this.pi = pi;
@@ -26,6 +28,7 @@ class Editor extends CustomEditor {
 
     this.spinner = spinner;
     this.spinner.setTUI(tui);
+    this.thinkingLevelIndicator = thinkingLevelIndicator;
     this.workingMessage = undefined;
     this.slots = { modelBefore: undefined };
   }
@@ -41,6 +44,12 @@ class Editor extends CustomEditor {
   }
 
   render(width: number): string[] {
+    // Pi reapplies the thinking-level border color when the level changes. Use the dim color here
+    // while preserving Bash mode's dedicated border color.
+    if (this.thinkingLevelIndicator === "model" && !this.getText().trimStart().startsWith("!")) {
+      this.borderColor = (text) => this.ctx.ui.theme.fg("dim", text);
+    }
+
     const lines = super.render(width);
     if (lines.length === 0) return lines;
 
@@ -77,8 +86,16 @@ class Editor extends CustomEditor {
 
     const modelBeforeText = this.slots.modelBefore;
     const modelText = formatModel(this.ctx.model?.provider, this.ctx.model?.id, this.pi.getThinkingLevel());
+    const coloredModelText = this.thinkingLevelIndicator === "model" ? this.withThinkingLevelColor(modelText) : theme.fg("dim", modelText);
 
-    return theme.fg("dim", [modelBeforeText, modelText].filter(Boolean).join(" · "));
+    return [modelBeforeText ? theme.fg("dim", modelBeforeText) : undefined, coloredModelText].filter(Boolean).join(theme.fg("dim", " · "));
+  }
+
+  private withThinkingLevelColor(text: string): string {
+    const theme = this.ctx.ui.theme;
+    const thinkingLevel = this.pi.getThinkingLevel();
+
+    return theme.getThinkingBorderColor(thinkingLevel)(text);
   }
 }
 
@@ -95,7 +112,7 @@ export function registerEditor(pi: ExtensionAPI, events: EventCollector): void {
 
     ctx.ui.setWorkingVisible(false);
     ctx.ui.setEditorComponent((tui, theme, keybindings) => {
-      editor = new Editor(pi, ctx, tui, theme, keybindings, spinner);
+      editor = new Editor(pi, ctx, tui, theme, keybindings, spinner, config.thinkingLevelIndicator);
 
       events.on(PRESET_CHANGE, (data) => {
         const payload = parsePresetChange(data);
