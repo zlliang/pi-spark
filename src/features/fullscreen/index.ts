@@ -56,7 +56,7 @@ export function registerFullscreen(pi: ExtensionAPI): void {
 
       // Defer setup until `setWidget` has mounted the filler in the render tree.
       queueMicrotask(() => {
-        filler.suppressIdleStatus();
+        filler.mount();
         if (shouldClear) capturedTui.requestRender(true);
       });
 
