@@ -75,7 +75,7 @@ class FooterComponent implements Component {
   }
 
   private getStyledCostText(): string {
-    const totalCost = this.ctx.sessionManager.getBranch().reduce((acc, entry) => acc + (getEntryUsage(entry)?.cost.total ?? 0), 0);
+    const totalCost = this.ctx.sessionManager.getEntries().reduce((acc, entry) => acc + (getEntryUsage(entry)?.cost.total ?? 0), 0);
 
     // Hide cost below half a cent, since it would render as $0.00.
     if (totalCost < 0.005) return "";

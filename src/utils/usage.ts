@@ -33,6 +33,7 @@ export function isUsage(value: unknown): value is Usage {
  * - `message` carries them on `message`.
  * - `custom` on `data`.
  * - `custom_message` on `details`.
+ * - `compaction` and `branch_summary` directly on the entry.
  *
  * Other entry types carry no usage. Returns `undefined` when the resolved field has no `usage`.
  */
@@ -41,6 +42,7 @@ export function getEntryUsage(entry: SessionEntry): Usage | undefined {
   if (entry.type === "message") source = entry.message;
   else if (entry.type === "custom") source = entry.data;
   else if (entry.type === "custom_message") source = entry.details;
+  else if (entry.type === "compaction" || entry.type === "branch_summary") source = entry;
   else return;
 
   if (typeof source !== "object" || source === null) return;
