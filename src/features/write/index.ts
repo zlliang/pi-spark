@@ -114,7 +114,7 @@ function trimTrailingEmptyLines(lines: string[]): string[] {
 }
 
 function renderOmission(hiddenLines: number, totalLines: number, theme: Theme): string {
-  const summary = theme.fg("muted", `... (${hiddenLines} more lines, ${totalLines} total,`);
+  const summary = theme.fg("muted", `... (${hiddenLines} earlier lines, ${totalLines} total,`);
   return `${summary} ${keyHint("app.tools.expand", "to expand")}${theme.fg("muted", ")")}`;
 }
 
