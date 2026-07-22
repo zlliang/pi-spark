@@ -8,7 +8,7 @@ export function registerTitle(pi: ExtensionAPI): void {
 
   pi.on("session_start", (_event, ctx) => {
     const config = loadConfig(ctx).title;
-    if (!ctx.hasUI || !config) return;
+    if (!config) return;
 
     titleManager = new TitleManager(pi, config);
   });

@@ -100,7 +100,7 @@ class FooterComponent implements Component {
 export function registerFooter(pi: ExtensionAPI): void {
   pi.on("session_start", (_event, ctx) => {
     const config = loadConfig(ctx).footer;
-    if (!ctx.hasUI || !config) return;
+    if (ctx.mode !== "tui" || !config) return;
 
     ctx.ui.setFooter((_tui, theme, footerData) => new FooterComponent(ctx, theme, footerData, config.statusPosition));
   });

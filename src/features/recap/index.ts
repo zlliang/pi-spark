@@ -10,7 +10,7 @@ export function registerRecap(pi: ExtensionAPI): void {
 
   pi.on("session_start", (event, ctx) => {
     const config = loadConfig(ctx).recap;
-    if (!ctx.hasUI || !config) return;
+    if (ctx.mode !== "tui" || !config) return;
 
     recapManager = new RecapManager(pi, config);
 

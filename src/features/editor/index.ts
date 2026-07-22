@@ -106,7 +106,7 @@ export function registerEditor(pi: ExtensionAPI, events: EventCollector): void {
 
   pi.on("session_start", (_event, ctx) => {
     const config = loadConfig(ctx).editor;
-    if (!ctx.hasUI || !config) return;
+    if (ctx.mode !== "tui" || !config) return;
 
     spinner = new Spinner(config.spinner);
 

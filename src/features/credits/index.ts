@@ -18,7 +18,7 @@ export function registerCredits(pi: ExtensionAPI): void {
 
   pi.on("session_start", (_event, ctx) => {
     const config = loadConfig(ctx).credits;
-    if (!ctx.hasUI || !config) return;
+    if (ctx.mode !== "tui" || !config) return;
 
     const providers = getEnabledProviders(config);
     if (providers.length === 0) return;
