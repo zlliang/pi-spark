@@ -32,9 +32,8 @@ export class TitleManager {
 
   /** Generate and set the session title once, silently, from the current context. */
   async run(ctx: ExtensionContext): Promise<void> {
-    if (this.pi.getSessionName()) return;
+    if (this.pi.getSessionName() || this.inflight) return;
 
-    this.cancelInflight();
     const controller = new AbortController();
     this.inflight = controller;
 
@@ -44,7 +43,7 @@ export class TitleManager {
 
       const { model, thinkingLevel } = modelSettings;
       const result = await this.generate(ctx, model, thinkingLevel, controller.signal);
-      if (controller.signal.aborted || this.inflight !== controller || !result.content) return;
+      if (controller.signal.aborted || this.inflight !== controller || !result.content || this.pi.getSessionName()) return;
 
       this.pi.setSessionName(result.content);
       this.pi.appendEntry("title", {

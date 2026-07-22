@@ -13,8 +13,13 @@ export function registerTitle(pi: ExtensionAPI): void {
     titleManager = new TitleManager(pi, config);
   });
 
-  // Generate the title after the first exchange, once the session has context to summarize.
-  // The manager runs at most once and skips sessions that already have a name.
+  // Generate the title after the first completed turn, without waiting for the full agent run.
+  // The manager skips sessions that already have a name and prevents concurrent attempts.
+  pi.on("turn_end", (_event, ctx) => {
+    void titleManager?.run(ctx);
+  });
+
+  // Fall back to settlement if the run ends without a completed turn or an early attempt fails.
   pi.on("agent_settled", (_event, ctx) => {
     void titleManager?.run(ctx);
   });
