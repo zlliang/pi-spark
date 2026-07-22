@@ -80,6 +80,8 @@ pi-spark names the session automatically after the first completed turn, so it's
 
 Long, streaming `write` tool calls keep their latest lines visible instead of pinning the preview to the beginning. The omitted-line count appears above the preview, while `ctrl+o` still expands the full content.
 
+https://github.com/user-attachments/assets/2c1bbe92-b74e-4100-bd87-ca31110a2d04
+
 ## Configuration
 
 pi-spark reads config from `~/.pi/agent/spark.json` and from the current project's `.pi/spark.json`. Project config overrides matching global fields.
