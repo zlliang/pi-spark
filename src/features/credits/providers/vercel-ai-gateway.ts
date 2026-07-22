@@ -1,4 +1,5 @@
 import { toNumber } from "../../../utils/format";
+import { http, withAuth } from "../../../utils/http";
 
 import type { Credits, CreditsProvider } from "../types";
 
@@ -14,15 +15,7 @@ export const vercelAiGatewayProvider: CreditsProvider = {
   label: "Vercel",
 
   async fetch(apiKey, signal): Promise<Credits> {
-    const headers: Record<string, string> = {
-      Accept: "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    };
-
-    const response = await fetch(URL, { headers, signal });
-    if (!response.ok) throw new Error("request failed");
-
-    const payload = (await response.json()) as VercelCreditsResponse;
+    const payload = await withAuth(http, apiKey).get(URL, { signal }).json<VercelCreditsResponse>();
     const remaining = toNumber(payload.balance);
 
     return { type: "balance", remaining };

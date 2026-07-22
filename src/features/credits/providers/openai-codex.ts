@@ -4,8 +4,10 @@ import prettyMilliseconds from "pretty-ms";
 
 import { confirmCodexReset, formatAvailableResets, showCodexResetLoader, showCodexResetSelector } from "./openai-codex-panel";
 import { toNumber } from "../../../utils/format";
+import { http, withAuth } from "../../../utils/http";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
+import type { KyInstance } from "ky";
 import type { CodexResetPanelData } from "./openai-codex-panel";
 import type { Credits, CreditsLane, CreditsProvider, RefreshCredits } from "../types";
 
@@ -14,7 +16,6 @@ const BASE_URL = "https://chatgpt.com/backend-api";
 const USAGE_PATH = "/wham/usage";
 const RESET_CREDITS_PATH = "/wham/rate-limit-reset-credits";
 const CONSUME_RESET_PATH = "/wham/rate-limit-reset-credits/consume";
-const REQUEST_TIMEOUT_MS = 30_000;
 
 interface CodexUsageResponse {
   rate_limit?: {
@@ -53,11 +54,10 @@ async function runCodexReset(ctx: ExtensionContext, refresh: RefreshCredits): Pr
   const apiKey = await ctx.modelRegistry.getApiKeyForProvider(PROVIDER);
   if (!apiKey) return;
 
-  const headers = buildHeaders(apiKey);
+  const client = createClient(apiKey);
 
   const credit = await showCodexResetSelector(ctx, async (signal) => {
-    const requestSignal = AbortSignal.any([signal, AbortSignal.timeout(REQUEST_TIMEOUT_MS)]);
-    const [usage, details] = await Promise.all([fetchUsage(headers, requestSignal), fetchResetCredits(headers, requestSignal)]);
+    const [usage, details] = await Promise.all([fetchUsage(client, signal), fetchResetCredits(client, signal)]);
 
     return {
       ...details,
@@ -66,63 +66,42 @@ async function runCodexReset(ctx: ExtensionContext, refresh: RefreshCredits): Pr
   });
   if (!credit || !(await confirmCodexReset(ctx, credit))) return;
 
-  await redeemReset(ctx, headers, credit, refresh);
+  await redeemReset(ctx, client, credit, refresh);
 }
 
-async function redeemReset(ctx: ExtensionContext, headers: Record<string, string>, credit: BankedRateLimitReset, refresh: RefreshCredits): Promise<void> {
+async function redeemReset(ctx: ExtensionContext, client: KyInstance, credit: BankedRateLimitReset, refresh: RefreshCredits): Promise<void> {
   await showCodexResetLoader(ctx, async () => {
-    const response = await consumeReset(headers, uuidv7(), credit.id);
+    const response = await consumeReset(client, uuidv7(), credit.id);
     if (response.code === "nothing_to_reset") throw new Error("No Codex rate-limit window currently needs a reset");
     if (response.code === "no_credit") throw new Error("No Codex resets are available");
   }).finally(() => refresh(ctx));
 }
 
-function buildHeaders(apiKey: string): Record<string, string> {
-  const headers: Record<string, string> = {
-    Accept: "application/json",
-    Authorization: `Bearer ${apiKey}`,
-  };
-
+function createClient(apiKey: string): KyInstance {
+  const client = withAuth(http, apiKey);
   const credential = readStoredCredential(PROVIDER);
   const accountId = credential?.type === "oauth" ? credential.accountId : undefined;
-  if (typeof accountId === "string" && accountId.length > 0) headers["ChatGPT-Account-ID"] = accountId;
 
-  return headers;
+  return typeof accountId === "string" && accountId.length > 0
+    ? client.extend({ headers: { "ChatGPT-Account-ID": accountId } })
+    : client;
 }
 
-async function requestJson<T>(path: string, headers: Record<string, string>, signal: AbortSignal, init: RequestInit = {}): Promise<T> {
-  const requestHeaders = new Headers(headers);
-  new Headers(init.headers).forEach((value, key) => requestHeaders.set(key, value));
-
-  const response = await fetch(`${BASE_URL}${path}`, {
-    ...init,
-    headers: requestHeaders,
-    signal,
-  });
-  if (!response.ok) throw new Error(`Codex backend returned ${response.status}`);
-
-  return (await response.json()) as T;
+async function fetchUsage(client: KyInstance, signal: AbortSignal): Promise<CodexUsageResponse> {
+  return client.get(`${BASE_URL}${USAGE_PATH}`, { signal }).json<CodexUsageResponse>();
 }
 
-async function fetchUsage(headers: Record<string, string>, signal: AbortSignal): Promise<CodexUsageResponse> {
-  return requestJson<CodexUsageResponse>(USAGE_PATH, headers, signal);
+async function fetchResetCredits(client: KyInstance, signal: AbortSignal): Promise<RateLimitResetCreditsResponse> {
+  return client.get(`${BASE_URL}${RESET_CREDITS_PATH}`, { signal }).json<RateLimitResetCreditsResponse>();
 }
 
-async function fetchResetCredits(headers: Record<string, string>, signal: AbortSignal): Promise<RateLimitResetCreditsResponse> {
-  return requestJson<RateLimitResetCreditsResponse>(RESET_CREDITS_PATH, headers, signal);
-}
-
-async function consumeReset(headers: Record<string, string>, redeemRequestId: string, creditId: string): Promise<ConsumeResetResponse> {
-  return requestJson<ConsumeResetResponse>(
-    CONSUME_RESET_PATH,
-    headers,
-    AbortSignal.timeout(REQUEST_TIMEOUT_MS),
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ redeem_request_id: redeemRequestId, credit_id: creditId }),
+async function consumeReset(client: KyInstance, redeemRequestId: string, creditId: string): Promise<ConsumeResetResponse> {
+  return client.post(`${BASE_URL}${CONSUME_RESET_PATH}`, {
+    json: {
+      redeem_request_id: redeemRequestId,
+      credit_id: creditId
     },
-  );
+  }).json<ConsumeResetResponse>();
 }
 
 function toCredits(usage: CodexUsageResponse, suffix?: string): Credits {
@@ -153,8 +132,8 @@ export const openaiCodexProvider: CreditsProvider = {
   label: "Codex",
 
   async fetch(apiKey, signal): Promise<Credits> {
-    const headers = buildHeaders(apiKey);
-    const usage = await fetchUsage(headers, signal);
+    const client = createClient(apiKey);
+    const usage = await fetchUsage(client, signal);
     const availableCount = usage.rate_limit_reset_credits?.available_count ?? 0;
     const suffix = availableCount > 0 ? `(${formatAvailableResets(availableCount)})` : undefined;
 

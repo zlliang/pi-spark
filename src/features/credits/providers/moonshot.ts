@@ -1,4 +1,5 @@
 import { convertToUSD, toNumber } from "../../../utils/format";
+import { http, withAuth } from "../../../utils/http";
 
 import type { Credits, CreditsProvider } from "../types";
 
@@ -19,15 +20,7 @@ function createMoonshotProvider(id: "moonshotai" | "moonshotai-cn", host: string
     label: "Moonshot",
 
     async fetch(apiKey, signal): Promise<Credits> {
-      const headers: Record<string, string> = {
-        Accept: "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      };
-
-      const response = await fetch(`https://${host}/v1/users/me/balance`, { headers, signal });
-      if (!response.ok) throw new Error("request failed");
-
-      const payload = (await response.json()) as MoonshotBalanceResponse;
+      const payload = await withAuth(http, apiKey).get(`https://${host}/v1/users/me/balance`, { signal }).json<MoonshotBalanceResponse>();
       const remaining = await convertToUSD(toNumber(payload.data?.available_balance), currency, signal);
 
       return { type: "balance", remaining };

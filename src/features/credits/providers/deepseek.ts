@@ -1,4 +1,5 @@
 import { convertToUSD, toNumber } from "../../../utils/format";
+import { http, withAuth } from "../../../utils/http";
 
 import type { Credits, CreditsProvider } from "../types";
 
@@ -19,15 +20,7 @@ export const deepseekProvider: CreditsProvider = {
   label: "DeepSeek",
 
   async fetch(apiKey, signal): Promise<Credits> {
-    const headers: Record<string, string> = {
-      Accept: "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    };
-
-    const response = await fetch(URL, { headers, signal });
-    if (!response.ok) throw new Error("request failed");
-
-    const payload = (await response.json()) as DeepSeekBalanceResponse;
+    const payload = await withAuth(http, apiKey).get(URL, { signal }).json<DeepSeekBalanceResponse>();
     const balance = payload.balance_infos?.find((entry) => entry.currency === "USD") ?? payload.balance_infos?.[0];
     const remaining = await convertToUSD(toNumber(balance?.total_balance), balance?.currency, signal);
 

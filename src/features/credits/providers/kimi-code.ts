@@ -1,4 +1,5 @@
 import { toNumber } from "../../../utils/format";
+import { http, withAuth } from "../../../utils/http";
 
 import type { Credits, CreditsLane, CreditsProvider } from "../types";
 
@@ -82,15 +83,7 @@ export const kimiCodeProvider: CreditsProvider = {
   label: "Kimi Code",
 
   async fetch(apiKey, signal): Promise<Credits> {
-    const headers: Record<string, string> = {
-      Accept: "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    };
-
-    const response = await fetch(URL, { headers, signal });
-    if (!response.ok) throw new Error("request failed");
-
-    const payload = (await response.json()) as KimiCodeUsageResponse;
+    const payload = await withAuth(http, apiKey).get(URL, { signal }).json<KimiCodeUsageResponse>();
     const lanes: CreditsLane[] = [];
 
     payload.limits?.forEach((item) => {

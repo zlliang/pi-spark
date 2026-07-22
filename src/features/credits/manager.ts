@@ -5,7 +5,6 @@ import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { CreditsProvider } from "./types";
 
 const STATUS_KEY = "credits";
-const REQUEST_TIMEOUT_MS = 30_000;
 
 export class CreditsManager {
   private inflight: AbortController | undefined = undefined;
@@ -55,8 +54,7 @@ export class CreditsManager {
         return;
       }
 
-      const signals = AbortSignal.any([AbortSignal.timeout(REQUEST_TIMEOUT_MS), signal]);
-      const credits = await provider.fetch(apiKey, signals);
+      const credits = await provider.fetch(apiKey, signal);
 
       // The active model may have changed while the request was in flight.
       if (ctx.model?.provider !== provider.id) return;

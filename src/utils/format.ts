@@ -1,5 +1,7 @@
 import { isAbsolute, relative, resolve, sep } from "node:path";
 
+import { http } from "./http";
+
 import type { ProviderId } from "@earendil-works/pi-ai";
 import type { ContextUsage } from "@earendil-works/pi-coding-agent";
 
@@ -76,10 +78,7 @@ export async function convertToUSD(amount: number | undefined, currency: string 
   if (!currency || currency === "USD") return amount;
 
   const url = `${FRANKFURTER_API}/${encodeURIComponent(currency)}/USD`;
-  const response = await fetch(url, { headers: { Accept: "application/json" }, signal });
-  if (!response.ok) throw new Error("currency conversion failed");
-
-  const payload = (await response.json()) as FrankfurterRateResponse;
+  const payload = await http.get(url, { signal }).json<FrankfurterRateResponse>();
   const rate = toNumber(payload.rate);
   if (rate === undefined) throw new Error("currency conversion failed");
 

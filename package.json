@@ -37,6 +37,7 @@
     "@grpc/grpc-js": "^1.14.4",
     "@grpc/proto-loader": "^0.8.1",
     "defu": "^6.1.7",
+    "ky": "^2.0.2",
     "parse-duration": "^2.1.8",
     "pretty-ms": "^9.3.0",
     "zod": "^4.4.3"
