@@ -76,6 +76,10 @@ pi-spark names the session automatically after the first completed turn, so it's
 - Sessions that already have a name are left untouched.
 - The title generation can use its own model, configured separately from your working model.
 
+### Scrolling write previews
+
+Long, streaming `write` tool calls keep their latest lines visible instead of pinning the preview to the beginning. The omitted-line count appears above the preview, while `ctrl+o` still expands the full content.
+
 ## Configuration
 
 pi-spark reads config from `~/.pi/agent/spark.json` and from the current project's `.pi/spark.json`. Project config overrides matching global fields.
@@ -127,6 +131,7 @@ All fields are optional. Each top-level feature runs with the defaults below unl
 | `presets` | `{ [name]: Preset }` | Defines named model presets, keyed by name. |
 | `recap` | `RecapConfig` | Generates a session recap when idle or on demand. |
 | `title` | `TitleConfig` | Names the session automatically after the first completed turn. |
+| `write` | `{}` | Keeps the latest lines of streaming `write` tool calls visible. |
 
 #### `CreditsConfig`
 
