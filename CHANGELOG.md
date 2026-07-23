@@ -1,5 +1,29 @@
 # Changelog
 
+## [0.21.0](https://github.com/zlliang/pi-spark/compare/v0.20.0...v0.21.0) (2026-07-23)
+
+
+### Features
+
+* **credits:** retry HTTP requests with Ky ([ee0a304](https://github.com/zlliang/pi-spark/commit/ee0a304de314a7950e9289ea2cb1618caf4d67bb))
+* **editor:** add model thinking level indicator ([d27059d](https://github.com/zlliang/pi-spark/commit/d27059df79f77d4087fe5c20218e3f76385781ae))
+* **themes:** add GitHub default themes ([40838ed](https://github.com/zlliang/pi-spark/commit/40838ed1b00be8b66da335eb8d29fa059b0bf51b))
+* **write:** add scrolling tail previews ([7542dde](https://github.com/zlliang/pi-spark/commit/7542dde92ac0c3973f9b284001d530b4115ff21c))
+
+
+### Bug Fixes
+
+* **footer:** include all session usage costs ([ed69b31](https://github.com/zlliang/pi-spark/commit/ed69b314bd1d56072b55804f64b7ed0f738675d8))
+* **modes:** handle non-TUI sessions correctly ([58e0246](https://github.com/zlliang/pi-spark/commit/58e02460109ca2cb494bc870ef1b8be0d2140e4f))
+* **themes:** improve muted colors and code fence contrast ([b8a85d9](https://github.com/zlliang/pi-spark/commit/b8a85d96cec879c59cfc2d3eb9aeee0f6b4efb72))
+* **title:** generate after first turn ([5fbf21e](https://github.com/zlliang/pi-spark/commit/5fbf21e0c2a2489d0582171a3b763dba045f1189))
+* **write:** clarify omitted line summary ([702af59](https://github.com/zlliang/pi-spark/commit/702af59c5877147a05c4279b80e7258807a837c6))
+
+
+### Performance Improvements
+
+* **fullscreen:** render transcript only once ([7eb60b9](https://github.com/zlliang/pi-spark/commit/7eb60b960d7acc544a8f5aa18b935f12c4bd9457))
+
 ## [0.20.0](https://github.com/zlliang/pi-spark/compare/v0.19.3...v0.20.0) (2026-07-19)
 
 
