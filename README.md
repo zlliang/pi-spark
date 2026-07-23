@@ -80,7 +80,7 @@ pi-spark names the session automatically after the first completed turn, so it's
 
 Long, streaming `write` tool calls keep their latest lines visible instead of pinning the preview to the beginning. The omitted-line count appears above the preview, while `ctrl+o` still expands the full content.
 
-https://raw.githubusercontent.com/zlliang/pi-spark/refs/heads/main/assets/screencast-write.mp4
+https://github.com/user-attachments/assets/b7bb77c1-c188-46a2-aba9-6487bdf58fa0
 
 ## Configuration
 
