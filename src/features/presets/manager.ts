@@ -80,10 +80,14 @@ export class PresetManager {
     const currentIndex = currentKey ? this.keys.indexOf(currentKey) : -1;
     const step = direction === "forward" ? 1 : -1;
     const nextIndex = currentIndex === -1 ? direction === "forward" ? 0 : this.keys.length - 1 : (currentIndex + step + this.keys.length) % this.keys.length;
-    const nextKey = this.keys[nextIndex];
-    if (!nextKey) return;
 
-    await this.apply(nextKey, ctx);
+    for (let offset = 0; offset < this.keys.length; offset++) {
+      const candidateIndex = (nextIndex + step * offset + this.keys.length) % this.keys.length;
+      const candidateKey = this.keys[candidateIndex];
+      if (!candidateKey) continue;
+
+      if (await this.apply(candidateKey, ctx)) return;
+    }
   }
 
   describe(key: string): string {
