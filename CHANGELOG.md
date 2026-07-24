@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.21.1](https://github.com/zlliang/pi-spark/compare/v0.21.0...v0.21.1) (2026-07-24)
+
+
+### Bug Fixes
+
+* **credits:** extract token from Authorization header for OAuth providers ([06f7309](https://github.com/zlliang/pi-spark/commit/06f7309bd520e76947dc7a9523b6fc4e2855a779))
+* **credits:** resolve OAuth tokens consistently ([e7fd9d8](https://github.com/zlliang/pi-spark/commit/e7fd9d8098cfaf96c79a7122b95d388016b6cefa))
+* **presets:** skip unavailable presets when cycling ([72348da](https://github.com/zlliang/pi-spark/commit/72348da41a6037165a1d89381a98fa54e8209993))
+
 ## [0.21.0](https://github.com/zlliang/pi-spark/compare/v0.20.0...v0.21.0) (2026-07-23)
 
 
