@@ -47,14 +47,17 @@ export class CreditsManager {
 
   private async fetch(ctx: ExtensionContext, provider: CreditsProvider, signal: AbortSignal): Promise<void> {
     try {
-      const apiKey = await ctx.modelRegistry.getApiKeyForProvider(provider.id);
+      const auth = await ctx.modelRegistry.getProviderAuth(provider.id);
       if (signal.aborted) return;
-      if (!apiKey) {
+
+      const authorization = Object.entries(auth?.auth.headers ?? {}).find(([name]) => name.toLowerCase() === "authorization")?.[1];
+      const token = auth?.auth.apiKey ?? authorization?.match(/^Bearer\s+(.+)$/i)?.[1];
+      if (!token) {
         ctx.ui.setStatus(STATUS_KEY, undefined);
         return;
       }
 
-      const credits = await provider.fetch(apiKey, signal);
+      const credits = await provider.fetch(token, signal);
 
       // The active model may have changed while the request was in flight.
       if (ctx.model?.provider !== provider.id) return;
