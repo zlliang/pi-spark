@@ -1,3 +1,4 @@
+import { getAuthToken } from "../../utils/auth";
 import { findProvider } from "./providers";
 import { renderCredits, renderError } from "./status";
 
@@ -47,11 +48,8 @@ export class CreditsManager {
 
   private async fetch(ctx: ExtensionContext, provider: CreditsProvider, signal: AbortSignal): Promise<void> {
     try {
-      const auth = await ctx.modelRegistry.getProviderAuth(provider.id);
+      const token = await getAuthToken(ctx.modelRegistry, provider.id);
       if (signal.aborted) return;
-
-      const authorization = Object.entries(auth?.auth.headers ?? {}).find(([name]) => name.toLowerCase() === "authorization")?.[1];
-      const token = auth?.auth.apiKey ?? authorization?.match(/^Bearer\s+(.+)$/i)?.[1];
       if (!token) {
         ctx.ui.setStatus(STATUS_KEY, undefined);
         return;

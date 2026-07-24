@@ -3,6 +3,7 @@ import { readStoredCredential } from "@earendil-works/pi-coding-agent";
 import prettyMilliseconds from "pretty-ms";
 
 import { confirmCodexReset, formatAvailableResets, showCodexResetLoader, showCodexResetSelector } from "./openai-codex-panel";
+import { getAuthToken } from "../../../utils/auth";
 import { toNumber } from "../../../utils/format";
 import { http, withAuth } from "../../../utils/http";
 
@@ -51,10 +52,10 @@ interface ConsumeResetResponse {
 }
 
 async function runCodexReset(ctx: ExtensionContext, refresh: RefreshCredits): Promise<void> {
-  const apiKey = await ctx.modelRegistry.getApiKeyForProvider(PROVIDER);
-  if (!apiKey) return;
+  const token = await getAuthToken(ctx.modelRegistry, PROVIDER);
+  if (!token) return;
 
-  const client = createClient(apiKey);
+  const client = createClient(token);
 
   const credit = await showCodexResetSelector(ctx, async (signal) => {
     const [usage, details] = await Promise.all([fetchUsage(client, signal), fetchResetCredits(client, signal)]);
