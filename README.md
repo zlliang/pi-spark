@@ -230,6 +230,8 @@ pi-spark ships with two custom themes inspired by [GitHub's VS Code themes](http
 - [`github-light-default`](themes/github-light-default.json)
 - [`github-dark-default`](themes/github-dark-default.json)
 
+![Themes](./assets/screenshot-themes.png)
+
 Select either theme in `/settings`, or configure automatic switching between them:
 
 ```json
