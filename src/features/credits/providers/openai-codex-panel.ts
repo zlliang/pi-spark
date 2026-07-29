@@ -11,11 +11,11 @@ import type { Credits } from "../types";
 
 const DATE_COLUMN_WIDTH = 14;
 
-export interface CodexResetPanelData extends RateLimitResetCreditsResponse {
+export interface CodexResetsPanelData extends RateLimitResetCreditsResponse {
   usage: Credits;
 }
 
-export async function showCodexResetSelector(ctx: ExtensionContext, load: (signal: AbortSignal) => Promise<CodexResetPanelData>): Promise<BankedRateLimitReset | undefined> {
+export async function showCodexResetsSelector(ctx: ExtensionContext, load: (signal: AbortSignal) => Promise<CodexResetsPanelData>): Promise<BankedRateLimitReset | undefined> {
   const selected = await ctx.ui.custom<BankedRateLimitReset | null>((tui, theme, _keybindings, done) => {
     const controller = new AbortController();
 
@@ -175,7 +175,7 @@ export async function confirmCodexReset(ctx: ExtensionContext, credit: BankedRat
   return confirmed ?? false;
 }
 
-export async function showCodexResetLoader(ctx: ExtensionContext, run: () => Promise<void>): Promise<void> {
+export async function showCodexResetsLoader(ctx: ExtensionContext, run: () => Promise<void>): Promise<void> {
   await ctx.ui.custom<void>((tui, theme, _keybindings, done) => {
     const container = new Container();
     const loader = new Loader(tui, (text) => theme.fg("accent", text), (text) => theme.fg("muted", text), "Redeeming...");

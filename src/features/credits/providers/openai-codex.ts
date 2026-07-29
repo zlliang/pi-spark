@@ -2,14 +2,14 @@ import { uuidv7 } from "@earendil-works/pi-agent-core";
 import { readStoredCredential } from "@earendil-works/pi-coding-agent";
 import prettyMilliseconds from "pretty-ms";
 
-import { confirmCodexReset, formatAvailableResets, showCodexResetLoader, showCodexResetSelector } from "./openai-codex-panel";
+import { confirmCodexReset, formatAvailableResets, showCodexResetsLoader, showCodexResetsSelector } from "./openai-codex-panel";
 import { getAuthToken } from "../../../utils/auth";
 import { toNumber } from "../../../utils/format";
 import { http, withAuth } from "../../../utils/http";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { KyInstance } from "ky";
-import type { CodexResetPanelData } from "./openai-codex-panel";
+import type { CodexResetsPanelData } from "./openai-codex-panel";
 import type { Credits, CreditsLane, CreditsProvider, RefreshCredits } from "../types";
 
 const PROVIDER = "openai-codex";
@@ -51,19 +51,19 @@ interface ConsumeResetResponse {
   windows_reset: number;
 }
 
-async function runCodexReset(ctx: ExtensionContext, refresh: RefreshCredits): Promise<void> {
+async function runCodexResets(ctx: ExtensionContext, refresh: RefreshCredits): Promise<void> {
   const token = await getAuthToken(ctx.modelRegistry, PROVIDER);
   if (!token) return;
 
   const client = createClient(token);
 
-  const credit = await showCodexResetSelector(ctx, async (signal) => {
+  const credit = await showCodexResetsSelector(ctx, async (signal) => {
     const [usage, details] = await Promise.all([fetchUsage(client, signal), fetchResetCredits(client, signal)]);
 
     return {
       ...details,
       usage: toCredits(usage, `· ${formatAvailableResets(details.available_count)}`),
-    } satisfies CodexResetPanelData;
+    } satisfies CodexResetsPanelData;
   });
   if (!credit || !(await confirmCodexReset(ctx, credit))) return;
 
@@ -71,7 +71,7 @@ async function runCodexReset(ctx: ExtensionContext, refresh: RefreshCredits): Pr
 }
 
 async function redeemReset(ctx: ExtensionContext, client: KyInstance, credit: BankedRateLimitReset, refresh: RefreshCredits): Promise<void> {
-  await showCodexResetLoader(ctx, async () => {
+  await showCodexResetsLoader(ctx, async () => {
     const response = await consumeReset(client, uuidv7(), credit.id);
     if (response.code === "nothing_to_reset") throw new Error("No Codex rate-limit window currently needs a reset");
     if (response.code === "no_credit") throw new Error("No Codex resets are available");
@@ -144,9 +144,9 @@ export const openaiCodexProvider: CreditsProvider = {
   register(pi, _ctx, refresh): void {
     if (readStoredCredential(PROVIDER)?.type !== "oauth") return;
 
-    pi.registerCommand("codex-reset", {
-      description: "Select and redeem a banked OpenAI Codex rate-limit reset",
-      handler: async (_args, ctx) => await runCodexReset(ctx, refresh),
+    pi.registerCommand("codex-resets", {
+      description: "Browse and redeem banked OpenAI Codex rate-limit resets",
+      handler: async (_args, ctx) => await runCodexResets(ctx, refresh),
     });
   },
 };

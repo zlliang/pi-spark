@@ -43,7 +43,7 @@ pi-spark shows the active provider's credit balance or rate-limit usage in the s
 
 #### OpenAI Codex banked resets
 
-Banked rate-limit resets are saved benefits that can reset eligible Codex usage windows when redeemed. When available, their count appears after the usage windows. Run `/codex-reset` to inspect each reset and its expiration date, then select one to redeem. See [OpenAI Codex Banked Rate-Limit Resets](./docs/openai-codex-banked-rate-limit-resets.md) for the underlying behavior and internal APIs.
+Banked rate-limit resets are saved benefits that can reset eligible Codex usage windows when redeemed. When available, their count appears after the usage windows. Run `/codex-resets` to inspect each reset and its expiration date, then select one to redeem. See [OpenAI Codex Banked Rate-Limit Resets](./docs/openai-codex-banked-rate-limit-resets.md) for the underlying behavior and internal APIs.
 
 ![Codex resets](./assets/screenshot-codex-resets.png)
 

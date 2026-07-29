@@ -212,7 +212,7 @@ When `/wham/usage` reports one or more available resets, the credits status appe
 Codex 5h 42% 7d 7% (4 resets available)
 ```
 
-The suffix is omitted when no reset is available. `/codex-reset` opens an interactive panel that loads current usage and reset details, lists available resets by title, grant time, and expiration time, and sorts the earliest expiration first. Selecting a reset opens a separate confirmation prompt before any POST request is made.
+The suffix is omitted when no reset is available. `/codex-resets` opens an interactive panel that loads current usage and reset details, lists available resets by title, grant time, and expiration time, and sorts the earliest expiration first. Selecting a reset opens a separate confirmation prompt before any POST request is made.
 
 Each confirmed redemption uses a new UUIDv7 idempotency key and makes one consume request without automatic retries. Successful and idempotently completed redemptions refresh the credits status.
 
