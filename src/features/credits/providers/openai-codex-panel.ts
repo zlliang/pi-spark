@@ -10,6 +10,7 @@ import type { BankedRateLimitReset, RateLimitResetCreditsResponse } from "./open
 import type { Credits } from "../types";
 
 const DATE_COLUMN_WIDTH = 14;
+const DATE_FORMATTER = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
 
 export interface CodexResetsPanelData extends RateLimitResetCreditsResponse {
   usage: Credits;
@@ -214,10 +215,12 @@ function formatCreditTitle(credit: BankedRateLimitReset): string {
 }
 
 function formatCreditDescription(credit: BankedRateLimitReset, padEnd: boolean = true): string {
-  const formatDate = (value: string) => new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(value));
+  const formatDate = (value: string) => DATE_FORMATTER.format(new Date(value));
+  const pad = (text: string) => (padEnd ? text.padEnd(DATE_COLUMN_WIDTH) : text);
 
-  const granted = padEnd ? `Granted ${formatDate(credit.granted_at)}`.padEnd(DATE_COLUMN_WIDTH) : `Granted ${formatDate(credit.granted_at)}`;
-  const expires = padEnd ? (credit.expires_at ? `Expires ${formatDate(credit.expires_at)}` : "No expiration").padEnd(DATE_COLUMN_WIDTH) : (credit.expires_at ? `Expires ${formatDate(credit.expires_at)}` : "No expiration");
+  const granted = pad(`Granted ${formatDate(credit.granted_at)}`);
+  const expires = pad(credit.expires_at ? `Expires ${formatDate(credit.expires_at)}` : "No expiration");
+
   return `${granted} · ${expires}`;
 }
 
