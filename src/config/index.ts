@@ -8,18 +8,19 @@ import { featureSchemas } from "./schema";
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { SparkConfig } from "./schema";
 
+const CONFIG_FILE = "spark.json";
+
 const cache = new Map<string, SparkConfig>();
 
 /** Load and validate spark.json once per session lifecycle; later calls return the cached result. */
-export function loadConfig(ctx: ExtensionContext, fileName: string = "spark.json"): SparkConfig {
-  const key = `${ctx.cwd}\u0000${fileName}`;
-  const cached = cache.get(key);
+export function loadConfig(ctx: ExtensionContext): SparkConfig {
+  const cached = cache.get(ctx.cwd);
   if (cached) return cached;
 
   // Deep-merge the global file under the project file, so project settings win at scalar
   // leaves while deep objects (e.g., `recap.model`) combine across both.
-  const [globalPath, projectPath] = getConfigPaths(ctx.cwd, fileName);
-  const raw = defu(readRawConfig(projectPath) ?? {}, readRawConfig(globalPath) ?? {});
+  const [globalPath, projectPath] = getConfigPaths(ctx.cwd, CONFIG_FILE);
+  const raw = defu(readJson(projectPath) ?? {}, readJson(globalPath) ?? {});
 
   // Validate each feature independently so a single invalid field disables only that feature
   // (falling back to its enabled defaults) instead of taking down the whole config.
@@ -53,7 +54,7 @@ export function loadConfig(ctx: ExtensionContext, fileName: string = "spark.json
     ctx.ui.notify(`Invalid pi-spark config: ${errors.join("; ")}`, "error");
   }
 
-  cache.set(key, config as SparkConfig);
+  cache.set(ctx.cwd, config as SparkConfig);
   return config as SparkConfig;
 }
 
@@ -61,7 +62,7 @@ function getConfigPaths(cwd: string, fileName: string): [globalPath: string, pro
   return [join(getAgentDir(), fileName), join(cwd, CONFIG_DIR_NAME, fileName)];
 }
 
-function readRawConfig(path: string): Record<string, unknown> | undefined {
+function readJson(path: string): Record<string, unknown> | undefined {
   try {
     return JSON.parse(readFileSync(path, "utf8")) as Record<string, unknown>;
   } catch {
