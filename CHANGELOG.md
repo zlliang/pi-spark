@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.22.0](https://github.com/zlliang/pi-spark/compare/v0.21.1...v0.22.0) (2026-08-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **fullscreen:** use Pi's native fullscreen mode
+
+### Code Refactoring
+
+* **fullscreen:** use Pi's native fullscreen mode ([3fbc092](https://github.com/zlliang/pi-spark/commit/3fbc09234f4baff627624b99714fd8057e179e80))
+
 ## [0.21.1](https://github.com/zlliang/pi-spark/compare/v0.21.0...v0.21.1) (2026-07-24)
 
 
