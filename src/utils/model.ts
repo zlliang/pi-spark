@@ -70,40 +70,27 @@ export async function resolveModelSettings(ctx: ExtensionContext, config: Option
 }
 
 async function resolveModel(ctx: ExtensionContext, config: OptionalModelConfig, feature: string, fallbackModel: Model<Api>): Promise<ModelSelection> {
-  if (!config.provider && !config.model) {
-    return {
-      model: fallbackModel,
-      warning: undefined,
-    };
+  let model = fallbackModel;
+  let warning: string | undefined = undefined;
+
+  if (config.provider && config.model) {
+    const reference = formatModel(config.provider, config.model);
+    const configuredModel = ctx.modelRegistry.find(config.provider, config.model);
+    if (!configuredModel) {
+      warning = `Model ${reference} not found; using the current model.`;
+    } else {
+      const auth = await ctx.modelRegistry.getApiKeyAndHeaders(configuredModel);
+      if (auth.ok) {
+        model = configuredModel;
+      } else {
+        warning = `Model ${reference} unavailable: ${auth.error}; using the current model.`;
+      }
+    }
+  } else if (config.provider || config.model) {
+    warning = `Both ${feature}.provider and ${feature}.model are required; using the current model.`;
   }
 
-  if (!config.provider || !config.model) {
-    return {
-      model: fallbackModel,
-      warning: `Both ${feature}.provider and ${feature}.model are required; using the current model.`,
-    };
-  }
-
-  const model = ctx.modelRegistry.find(config.provider, config.model);
-  if (!model) {
-    return {
-      model: fallbackModel,
-      warning: `Model ${formatModel(config.provider, config.model)} not found; using the current model.`,
-    };
-  }
-
-  const auth = await ctx.modelRegistry.getApiKeyAndHeaders(model);
-  if (!auth.ok) {
-    return {
-      model: fallbackModel,
-      warning: `Model ${formatModel(config.provider, config.model)} unavailable: ${auth.error}; using the current model.`,
-    };
-  }
-
-  return {
-    model,
-    warning: undefined,
-  };
+  return { model, warning };
 }
 
 function resolveThinkingLevel(model: Model<Api>, requested: ModelThinkingLevel): ThinkingLevelSelection {
