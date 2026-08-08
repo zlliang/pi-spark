@@ -87,6 +87,7 @@ export class RecapManager {
     const options: SimpleStreamOptions = { maxTokens: MAX_TOKENS, signal };
     if (auth.apiKey) options.apiKey = auth.apiKey;
     if (auth.headers) options.headers = auth.headers;
+    if (auth.env) options.env = auth.env;
     if (thinkingLevel !== "off") options.reasoning = thinkingLevel;
 
     const response = await completeBackground(model, {
