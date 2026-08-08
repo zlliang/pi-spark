@@ -59,7 +59,7 @@ export async function resolveModelSettings(ctx: ExtensionContext, config: Option
     return;
   }
 
-  const { model, warning: modelWarning } = await resolveModelSelection(ctx, config, feature, fallbackModel);
+  const { model, warning: modelWarning } = await resolveModel(ctx, config, feature, fallbackModel);
   const { thinkingLevel, warning: thinkingLevelWarning } = resolveThinkingLevel(model, config.thinkingLevel ?? DEFAULT_THINKING_LEVEL);
 
   return {
@@ -69,7 +69,7 @@ export async function resolveModelSettings(ctx: ExtensionContext, config: Option
   };
 }
 
-async function resolveModelSelection(ctx: ExtensionContext, config: OptionalModelConfig, feature: string, fallbackModel: Model<Api>): Promise<ModelSelection> {
+async function resolveModel(ctx: ExtensionContext, config: OptionalModelConfig, feature: string, fallbackModel: Model<Api>): Promise<ModelSelection> {
   if (!config.provider && !config.model) {
     return {
       model: fallbackModel,
