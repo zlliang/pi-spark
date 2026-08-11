@@ -5,7 +5,7 @@ import { hyperlink, Text } from "@earendil-works/pi-tui";
 
 import { SplitLine } from "../../components/split-line";
 import { loadConfig } from "../../config";
-import { formatContextUsage, formatCost, formatCwd, sanitizeText } from "../../utils/format";
+import { formatContextUsage, formatCwd, sanitizeText } from "../../utils/format";
 import { getEntryUsage } from "../../utils/usage";
 
 import type { ExtensionContext, ExtensionAPI, ReadonlyFooterDataProvider, Theme } from "@earendil-works/pi-coding-agent";
@@ -76,11 +76,9 @@ class FooterComponent implements Component {
 
   private getStyledCostText(): string {
     const totalCost = this.ctx.sessionManager.getEntries().reduce((acc, entry) => acc + (getEntryUsage(entry)?.cost.total ?? 0), 0);
+    if (totalCost < 0.0005) return ""; // Hide cost below half a millicent, since it would render as $0.000.
 
-    // Hide cost below half a cent, since it would render as $0.00.
-    if (totalCost < 0.005) return "";
-
-    const costText = formatCost(totalCost);
+    const costText = `$${totalCost.toFixed(3)}`;
 
     if (totalCost > 20) return this.theme.fg("warning", costText);
     return this.theme.fg("dim", costText);

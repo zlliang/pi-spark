@@ -26,10 +26,6 @@ export function formatContextUsage(contextUsage: ContextUsage | undefined): stri
   return `${tokens === null ? "?" : formatTokens(tokens)}/${contextWindow === null ? "?" : formatTokens(contextWindow)} (${percentText})`;
 }
 
-export function formatCost(cost: number): string {
-  return `$${cost.toFixed(2)}`;
-}
-
 export function formatCwd(cwd: string, home: string): string {
   const resolvedCwd = resolve(cwd);
   const resolvedHome = resolve(home);
