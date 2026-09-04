@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.22.1](https://github.com/zlliang/pi-spark/compare/v0.22.0...v0.22.1) (2026-09-04)
+
+
+### Bug Fixes
+
+* **auth:** pass environment to background requests ([a89c943](https://github.com/zlliang/pi-spark/commit/a89c943c4190b659ac4cf3ffec49eff315008f94))
+* **credits:** enable credits status in RPC mode ([#72](https://github.com/zlliang/pi-spark/issues/72)) ([58e9cc1](https://github.com/zlliang/pi-spark/commit/58e9cc16bbae4a06cc9ea89e694f7723f6abcd7d))
+* **credits:** simplify mode check ([a58acd1](https://github.com/zlliang/pi-spark/commit/a58acd1ca7830f4a03941ad90778a1b4f2ae715c))
+* **model:** avoid authenticating fallback models ([3a6f6a1](https://github.com/zlliang/pi-spark/commit/3a6f6a12bbf180079cf09333842cf4159583cf7e))
+
 ## [0.22.0](https://github.com/zlliang/pi-spark/compare/v0.21.1...v0.22.0) (2026-08-07)
 
 
