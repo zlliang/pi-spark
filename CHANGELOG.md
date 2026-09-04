@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.22.2](https://github.com/zlliang/pi-spark/compare/v0.22.1...v0.22.2) (2026-09-04)
+
+
+### Miscellaneous Chores
+
+* trigger release 0.22.2 ([b8463a8](https://github.com/zlliang/pi-spark/commit/b8463a887b9be6c81d8d55df7b6a31df6acdb21f))
+
 ## [0.22.1](https://github.com/zlliang/pi-spark/compare/v0.22.0...v0.22.1) (2026-09-04)
 
 
