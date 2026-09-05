@@ -16,6 +16,7 @@ interface OpenRouterCreditsResponse {
 export const openrouterProvider: CreditsProvider = {
   id: PROVIDER,
   label: "OpenRouter",
+  link: "https://openrouter.ai/settings/credits",
 
   async fetch(apiKey, signal): Promise<Credits> {
     const payload = await withAuth(http, apiKey).get(URL, { signal }).json<OpenRouterCreditsResponse>();

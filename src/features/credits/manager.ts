@@ -60,7 +60,7 @@ export class CreditsManager {
       // The active model may have changed while the request was in flight.
       if (ctx.model?.provider !== provider.id) return;
 
-      ctx.ui.setStatus(STATUS_KEY, renderCredits(ctx.ui.theme, provider.label, credits));
+      ctx.ui.setStatus(STATUS_KEY, renderCredits(ctx.ui.theme, provider.label, credits, provider.link));
     } catch (error) {
       if (signal.aborted) return;
       if (ctx.model?.provider !== provider.id) return;

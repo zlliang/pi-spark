@@ -18,6 +18,7 @@ interface DeepSeekBalanceInfo {
 export const deepseekProvider: CreditsProvider = {
   id: PROVIDER,
   label: "DeepSeek",
+  link: "https://platform.deepseek.com/usage",
 
   async fetch(apiKey, signal): Promise<Credits> {
     const payload = await withAuth(http, apiKey).get(URL, { signal }).json<DeepSeekBalanceResponse>();

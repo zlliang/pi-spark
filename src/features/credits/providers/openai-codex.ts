@@ -131,6 +131,7 @@ function parseUsedPercent(window?: CodexRateWindow | null): number | undefined {
 export const openaiCodexProvider: CreditsProvider = {
   id: PROVIDER,
   label: "Codex",
+  link: "https://chatgpt.com/codex/cloud/settings/analytics",
 
   async fetch(apiKey, signal): Promise<Credits> {
     const client = createClient(apiKey);

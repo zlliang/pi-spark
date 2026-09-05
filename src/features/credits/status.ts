@@ -1,3 +1,5 @@
+import { hyperlink } from "@earendil-works/pi-tui";
+
 import type { Theme } from "@earendil-works/pi-coding-agent";
 import type { Credits, CreditsLane } from "./types";
 
@@ -6,12 +8,13 @@ const WINDOWS_ERROR = 90;
 const BALANCE_WARNING = 10;
 const BALANCE_ERROR = 5;
 
-export function renderCredits(theme: Theme, label: string, credits: Credits): string {
+export function renderCredits(theme: Theme, label: string, credits: Credits, link?: string): string {
   const styledLabel = theme.fg("dim", label ? `${label} ` : "");
   const value = credits.type === "windows" ? renderWindows(theme, credits) : renderBalance(theme, credits);
   const suffix = credits.suffix ? ` ${theme.fg("dim", credits.suffix)}` : "";
 
-  return `${styledLabel}${value}${suffix}`;
+  const text = `${styledLabel}${value}${suffix}`;
+  return link ? hyperlink(text, link) : text;
 }
 
 export function renderError(theme: Theme, label: string, message: string): string {

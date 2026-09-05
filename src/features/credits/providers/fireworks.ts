@@ -107,6 +107,7 @@ function moneyToNumber(money: Money | null | undefined): number | undefined {
 export const fireworksProvider: CreditsProvider = {
   id: PROVIDER,
   label: "Fireworks",
+  link: "https://app.fireworks.ai/account/billing",
 
   async fetch(apiKey, signal): Promise<Credits> {
     const name = await resolveAccount(apiKey, signal);
