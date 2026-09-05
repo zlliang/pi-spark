@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.0](https://github.com/zlliang/pi-spark/compare/v0.22.2...v0.23.0) (2026-09-05)
+
+
+### Features
+
+* **credits:** add provider dashboard hyperlinks ([f7a7ec2](https://github.com/zlliang/pi-spark/commit/f7a7ec2b2394dd65e5c6ce20bc4b3d8fb5cc600e))
+
 ## [0.22.2](https://github.com/zlliang/pi-spark/compare/v0.22.1...v0.22.2) (2026-09-04)
 
 
