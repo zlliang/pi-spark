@@ -24,7 +24,6 @@ from typing import Annotated, Any, BinaryIO
 import orjson
 import typer
 
-
 Json = dict[str, Any]
 REPO = Path(__file__).resolve().parents[4]
 FIELDS = (
