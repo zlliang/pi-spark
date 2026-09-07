@@ -53,12 +53,12 @@ class Editor extends CustomEditor {
     const lines = super.render(width);
     if (lines.length === 0) return lines;
 
-    lines[0] = this.renderTopBorder(width);
+    lines[0] = this.getTopBorder(width);
 
     return lines;
   }
 
-  private renderTopBorder(width: number): string {
+  private getTopBorder(width: number): string {
     const theme = this.ctx.ui.theme;
 
     const left = this.getLeft();
