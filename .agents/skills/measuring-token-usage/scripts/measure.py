@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["orjson", "typer"]
 # ///
-"""Measure prompt and output tokens from one minimal Pi turn."""
+"""Measures prompt and output tokens from one minimal Pi turn."""
 
 from __future__ import annotations
 

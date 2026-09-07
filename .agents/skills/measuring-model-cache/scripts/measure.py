@@ -3,7 +3,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["orjson", "typer"]
 # ///
-"""A/B-measure how a pi-spark background call affects the next main turn."""
+"""A/B-measures how a pi-spark background call affects the next main turn."""
 
 from __future__ import annotations
 
