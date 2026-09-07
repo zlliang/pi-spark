@@ -218,7 +218,7 @@ def stable_prompt(chars: int) -> str:
 
 
 def write_config(path: Path, options: Options, variant: str) -> None:
-    config = dict(DISABLED)
+    config: Json = dict(DISABLED)
     if variant == "treatment":
         config[options.feature] = {
             "provider": options.feature_provider,
