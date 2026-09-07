@@ -404,7 +404,7 @@ def main(
     ] = REPO,
     pi: Annotated[str, typer.Option(envvar="PI_BIN", help="Pi executable")] = "pi",
 ) -> None:
-    """Compare main-thread cache behavior with title or recap disabled and enabled."""
+    """Compares main-thread cache behavior with title or recap disabled and enabled."""
     if not (repo / "index.ts").is_file():
         raise typer.BadParameter("index.ts not found", param_hint="--repo")
     if shutil.which(pi) is None:

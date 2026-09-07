@@ -63,7 +63,7 @@ class FooterComponent implements Component {
     return [statusesText, styledCostText, styledContextUsageText].filter(Boolean).join(this.theme.fg("dim", " · "));
   }
 
-  /** Get extension statuses, sorted by key alphabetically. */
+  /** Gets extension statuses, sorted alphabetically by key. */
   private getStatusesText(): string {
     const extensionStatuses = this.footerData.getExtensionStatuses();
     if (extensionStatuses.size === 0) return "";

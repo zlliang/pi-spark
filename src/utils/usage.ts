@@ -26,9 +26,9 @@ export function isUsage(value: unknown): value is Usage {
 }
 
 /**
- * Extract usage from a session entry.
+ * Extracts usage from a session entry.
  *
- * `usage` live in different fields depending on the entry type:
+ * `usage` lives in different fields depending on the entry type:
  *
  * - `message` carries them on `message`.
  * - `custom` on `data`.

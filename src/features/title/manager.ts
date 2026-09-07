@@ -30,7 +30,7 @@ export class TitleManager {
     this.config = config;
   }
 
-  /** Generate and set the session title once, silently, from the current context. */
+  /** Generates and sets the session title once, silently, from the current context. */
   async run(ctx: ExtensionContext): Promise<void> {
     if (this.pi.getSessionName() || this.inflight) return;
 

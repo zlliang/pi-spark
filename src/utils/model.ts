@@ -27,7 +27,7 @@ type ThinkingLevelSelection = {
 };
 
 /**
- * Complete a one-shot background request, using an isolated session for OpenAI Codex models.
+ * Completes a one-shot background request, using an isolated session for OpenAI Codex models.
  * See [the investigation](../../docs/background-model-calls-and-openai-codex-sessions.md).
  */
 export const completeBackground: typeof completeSimple = async (model, context, options) => {
@@ -43,7 +43,7 @@ export const completeBackground: typeof completeSimple = async (model, context, 
 };
 
 /**
- * Resolve the model and thinking level for a background feature (recap, title, ...).
+ * Resolves the model and thinking level for a background feature (recap, title, ...).
  *
  * `feature` names the config section so warnings can point at the offending fields. When the
  * feature's model config is incomplete or unavailable, this falls back to the session's main

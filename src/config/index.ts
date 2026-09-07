@@ -12,7 +12,7 @@ const CONFIG_FILE = "spark.json";
 
 const cache = new Map<string, SparkConfig>();
 
-/** Load and validate spark.json once per session lifecycle; later calls return the cached result. */
+/** Loads and validates spark.json once per session lifecycle; later calls return the cached result. */
 export function loadConfig(ctx: ExtensionContext): SparkConfig {
   const cached = cache.get(ctx.cwd);
   if (cached) return cached;

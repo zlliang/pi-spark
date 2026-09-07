@@ -46,7 +46,7 @@ def measure(
     timeout: Annotated[float, typer.Option(min=1, help="Pi timeout in seconds")] = 180,
     pi: Annotated[str, typer.Option(envvar="PI_BIN", help="Pi executable")] = "pi",
 ) -> None:
-    """Run one minimal Pi turn and print label,provider,model,prompt,output as CSV."""
+    """Runs one minimal Pi turn and prints label,provider,model,prompt,output as CSV."""
     if shutil.which(pi) is None:
         raise typer.BadParameter(f"executable not found: {pi}", param_hint="--pi")
 

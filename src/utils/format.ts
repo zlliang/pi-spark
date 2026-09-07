@@ -36,7 +36,7 @@ export function formatCwd(cwd: string, home: string): string {
   return shortenPath(displayCwd);
 }
 
-/** Shorten every path component except the first and last to one character, like fish `prompt_pwd`. */
+/** Shortens every path component except the first and last to one character, like fish `prompt_pwd`. */
 function shortenPath(path: string): string {
   const parts = path.split(sep);
   const lastIndex = parts.length - 1;
@@ -47,7 +47,7 @@ function shortenPath(path: string): string {
   }).join(sep);
 }
 
-/** Replace newlines, tabs, carriage returns with space, then collapse multiple spaces */
+/** Replaces newlines, tabs, and carriage returns with spaces, then collapses multiple spaces. */
 export function sanitizeText(text: string): string {
   return text
     .replace(/[\r\n\t]/g, " ")
@@ -55,7 +55,7 @@ export function sanitizeText(text: string): string {
     .trim();
 }
 
-/** Coerce a possibly-stringified numeric value to a finite number, or `undefined`. */
+/** Coerces a possibly-stringified numeric value to a finite number, or `undefined`. */
 export function toNumber(value?: string | number | null): number | undefined {
   if (value === undefined || value === null) return undefined;
   const parsed = typeof value === "number" ? value : Number(value);
@@ -68,7 +68,7 @@ interface FrankfurterRateResponse {
   rate?: string | number;
 }
 
-/** Convert an amount in the given currency to USD via the Frankfurter API. */
+/** Converts an amount in the given currency to USD via the Frankfurter API. */
 export async function convertToUSD(amount: number | undefined, currency: string | undefined, signal: AbortSignal): Promise<number | undefined> {
   if (amount === undefined) return undefined;
   if (!currency || currency === "USD") return amount;

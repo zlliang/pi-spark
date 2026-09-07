@@ -19,8 +19,8 @@ const DEFAULT_INLINE_TEXT_OPTIONS: Required<InlineTextOptions> = {
 /**
  * Text component that renders inline and truncates it to fit the given width.
  *
- * The given width is a budget, not a guaranteed rendered width. After rendering, callers should
- * check the result with visibleWidth(), because the rendered width may be smaller than the budget.
+ * The given width is a budget, not a guaranteed rendered width. After rendering, check the result
+ * with visibleWidth(), because the rendered width may be smaller than the budget.
  */
 export class InlineText implements Component {
   private text: string;

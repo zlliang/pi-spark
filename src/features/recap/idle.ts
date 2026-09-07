@@ -3,7 +3,7 @@ import * as z from "zod";
 
 const MIN_IDLE_MS = 5_000;
 
-/** Accept a millisecond number or a human-readable duration (e.g., "3m"), normalized to milliseconds. */
+/** Accepts a millisecond number or a human-readable duration (e.g., "3m"), normalized to milliseconds. */
 export const idleTimeoutSchema = z
   .union([z.number(), z.string()])
   .transform((value, ctx) => {
@@ -76,7 +76,7 @@ export class IdleListener<T> {
     this.enterCallbacks.forEach((callback) => callback(ctx));
   }
 
-  /** Emit on every wake signal, even when the listener is already active. */
+  /** Emits on every wake signal, even when the listener is already active. */
   wake(ctx: T): void {
     this.stop();
     this.state = "active";
