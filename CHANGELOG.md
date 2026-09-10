@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.22.3](https://github.com/zlliang/pi-spark/compare/v0.22.2...v0.22.3) (2026-09-10)
+
+
+### Features
+
+* **credits:** add provider dashboard hyperlinks ([f7a7ec2](https://github.com/zlliang/pi-spark/commit/f7a7ec2b2394dd65e5c6ce20bc4b3d8fb5cc600e))
+* **credits:** show reset times and convert Kimi balances to USD ([7c4a478](https://github.com/zlliang/pi-spark/commit/7c4a4782cecba8ecc557bfcf496b898347b5e2b5))
+
+
+### Bug Fixes
+
+* correct cache probe config typing ([1695212](https://github.com/zlliang/pi-spark/commit/1695212c607163ebc2fbb721d6088377f36b9887))
+* **credits:** update Codex usage settings link ([4f8d72c](https://github.com/zlliang/pi-spark/commit/4f8d72c6acbd519ab7850b8a086a09de5d83ca98))
+
 ## [0.22.2](https://github.com/zlliang/pi-spark/compare/v0.22.1...v0.22.2) (2026-09-04)
 
 
