@@ -30,6 +30,7 @@ interface CodexUsageResponse {
 interface CodexRateWindow {
   limit_window_seconds: number;
   used_percent?: number | string;
+  reset_at?: number;
 }
 
 export interface BankedRateLimitReset {
@@ -120,6 +121,7 @@ function toLane(window: CodexRateWindow): CreditsLane {
   return {
     label: prettyMilliseconds(window.limit_window_seconds * 1_000, { compact: true }),
     percent: parseUsedPercent(window),
+    resetAt: !!window.reset_at ? window.reset_at * 1_000 : undefined,
   };
 }
 

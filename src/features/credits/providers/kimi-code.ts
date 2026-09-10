@@ -1,4 +1,4 @@
-import { toNumber } from "../../../utils/format";
+import { convertToUSD, toNumber } from "../../../utils/format";
 import { http, withAuth } from "../../../utils/http";
 
 import type { Credits, CreditsLane, CreditsProvider } from "../types";
@@ -11,6 +11,7 @@ interface KimiCodeUsage {
   limit?: string | number;
   used?: string | number;
   remaining?: string | number;
+  resetTime?: string | null;
 }
 
 interface KimiCodeLimit {
@@ -24,6 +25,8 @@ interface KimiCodeBoosterWallet {
     amount?: string | number;
     amountLeft?: string | number;
   } | null;
+  monthlyChargeLimit?: { currency?: string } | null;
+  monthlyUsed?: { currency?: string } | null;
 }
 
 interface KimiCodeUsageResponse {
@@ -50,24 +53,24 @@ function formatWindowLabel(window?: { duration?: number; timeUnit?: string } | n
   if (!window?.duration) return "Limit";
 
   const duration = window.duration;
-  const unit = window.timeUnit?.toUpperCase() ?? "";
+  const unit = window.timeUnit;
 
-  if (unit === "TIME_UNIT_MINUTE") {
-    if (duration >= 60 && duration % 60 === 0) return `${duration / 60}h`;
-    return `${duration}m`;
-  }
+  if (unit === "TIME_UNIT_MINUTE") return (duration >= 60 && duration % 60 === 0) ? `${duration / 60}h` : `${duration}m`;
   if (unit === "TIME_UNIT_HOUR") return `${duration}h`;
   if (unit === "TIME_UNIT_DAY") return `${duration}d`;
-  if (unit === "TIME_UNIT_MONTH") return `${duration}mo`;
-  return `${duration}${unit.replace("TIME_UNIT_", "").toLowerCase()}`;
+  if (unit === "TIME_UNIT_WEEK") return `${duration * 7}d`;
+  return "Limit";
 }
 
 function buildLane(label: string, detail: KimiCodeUsage): CreditsLane | undefined {
   const percent = toPercent(detail);
-  return percent === undefined ? undefined : { label, percent };
+  if (percent === undefined) return undefined;
+
+  const resetAt = Date.parse(detail.resetTime ?? "");
+  return { label, percent, resetAt: Number.isFinite(resetAt) ? resetAt : undefined };
 }
 
-function formatSuffix(wallet?: KimiCodeBoosterWallet | null): string | undefined {
+async function formatSuffix(wallet: KimiCodeBoosterWallet | null | undefined, signal: AbortSignal): Promise<string | undefined> {
   if (wallet?.balance?.type !== "BOOSTER") return undefined;
 
   const amount = toNumber(wallet.balance.amount);
@@ -75,7 +78,9 @@ function formatSuffix(wallet?: KimiCodeBoosterWallet | null): string | undefined
 
   const amountLeft = Math.max(0, toNumber(wallet.balance.amountLeft) ?? 0);
   const remaining = Math.round(amountLeft / BOOSTER_FIXED_POINT_CENTS) / 100;
-  return `(Extra Usage $${remaining.toFixed(2)})`;
+  const currency = wallet.monthlyChargeLimit?.currency || wallet.monthlyUsed?.currency || "USD";
+  const remainingUSD = await convertToUSD(remaining, currency, signal);
+  return !!remainingUSD ? `(Extra Usage $${remainingUSD.toFixed(2)})` : undefined;
 }
 
 export const kimiCodeProvider: CreditsProvider = {
@@ -100,6 +105,6 @@ export const kimiCodeProvider: CreditsProvider = {
 
     if (lanes.length === 0) throw new Error("no usage data");
 
-    return { type: "windows", lanes, suffix: formatSuffix(payload.boosterWallet) };
+    return { type: "windows", lanes, suffix: await formatSuffix(payload.boosterWallet, signal) };
   },
 };

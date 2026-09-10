@@ -15,6 +15,8 @@ export type Credits = (
 export interface CreditsLane {
   label: string;
   percent: number | undefined;
+  /** Timestamp in milliseconds. */
+  resetAt?: number;
 }
 
 export type RefreshCredits = (ctx: ExtensionContext) => Promise<void>;

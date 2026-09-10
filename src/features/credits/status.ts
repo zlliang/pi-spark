@@ -1,4 +1,5 @@
 import { hyperlink } from "@earendil-works/pi-tui";
+import prettyMilliseconds from "pretty-ms";
 
 import type { Theme } from "@earendil-works/pi-coding-agent";
 import type { Credits, CreditsLane } from "./types";
@@ -29,11 +30,11 @@ function renderWindows(theme: Theme, credits: Extract<Credits, { type: "windows"
 }
 
 function renderLane(theme: Theme, lane: CreditsLane): string {
-  const text = `${lane.label} ${lane.percent === undefined ? "?" : lane.percent.toFixed(0)}%`;
+  const percent = `${lane.label} ${lane.percent === undefined ? "?" : lane.percent.toFixed(0)}%`;
+  const color = lane.percent && lane.percent > WINDOWS_ERROR ? "error" : lane.percent && lane.percent > WINDOWS_WARNING ? "warning" : "success";
+  const resetAt = !!lane.resetAt ? ` ${theme.fg("dim", `[⟳ ${prettyMilliseconds(Math.max(0, lane.resetAt - Date.now()), { compact: true })}]`)}` : "";
 
-  if (lane.percent && lane.percent > WINDOWS_ERROR) return theme.fg("error", text);
-  if (lane.percent && lane.percent > WINDOWS_WARNING) return theme.fg("warning", text);
-  return theme.fg("success", text);
+  return `${theme.fg(color, percent)}${resetAt}`;
 }
 
 function renderBalance(theme: Theme, credits: Extract<Credits, { type: "balance" }>): string {
