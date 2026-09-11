@@ -56,6 +56,12 @@ Banked rate-limit resets are saved benefits that can reset eligible Codex usage 
 
 ![Codex resets](./assets/screenshot-codex-resets.png)
 
+#### Peak/off-peak pricing
+
+Pi does not currently support time-based pricing, so its cost estimates can be inaccurate for providers with peak/off-peak rates, such as [DeepSeek](https://api-docs.deepseek.com/quick_start/pricing). pi-spark updates model cost metadata so subsequent usage calculations reflect the current rate.
+
+![Peak/off-peak pricing](./assets/screenshot-peak-off-peak-pricing.png)
+
 ### Presets
 
 pi-spark lets you define named model presets in `spark.json` (see [Configuration](#configuration)), so you can switch between models and thinking levels without retyping provider details. The active preset is shown on the editor's top border.
@@ -145,7 +151,7 @@ All fields are optional. Each top-level feature runs with the defaults below unl
 
 #### `CreditsConfig`
 
-All supported providers are enabled by default. Set a provider to `false` to disable its credits status, or to `true` to override a global `false` in project config.
+All supported providers are enabled by default. Set a provider to `false` to disable its credits status and pricing updates, or to `true` to override a global `false` in project config.
 
 ```json
 {

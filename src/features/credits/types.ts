@@ -1,5 +1,6 @@
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { CreditsProviderId } from "./config";
+import type { Cost, PricingRule } from "./pricing";
 
 /**
  * Normalized credits/usage for a provider.
@@ -26,6 +27,7 @@ export interface CreditsProvider {
   readonly id: CreditsProviderId;
   readonly label: string;
   readonly link?: string;
-  fetch(apiKey: string, signal: AbortSignal): Promise<Credits>;
+  readonly pricingRules?: PricingRule[];
+  fetch(apiKey: string, signal: AbortSignal, cost?: Cost): Promise<Credits>;
   register?(pi: ExtensionAPI, ctx: ExtensionContext, refresh: RefreshCredits): void;
 }

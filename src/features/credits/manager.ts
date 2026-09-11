@@ -1,5 +1,6 @@
 import { getAuthToken } from "../../utils/auth";
 import { findProvider } from "./providers";
+import { applyPricingRules } from "./pricing";
 import { renderCredits, renderError } from "./status";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
@@ -17,6 +18,7 @@ export class CreditsManager {
   }
 
   async refresh(ctx: ExtensionContext): Promise<void> {
+    this.providers.forEach((provider) => applyPricingRules(ctx, provider, Date.now()));
     this.inflight?.abort();
 
     const provider = findProvider(this.providers, ctx.model?.provider);
@@ -55,10 +57,8 @@ export class CreditsManager {
         return;
       }
 
-      const credits = await provider.fetch(token, signal);
-
-      // The active model may have changed while the request was in flight.
-      if (ctx.model?.provider !== provider.id) return;
+      const credits = await provider.fetch(token, signal, ctx.model?.cost);
+      if (signal.aborted || ctx.model?.provider !== provider.id) return;
 
       ctx.ui.setStatus(STATUS_KEY, renderCredits(ctx.ui.theme, provider.label, credits, provider.link));
     } catch (error) {

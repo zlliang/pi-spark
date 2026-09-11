@@ -31,5 +31,5 @@ export function findProvider(providers: CreditsProvider[], provider?: string): C
 }
 
 export function registerProviderExtensions(pi: ExtensionAPI, ctx: ExtensionContext, providers: CreditsProvider[], refresh: RefreshCredits): void {
-  for (const provider of providers) provider.register?.(pi, ctx, refresh);
+  providers.forEach((provider) => provider.register?.(pi, ctx, refresh));
 }
