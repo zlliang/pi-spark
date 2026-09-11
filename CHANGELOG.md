@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.0](https://github.com/zlliang/pi-spark/compare/v0.22.3...v0.23.0) (2026-09-11)
+
+
+### Features
+
+* **credits:** support provider peak/off-peak pricing ([f0dbf19](https://github.com/zlliang/pi-spark/commit/f0dbf19dca6f7a3eb290490052489eb0649680d1))
+
 ## [0.22.3](https://github.com/zlliang/pi-spark/compare/v0.22.2...v0.22.3) (2026-09-10)
 
 
