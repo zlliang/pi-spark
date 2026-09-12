@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.23.1](https://github.com/zlliang/pi-spark/compare/v0.23.0...v0.23.1) (2026-09-12)
+
+
+### Bug Fixes
+
+* **credits:** refresh pricing on user input ([8183402](https://github.com/zlliang/pi-spark/commit/8183402da978b41696685e244a698214fd519ce4))
+
 ## [0.23.0](https://github.com/zlliang/pi-spark/compare/v0.22.3...v0.23.0) (2026-09-11)
 
 
