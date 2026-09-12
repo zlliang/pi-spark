@@ -48,7 +48,6 @@ export const deepseekProvider: CreditsProvider = {
       ],
     },
     {
-      // Update to Flash rates when V4 Pro retires on September 14, 2026 at 04:00 UTC.
       model: "deepseek-v4-pro",
       defaultCost: { input: 0.66, output: 1.98, cacheRead: 0.022, cacheWrite: 0, label: "off-peak" },
       windows: [
