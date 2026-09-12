@@ -20,6 +20,12 @@ export function registerCredits(pi: ExtensionAPI): void {
     creditsManager.refresh(ctx);
   });
 
+  // Background calls run at `before_agent_start`, before the first `context` event, and the model
+  // registry may have been refreshed since the last apply.
+  pi.on("input", (_event, ctx) => {
+    creditsManager?.refresh(ctx);
+  });
+
   pi.on("model_select", (_event, ctx) => {
     creditsManager?.refresh(ctx);
   });
