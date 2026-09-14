@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.0](https://github.com/zlliang/pi-spark/compare/v0.24.0...v0.25.0) (2026-09-14)
+
+
+### Bug Fixes
+
+* refine recap lifecycle and feature event handling ([4bb7474](https://github.com/zlliang/pi-spark/commit/4bb7474b3d04a6d92179b1873afdd6155e5e0368))
+
 ## [0.24.0](https://github.com/zlliang/pi-spark/compare/v0.23.1...v0.24.0) (2026-09-14)
 
 
