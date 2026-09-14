@@ -1,5 +1,8 @@
 import parseDuration from "parse-duration";
 import * as z from "zod";
+import { convertToLlm, sessionEntryToContextMessages } from "@earendil-works/pi-coding-agent";
+
+import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 
 const MIN_IDLE_MS = 5_000;
 
@@ -17,105 +20,79 @@ export const idleTimeoutSchema = z
   })
   .pipe(z.number().min(MIN_IDLE_MS));
 
-type IdleTimeout = z.infer<typeof idleTimeoutSchema>;
-type IdleHash = string | number | boolean;
-
 const DEFAULT_IDLE_MS = 5 * 60 * 1000;
 const POLL_MS = 1_000;
 
-export class IdleListener<T> {
-  private state: "active" | "watching" | "idle" = "active";
-  private computeStateHash: (ctx: T) => IdleHash;
-  private lastStateHash: IdleHash | undefined;
-
+export class IdleListener {
+  private entered = false;
+  private lastEditorText: string | undefined;
+  private stableSince = 0;
   private idleMs: number;
-  private pollMs: number;
-  private idleTimer: ReturnType<typeof setTimeout> | undefined;
   private pollTimer: ReturnType<typeof setInterval> | undefined;
 
-  private enterCallbacks: Set<(ctx: T) => void> = new Set();
-  private wakeCallbacks: Set<(ctx: T) => void> = new Set();
+  private enterCallbacks: Set<(ctx: ExtensionContext) => void> = new Set();
+  private resetCallbacks: Set<(ctx: ExtensionContext) => void> = new Set();
 
-  constructor(computeStateHash: (ctx: T) => IdleHash, idleMs: IdleTimeout = DEFAULT_IDLE_MS, pollMs: number = POLL_MS) {
-    this.computeStateHash = computeStateHash;
+  constructor(idleMs: number = DEFAULT_IDLE_MS) {
     this.idleMs = idleMs;
-    this.pollMs = pollMs;
   }
 
-  on(event: "enter" | "wake", callback: (ctx: T) => void): () => void {
-    const callbackSet = event === "enter" ? this.enterCallbacks : this.wakeCallbacks;
-    callbackSet.add(callback);
+  on(event: "enter" | "reset", callback: (ctx: ExtensionContext) => void): () => void {
+    const callbacks = event === "enter" ? this.enterCallbacks : this.resetCallbacks;
+    callbacks.add(callback);
 
-    return () => callbackSet.delete(callback);
+    return () => callbacks.delete(callback);
   }
 
-  watch(ctx: T): void {
-    if (this.state === "idle") return;
+  /** Clears any recap and starts a fresh idle period, keeping observation active while Pi is busy. */
+  reset(ctx: ExtensionContext): void {
+    this.entered = false;
+    this.lastEditorText = undefined;
+    this.resetCallbacks.forEach((callback) => callback(ctx));
 
-    this.stop();
-    this.state = "watching";
-
-    this.lastStateHash = this.computeStateHash(ctx);
-    this.reset(ctx);
-
-    this.pollTimer = setInterval(() => {
-      const current = this.computeStateHash(ctx);
-      if (current === this.lastStateHash) return;
-
-      this.lastStateHash = current;
-      this.reset(ctx);
-    }, this.pollMs);
-  }
-
-  enter(ctx: T): void {
-    if (this.state === "idle") return;
-
-    this.stop();
-    this.state = "idle";
-
-    this.enterCallbacks.forEach((callback) => callback(ctx));
-  }
-
-  /** Emits on every wake signal, even when the listener is already active. */
-  wake(ctx: T): void {
-    this.stop();
-    this.state = "active";
-
-    this.wakeCallbacks.forEach((callback) => callback(ctx));
+    this.check(ctx);
+    if (!this.pollTimer) {
+      this.pollTimer = setInterval(() => this.check(ctx), POLL_MS);
+    }
   }
 
   dispose(): void {
-    this.stop();
-    this.state = "active";
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = undefined;
+    }
 
+    this.entered = false;
+    this.lastEditorText = undefined;
     this.enterCallbacks.clear();
-    this.wakeCallbacks.clear();
+    this.resetCallbacks.clear();
   }
 
-  private reset(ctx: T): void {
-    this.clearIdleTimer();
-    this.idleTimer = setTimeout(() => {
-      this.idleTimer = undefined;
-      this.enter(ctx);
-    }, this.idleMs);
-  }
+  private check(ctx: ExtensionContext): void {
+    const canEnter = ctx.isIdle() && ctx.sessionManager.buildContextEntries().some((entry) => convertToLlm(sessionEntryToContextMessages(entry)).length > 0);
+    if (!canEnter) {
+      this.lastEditorText = undefined;
+      if (this.entered) {
+        this.entered = false;
+        this.resetCallbacks.forEach((callback) => callback(ctx));
+      }
+      return;
+    }
 
-  private stop(): void {
-    this.clearIdleTimer();
-    this.clearPollTimer();
-  }
+    // Keep the recap while the user edits; only a reset or Pi becoming busy clears it.
+    if (this.entered) return;
 
-  private clearIdleTimer(): void {
-    if (!this.idleTimer) return;
+    const editorText = ctx.ui.getEditorText();
+    const now = Date.now();
+    if (editorText !== this.lastEditorText) {
+      this.lastEditorText = editorText;
+      this.stableSince = now;
+      return;
+    }
 
-    clearTimeout(this.idleTimer);
-    this.idleTimer = undefined;
-  }
-
-  private clearPollTimer(): void {
-    if (!this.pollTimer) return;
-
-    clearInterval(this.pollTimer);
-    this.pollTimer = undefined;
+    if (now - this.stableSince >= this.idleMs) {
+      this.entered = true;
+      this.enterCallbacks.forEach((callback) => callback(ctx));
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { convertToLlm, serializeConversation } from "@earendil-works/pi-coding-agent";
+import { convertToLlm, serializeConversation, sessionEntryToContextMessages } from "@earendil-works/pi-coding-agent";
 
 import { clearRecapWidget, setRecapLoadingWidget, setRecapTextWidget } from "./widget";
 import { sanitizeText } from "../../utils/format";
@@ -32,7 +32,7 @@ export class RecapManager {
   }
 
   async run(ctx: ExtensionContext, options: { force?: boolean } = {}): Promise<void> {
-    if (this.active && !options.force) return;
+    if (!options.force && (this.active || this.inflight || !ctx.isIdle())) return;
 
     this.cancelInflight();
     const controller = new AbortController();
@@ -41,6 +41,7 @@ export class RecapManager {
     try {
       const modelSettings = await resolveModelSettings(ctx, this.config, "recap");
       if (controller.signal.aborted || this.inflight !== controller || !modelSettings) return;
+      if (!options.force && !ctx.isIdle()) return;
 
       const { model, thinkingLevel, warning } = modelSettings;
 
@@ -113,7 +114,7 @@ export class RecapManager {
   }
 
   private buildPrompt(ctx: ExtensionContext): string {
-    const messages = ctx.sessionManager.getBranch().filter((entry) => entry.type === "message").map((entry) => entry.message);
+    const messages = ctx.sessionManager.buildContextEntries().flatMap(sessionEntryToContextMessages);
     const text = serializeConversation(convertToLlm(messages));
     const conversation = text.length > MAX_CONVERSATION_CHARS ? text.slice(-MAX_CONVERSATION_CHARS) : text;
 

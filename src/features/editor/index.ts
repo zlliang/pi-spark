@@ -168,11 +168,6 @@ export function registerEditor(pi: ExtensionAPI, events: EventCollector): void {
     editor?.setWorkingMessage("Running tools");
   });
 
-  pi.on("tool_call", (event) => {
-    runningToolCallIds.add(event.toolCallId);
-    editor?.setWorkingMessage("Running tools");
-  });
-
   pi.on("tool_execution_end", (event) => {
     runningToolCallIds.delete(event.toolCallId);
     editor?.setWorkingMessage(runningToolCallIds.size > 0 ? "Running tools" : undefined);
