@@ -25,34 +25,34 @@ export const deepseekProvider: CreditsProvider = {
   pricingRules: [
     {
       model: "deepseek-flash",
-      defaultCost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0, label: "off-peak" },
+      defaultCost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0, label: "Off-peak" },
       windows: [
-        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "peak" } },
-        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "peak" } },
+        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "Peak" } },
+        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "Peak" } },
       ],
     },
     {
       model: "deepseek-v4-flash",
-      defaultCost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0, label: "off-peak" },
+      defaultCost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0, label: "Off-peak" },
       windows: [
-        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "peak" } },
-        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "peak" } },
+        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "Peak" } },
+        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "Peak" } },
       ],
     },
     {
       model: "deepseek-v4-flash-vision-exp",
-      defaultCost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0, label: "off-peak" },
+      defaultCost: { input: 0.15, output: 0.6, cacheRead: 0.003, cacheWrite: 0, label: "Off-peak" },
       windows: [
-        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "peak" } },
-        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "peak" } },
+        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "Peak" } },
+        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 0.3, output: 1.2, cacheRead: 0.006, cacheWrite: 0, label: "Peak" } },
       ],
     },
     {
       model: "deepseek-v4-pro",
-      defaultCost: { input: 0.66, output: 1.98, cacheRead: 0.022, cacheWrite: 0, label: "off-peak" },
+      defaultCost: { input: 0.66, output: 1.98, cacheRead: 0.022, cacheWrite: 0, label: "Off-peak" },
       windows: [
-        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 1.32, output: 3.96, cacheRead: 0.044, cacheWrite: 0, label: "peak" } },
-        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 1.32, output: 3.96, cacheRead: 0.044, cacheWrite: 0, label: "peak" } },
+        { start: "01:00", end: "04:00", days: [1, 2, 3, 4, 5], cost: { input: 1.32, output: 3.96, cacheRead: 0.044, cacheWrite: 0, label: "Peak" } },
+        { start: "06:00", end: "10:00", days: [1, 2, 3, 4, 5], cost: { input: 1.32, output: 3.96, cacheRead: 0.044, cacheWrite: 0, label: "Peak" } },
       ],
     },
   ],
