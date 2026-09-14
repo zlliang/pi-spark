@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.24.0](https://github.com/zlliang/pi-spark/compare/v0.23.1...v0.24.0) (2026-09-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* adopt Pi 0.85 extension APIs
+
+### Features
+
+* adopt Pi 0.85 extension APIs ([2cd3208](https://github.com/zlliang/pi-spark/commit/2cd3208fe5bf8aade7828720ae0397da6836fe99))
+
+
+### Bug Fixes
+
+* capitalize DeepSeek pricing labels ([fffcc40](https://github.com/zlliang/pi-spark/commit/fffcc40c8664056fb54d3c5fea5853f3805a2e4f))
+
 ## [0.23.1](https://github.com/zlliang/pi-spark/compare/v0.23.0...v0.23.1) (2026-09-12)
 
 
