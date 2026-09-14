@@ -44,17 +44,17 @@
     "zod": "^4.4.3"
   },
   "peerDependencies": {
-    "@earendil-works/pi-agent-core": ">=0.84.0",
-    "@earendil-works/pi-ai": ">=0.84.0",
-    "@earendil-works/pi-coding-agent": ">=0.84.0",
-    "@earendil-works/pi-tui": ">=0.84.0",
+    "@earendil-works/pi-agent-core": ">=0.85.0",
+    "@earendil-works/pi-ai": ">=0.85.0",
+    "@earendil-works/pi-coding-agent": ">=0.85.0",
+    "@earendil-works/pi-tui": ">=0.85.0",
     "typebox": "*"
   },
   "devDependencies": {
-    "@earendil-works/pi-agent-core": ">=0.84.0",
-    "@earendil-works/pi-ai": ">=0.84.0",
-    "@earendil-works/pi-coding-agent": ">=0.84.0",
-    "@earendil-works/pi-tui": ">=0.84.0",
+    "@earendil-works/pi-agent-core": ">=0.85.0",
+    "@earendil-works/pi-ai": ">=0.85.0",
+    "@earendil-works/pi-coding-agent": ">=0.85.0",
+    "@earendil-works/pi-tui": ">=0.85.0",
     "@types/node": "*",
     "typebox": "*",
     "typescript": "^7.0.2"

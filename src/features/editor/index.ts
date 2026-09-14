@@ -43,26 +43,27 @@ class Editor extends CustomEditor {
     this.tui.requestRender();
   }
 
-  render(width: number): string[] {
+  override render(width: number): string[] {
     // Pi reapplies the thinking-level border color when the level changes. Use the dim color here
-    // while preserving Bash mode's dedicated border color.
+    // while preserving Bash mode's dedicated border color. Set it before rendering, since the
+    // border helpers below run inside `super.render()`.
     if (this.thinkingLevelIndicator === "model" && !this.getText().trimStart().startsWith("!")) {
       this.borderColor = (text) => this.ctx.ui.theme.fg("dim", text);
     }
 
-    const lines = super.render(width);
-    if (lines.length === 0) return lines;
-
-    lines[0] = this.getTopBorder(width);
-
-    return lines;
+    return super.render(width);
   }
 
-  private getTopBorder(width: number): string {
-    const theme = this.ctx.ui.theme;
+  protected override renderTopBorder(width: number, hiddenLineCount: number): string {
+    return this.renderBorder(width, this.getTopLeft(hiddenLineCount), this.getTopRight());
+  }
 
-    const left = this.getLeft();
-    const right = this.getRight();
+  protected override renderBottomBorder(width: number, hiddenLineCount: number): string {
+    return this.renderBorder(width, this.getScrollHint("↓", hiddenLineCount), "");
+  }
+
+  private renderBorder(width: number, left: string, right: string): string {
+    const theme = this.ctx.ui.theme;
 
     return new SplitLine(left, right, {
       padding: 1,
@@ -72,16 +73,17 @@ class Editor extends CustomEditor {
     }).render(width)[0];
   }
 
-  private getLeft(): string {
+  private getTopLeft(hiddenLineCount: number): string {
     const theme = this.ctx.ui.theme;
 
     const spinner = this.spinner.getFrame();
     const workingMessage = this.workingMessage;
+    const workingText = [spinner ? theme.fg("accent", spinner) : undefined, workingMessage ? theme.fg("dim", workingMessage) : undefined].filter(Boolean).join(" ");
 
-    return [theme.fg("accent", spinner), workingMessage ? theme.fg("dim", workingMessage) : undefined].filter(Boolean).join(" ");
+    return [this.getScrollHint("↑", hiddenLineCount), workingText].filter(Boolean).join(theme.fg("dim", " · "));
   }
 
-  private getRight(): string {
+  private getTopRight(): string {
     const theme = this.ctx.ui.theme;
 
     const modelBeforeText = this.slots.modelBefore;
@@ -89,6 +91,13 @@ class Editor extends CustomEditor {
     const coloredModelText = this.thinkingLevelIndicator === "model" ? this.withThinkingLevelColor(modelText) : theme.fg("dim", modelText);
 
     return [modelBeforeText ? theme.fg("dim", modelBeforeText) : undefined, coloredModelText].filter(Boolean).join(theme.fg("dim", " · "));
+  }
+
+  /** Renders Pi's hidden-line hint, which this editor keeps on the left side of the border. */
+  private getScrollHint(direction: "↑" | "↓", hiddenLineCount: number): string {
+    if (hiddenLineCount <= 0) return "";
+
+    return this.ctx.ui.theme.fg("dim", `${direction} ${hiddenLineCount} more`);
   }
 
   private withThinkingLevelColor(text: string): string {

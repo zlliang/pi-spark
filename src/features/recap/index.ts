@@ -56,6 +56,10 @@ export function registerRecap(pi: ExtensionAPI): void {
     idleListener?.watch(ctx);
   });
 
+  pi.on("session_compact_failed", (_event, ctx) => {
+    idleListener?.watch(ctx);
+  });
+
   pi.on("session_tree", (_event, ctx) => {
     idleListener?.watch(ctx);
   });

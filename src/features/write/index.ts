@@ -139,29 +139,18 @@ function formatWriteCall(path: string | null, content: string | null, highlighte
 
 export function registerWrite(pi: ExtensionAPI): void {
   let enabled = true;
-  const toolCache = new Map<string, ReturnType<typeof createWriteToolDefinition>>();
 
-  function getWriteTool(cwd: string): ReturnType<typeof createWriteToolDefinition> {
-    let tool = toolCache.get(cwd);
-    if (!tool) {
-      tool = createWriteToolDefinition(cwd);
-      toolCache.set(cwd, tool);
-    }
-
-    return tool;
-  };
+  // Pi resolves paths against `ctx.cwd`, falling back to this cwd only when neither is provided.
+  const writeTool = createWriteToolDefinition(process.cwd());
 
   pi.on("session_start", (_event, ctx) => {
     enabled = loadConfig(ctx).write !== false;
   });
 
   pi.registerTool({
-    ...getWriteTool(process.cwd()),
-    execute(toolCallId, params, signal, onUpdate, ctx) {
-      return getWriteTool(ctx.cwd).execute(toolCallId, params, signal, onUpdate, ctx);
-    },
+    ...writeTool,
     renderCall(args, theme, context) {
-      if (!enabled) return getWriteTool(context.cwd).renderCall!(args, theme, context);
+      if (!enabled) return writeTool.renderCall!(args, theme, context);
 
       const renderArgs = args as { path?: string; file_path?: string; content?: string } | undefined;
       const path = parseArg(renderArgs?.file_path ?? renderArgs?.path);

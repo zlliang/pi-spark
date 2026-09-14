@@ -1,9 +1,15 @@
 import { isAbsolute, relative, resolve, sep } from "node:path";
+import { getCapabilities, hyperlink } from "@earendil-works/pi-tui";
 
 import { http } from "./http";
 
 import type { ProviderId } from "@earendil-works/pi-ai";
 import type { ContextUsage } from "@earendil-works/pi-coding-agent";
+
+/** Links text with OSC 8, honoring the terminal's detected and user-overridden hyperlink support. */
+export function formatLink(text: string, url: string): string {
+  return getCapabilities().hyperlinks ? hyperlink(text, url) : text;
+}
 
 export function formatModel(provider?: ProviderId, model?: string, thinkingLevel?: string): string {
   return provider && model ? `${provider}/${model}${thinkingLevel ? `:${thinkingLevel}` : ""}` : "no-model";

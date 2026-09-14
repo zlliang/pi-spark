@@ -2,6 +2,7 @@ import { keyHint, rawKeyHint, DynamicBorder } from "@earendil-works/pi-coding-ag
 import { Box, Container, SelectList, Spacer, Text } from "@earendil-works/pi-tui";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
+import type { TuiMouseEvent } from "@earendil-works/pi-tui";
 import type { PresetManager } from "./manager";
 
 export async function showPresetSelector(ctx: ExtensionContext, presetManager: PresetManager): Promise<string | undefined> {
@@ -51,6 +52,7 @@ export async function showPresetSelector(ctx: ExtensionContext, presetManager: P
         selectList.handleInput(data);
         tui.requestRender();
       },
+      handleMouse: (event: TuiMouseEvent) => container.handleMouse(event),
     };
   });
 

@@ -5,7 +5,7 @@ import { Loader } from "../../../components/loader";
 import { renderCredits } from "../status";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
-import type { SelectItem } from "@earendil-works/pi-tui";
+import type { SelectItem, TuiMouseEvent } from "@earendil-works/pi-tui";
 import type { BankedRateLimitReset, RateLimitResetCreditsResponse } from "./openai-codex";
 import type { Credits } from "../types";
 
@@ -113,6 +113,7 @@ export async function showCodexResetsSelector(ctx: ExtensionContext, load: (sign
           finish(null);
         }
       },
+      handleMouse: (event: TuiMouseEvent) => container.handleMouse(event),
     };
   });
 
@@ -170,6 +171,7 @@ export async function confirmCodexReset(ctx: ExtensionContext, credit: BankedRat
         selectList.handleInput(data);
         tui.requestRender();
       },
+      handleMouse: (event: TuiMouseEvent) => container.handleMouse(event),
     };
   });
 

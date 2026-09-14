@@ -1,5 +1,6 @@
-import { hyperlink } from "@earendil-works/pi-tui";
 import prettyMilliseconds from "pretty-ms";
+
+import { formatLink } from "../../utils/format";
 
 import type { Theme } from "@earendil-works/pi-coding-agent";
 import type { Credits, CreditsLane } from "./types";
@@ -15,7 +16,7 @@ export function renderCredits(theme: Theme, label: string, credits: Credits, lin
   const suffix = credits.suffix ? ` ${theme.fg("dim", credits.suffix)}` : "";
 
   const text = `${styledLabel}${value}${suffix}`;
-  return link ? hyperlink(text, link) : text;
+  return link ? formatLink(text, link) : text;
 }
 
 export function renderError(theme: Theme, label: string, message: string): string {

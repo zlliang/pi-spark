@@ -1,7 +1,8 @@
 import { homedir } from "node:os";
 import { isAbsolute, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { getCapabilities, hyperlink } from "@earendil-works/pi-tui";
+
+import { formatLink } from "../../utils/format";
 
 import type { Theme } from "@earendil-works/pi-coding-agent";
 
@@ -12,9 +13,8 @@ export function renderPath(path: string | null, cwd: string, theme: Theme): stri
   const home = homedir();
   const displayPath = path.startsWith(home) ? `~${path.slice(home.length)}` : path;
   const styledPath = theme.fg("accent", displayPath);
-  if (!getCapabilities().hyperlinks) return styledPath;
 
-  return hyperlink(styledPath, pathToFileURL(resolvePath(path, cwd)).href);
+  return formatLink(styledPath, pathToFileURL(resolvePath(path, cwd)).href);
 }
 
 function resolvePath(path: string, cwd: string): string {

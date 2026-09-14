@@ -50,6 +50,10 @@ export function registerCredits(pi: ExtensionAPI): void {
     creditsManager?.refresh(ctx);
   });
 
+  pi.on("session_compact_failed", (_event, ctx) => {
+    creditsManager?.refresh(ctx);
+  });
+
   pi.on("session_before_tree", (event, ctx) => {
     if (!event.preparation.userWantsSummary) return;
 
