@@ -74,4 +74,6 @@ Cache admission remains provider-controlled and noisy. In repeated GPT-5.6 Luna 
 
 Use the [`measuring-model-cache`](../.agents/skills/measuring-model-cache/SKILL.md) skill to repeat the comparison after changes to Pi, providers, session handling, title, recap, or other background model features.
 
+---
+
 **Update Sep 19, 2026:** Background calls now use Pi 0.86's `ctx.modelRegistry.streamSimple(...).result()` to support extension-registered providers and resolve authentication automatically. Independent Codex UUIDv7 sessions and cleanup in `finally` remain unchanged.
