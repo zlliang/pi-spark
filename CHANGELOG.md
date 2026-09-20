@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.26.0](https://github.com/zlliang/pi-spark/compare/v0.25.0...v0.26.0) (2026-09-20)
+
+
+### ⚠ BREAKING CHANGES
+
+* Require Pi 0.86.0 or later.
+
+### Features
+
+* adopt Pi 0.86 model and usage APIs ([5d5868d](https://github.com/zlliang/pi-spark/commit/5d5868defdad303a0b8a9761b013886a198c268d))
+
 ## [0.25.0](https://github.com/zlliang/pi-spark/compare/v0.24.0...v0.25.0) (2026-09-14)
 
 
