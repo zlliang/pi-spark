@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.27.0](https://github.com/zlliang/pi-spark/compare/v0.26.0...v0.27.0) (2026-09-20)
+
+
+### Features
+
+* **credits:** honor Chinese holidays in DeepSeek off-peak pricing ([fc99f7d](https://github.com/zlliang/pi-spark/commit/fc99f7d152091e7c751745b46f35840676270538))
+
 ## [0.26.0](https://github.com/zlliang/pi-spark/compare/v0.25.0...v0.26.0) (2026-09-20)
 
 
