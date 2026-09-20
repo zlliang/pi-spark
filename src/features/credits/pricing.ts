@@ -23,7 +23,7 @@ export interface PricingRule {
 
 /** Updates registry and active model prices without changing the provider's rule data. */
 export function applyPricingRules(ctx: ExtensionContext, provider: CreditsProvider, timestamp: number): void {
-  (provider.pricingRules ?? []).forEach((rule) => {
+  (provider.pricingRules?.(timestamp) ?? []).forEach((rule) => {
     const cost = resolveCost(rule, timestamp);
     const model = ctx.modelRegistry.find(provider.id, rule.model);
 

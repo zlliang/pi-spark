@@ -27,7 +27,7 @@ export interface CreditsProvider {
   readonly id: CreditsProviderId;
   readonly label: string;
   readonly link?: string;
-  readonly pricingRules?: PricingRule[];
+  readonly pricingRules?: (timestamp: number) => PricingRule[];
   fetch(apiKey: string, signal: AbortSignal, cost?: Cost): Promise<Credits>;
   register?(pi: ExtensionAPI, ctx: ExtensionContext, refresh: RefreshCredits): void;
 }
