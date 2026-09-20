@@ -1,10 +1,9 @@
 import { uuidv7 } from "@earendil-works/pi-agent-core";
 import { clampThinkingLevel, cleanupSessionResources } from "@earendil-works/pi-ai";
-import { completeSimple } from "@earendil-works/pi-ai/compat";
 
 import { formatModel } from "./format";
 
-import type { Api, Model, ModelThinkingLevel } from "@earendil-works/pi-ai";
+import type { Api, AssistantMessage, Context, Model, ModelsSimpleStreamOptions, ModelThinkingLevel } from "@earendil-works/pi-ai";
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { OptionalModelConfig } from "../config/model";
 
@@ -30,17 +29,17 @@ type ThinkingLevelSelection = {
  * Completes a one-shot background request, using an isolated session for OpenAI Codex models.
  * See [the investigation](../../docs/background-model-calls-and-openai-codex-sessions.md).
  */
-export const completeBackground: typeof completeSimple = async (model, context, options) => {
-  if (model.api !== "openai-codex-responses") return completeSimple(model, context, options);
+export async function completeBackground(ctx: ExtensionContext, model: Model<Api>, context: Context, options?: ModelsSimpleStreamOptions): Promise<AssistantMessage> {
+  if (model.api !== "openai-codex-responses") return ctx.modelRegistry.streamSimple(model, context, options).result();
 
   const sessionId = uuidv7();
 
   try {
-    return await completeSimple(model, context, { ...options, sessionId });
+    return await ctx.modelRegistry.streamSimple(model, context, { ...options, sessionId }).result();
   } finally {
     cleanupSessionResources(sessionId);
   }
-};
+}
 
 /**
  * Resolves the model and thinking level for a background feature (recap, title, ...).

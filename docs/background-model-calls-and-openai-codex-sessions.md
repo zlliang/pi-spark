@@ -73,3 +73,5 @@ The independent-session design preserves the main thread's WebSocket reuse, `pre
 Cache admission remains provider-controlled and noisy. In repeated GPT-5.6 Luna title A/B probes, isolated background calls caused no continuation errors and showed no negative main-thread cache trend. Main second-turn latency remained around the normal control range instead of paying the reconnect penalty seen when the shared main socket was closed.
 
 Use the [`measuring-model-cache`](../.agents/skills/measuring-model-cache/SKILL.md) skill to repeat the comparison after changes to Pi, providers, session handling, title, recap, or other background model features.
+
+**Update Sep 19, 2026:** Background calls now use Pi 0.86's `ctx.modelRegistry.streamSimple(...).result()` to support extension-registered providers and resolve authentication automatically. Independent Codex UUIDv7 sessions and cleanup in `finally` remain unchanged.

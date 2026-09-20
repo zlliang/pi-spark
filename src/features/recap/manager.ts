@@ -4,7 +4,7 @@ import { clearRecapWidget, setRecapLoadingWidget, setRecapTextWidget } from "./w
 import { sanitizeText } from "../../utils/format";
 import { completeBackground, resolveModelSettings } from "../../utils/model";
 
-import type { Api, Model, ModelThinkingLevel, SimpleStreamOptions, Usage } from "@earendil-works/pi-ai";
+import type { Api, Model, ModelThinkingLevel, Usage } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { RecapConfig } from "./config";
 
@@ -82,23 +82,18 @@ export class RecapManager {
   }
 
   private async generate(ctx: ExtensionContext, model: Model<Api>, thinkingLevel: ModelThinkingLevel, signal: AbortSignal): Promise<{ content: string; usage: Usage }> {
-    const auth = await ctx.modelRegistry.getApiKeyAndHeaders(model);
-    if (!auth.ok) throw new Error(auth.error);
-
-    const options: SimpleStreamOptions = { maxTokens: MAX_TOKENS, signal };
-    if (auth.apiKey) options.apiKey = auth.apiKey;
-    if (auth.headers) options.headers = auth.headers;
-    if (auth.env) options.env = auth.env;
-    if (thinkingLevel !== "off") options.reasoning = thinkingLevel;
-
-    const response = await completeBackground(model, {
+    const response = await completeBackground(ctx, model, {
       systemPrompt: SYSTEM_PROMPT,
       messages: [{
         role: "user",
         content: [{ type: "text", text: this.buildPrompt(ctx) }],
         timestamp: Date.now(),
       }],
-    }, options);
+    }, {
+      maxTokens: MAX_TOKENS,
+      signal,
+      reasoning: thinkingLevel === "off" ? undefined : thinkingLevel,
+    });
 
     if (response.stopReason === "error") {
       throw new Error(response.errorMessage ?? "Recap generation failed");
