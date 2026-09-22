@@ -1,6 +1,6 @@
 import parseDuration from "parse-duration";
 import * as z from "zod";
-import { convertToLlm, sessionEntryToContextMessages } from "@earendil-works/pi-coding-agent";
+import { convertToLlm } from "@earendil-works/pi-coding-agent";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 
@@ -69,7 +69,7 @@ export class IdleListener {
   }
 
   private check(ctx: ExtensionContext): void {
-    const canEnter = ctx.isIdle() && ctx.sessionManager.buildContextEntries().some((entry) => convertToLlm(sessionEntryToContextMessages(entry)).length > 0);
+    const canEnter = ctx.isIdle() && convertToLlm(ctx.sessionManager.buildSessionProjection().messages).some((message) => message.role !== "system");
     if (!canEnter) {
       this.lastEditorText = undefined;
       if (this.entered) {

@@ -1,4 +1,4 @@
-import { convertToLlm, serializeConversation, sessionEntryToContextMessages } from "@earendil-works/pi-coding-agent";
+import { convertToLlm, serializeConversation } from "@earendil-works/pi-coding-agent";
 
 import { clearRecapWidget, setRecapLoadingWidget, setRecapTextWidget } from "./widget";
 import { sanitizeText } from "../../utils/format";
@@ -109,7 +109,7 @@ export class RecapManager {
   }
 
   private buildPrompt(ctx: ExtensionContext): string {
-    const messages = ctx.sessionManager.buildContextEntries().flatMap(sessionEntryToContextMessages);
+    const messages = ctx.sessionManager.buildSessionProjection().messages;
     const text = serializeConversation(convertToLlm(messages));
     const conversation = text.length > MAX_CONVERSATION_CHARS ? text.slice(-MAX_CONVERSATION_CHARS) : text;
 

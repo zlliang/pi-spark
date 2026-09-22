@@ -91,7 +91,7 @@ export class TitleManager {
   }
 
   private buildPrompt(ctx: ExtensionContext): string {
-    const messages = ctx.sessionManager.getBranch().filter((entry) => entry.type === "message").map((entry) => entry.message);
+    const messages = ctx.sessionManager.buildSessionProjection().messages;
     const text = serializeConversation(convertToLlm(messages));
     const conversation = text.length > MAX_CONVERSATION_CHARS ? text.slice(0, MAX_CONVERSATION_CHARS) : text;
 
