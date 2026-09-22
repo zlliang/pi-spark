@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.28.0](https://github.com/zlliang/pi-spark/compare/v0.27.0...v0.28.0) (2026-09-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* use Pi 0.87 context projections for recaps and titles
+
+### Bug Fixes
+
+* use Pi 0.87 context projections for recaps and titles ([a822fa3](https://github.com/zlliang/pi-spark/commit/a822fa350f1146123d46a7dbf53d812947ff7b49))
+
 ## [0.27.0](https://github.com/zlliang/pi-spark/compare/v0.26.0...v0.27.0) (2026-09-20)
 
 
