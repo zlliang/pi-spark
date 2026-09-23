@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.1](https://github.com/zlliang/pi-spark/compare/v0.28.0...v0.28.1) (2026-09-23)
+
+
+### Bug Fixes
+
+* **presets:** keep selector order and focus active preset ([b688b4d](https://github.com/zlliang/pi-spark/commit/b688b4dac32100e3c07e7d7d1dc84a8161d7f4b5))
+
 ## [0.28.0](https://github.com/zlliang/pi-spark/compare/v0.27.0...v0.28.0) (2026-09-22)
 
 
