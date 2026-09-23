@@ -12,13 +12,11 @@ export async function showPresetSelector(ctx: ExtensionContext, presetManager: P
   }
 
   const selected = await ctx.ui.custom<string | null>((tui, theme, _keybindings, done) => {
-    const items = presetManager.keys
-      .toSorted((a, b) => Number(presetManager.isActive(ctx, b)) - Number(presetManager.isActive(ctx, a)))
-      .map((key) => ({
-        value: key,
-        label: presetManager.isActive(ctx, key) ? `${key} ${theme.fg("success", "✓")} ` : key,
-        description: presetManager.describe(key),
-      }));
+    const items = presetManager.keys.map((key) => ({
+      value: key,
+      label: presetManager.isActive(ctx, key) ? `${key} ${theme.fg("success", "✓")} ` : key,
+      description: presetManager.describe(key),
+    }));
 
     const container = new Container();
     container.addChild(new DynamicBorder((s: string) => theme.fg("border", s)));
@@ -34,6 +32,10 @@ export async function showPresetSelector(ctx: ExtensionContext, presetManager: P
       scrollInfo: (text) => theme.fg("dim", text),
       noMatch: (text) => theme.fg("warning", text),
     });
+
+    const activeIndex = presetManager.keys.findIndex((key) => presetManager.isActive(ctx, key));
+    if (activeIndex > 0) selectList.setSelectedIndex(activeIndex);
+
     selectList.onSelect = (item) => done(item.value);
     selectList.onCancel = () => done(null);
     box.addChild(selectList);
