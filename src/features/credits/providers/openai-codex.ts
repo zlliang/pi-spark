@@ -1,4 +1,4 @@
-import { uuidv7 } from "@earendil-works/pi-agent-core";
+import { uuidv7 } from "@earendil-works/pi-ai";
 import { readStoredCredential } from "@earendil-works/pi-coding-agent";
 import prettyMilliseconds from "pretty-ms";
 
