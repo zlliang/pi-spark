@@ -1,6 +1,5 @@
 import { CustomEditor } from "@earendil-works/pi-coding-agent";
 
-import { Spinner } from "./spinner";
 import { SplitLine } from "../../components/split-line";
 import { loadConfig } from "../../config";
 import { PRESET_CHANGE, parsePresetChange } from "../../events";
@@ -11,31 +10,30 @@ import type { TUI, EditorTheme } from "@earendil-works/pi-tui";
 import type { EventCollector } from "../../events";
 import type { ThinkingLevelIndicator } from "./config";
 
+type StatusIndicator = NonNullable<Parameters<CustomEditor["setWorkingStatusIndicator"]>[0]>;
+
 class Editor extends CustomEditor {
   private pi: ExtensionAPI;
   private ctx: ExtensionContext;
 
-  private spinner: Spinner;
   private thinkingLevelIndicator: ThinkingLevelIndicator;
-  private workingMessage: string | undefined;
+  private statusIndicator: StatusIndicator | undefined;
   private slots: { modelBefore: string | undefined };
 
-  constructor(pi: ExtensionAPI, ctx: ExtensionContext, tui: TUI, theme: EditorTheme, keybindings: KeybindingsManager, spinner: Spinner = new Spinner(), thinkingLevelIndicator: ThinkingLevelIndicator = "border") {
-    super(tui, theme, keybindings);
+  constructor(pi: ExtensionAPI, ctx: ExtensionContext, tui: TUI, theme: EditorTheme, keybindings: KeybindingsManager, thinkingLevelIndicator: ThinkingLevelIndicator = "border") {
+    super(tui, theme, keybindings, { embedWorkingStatus: true });
 
     this.pi = pi;
     this.ctx = ctx;
 
-    this.spinner = spinner;
-    this.spinner.setTUI(tui);
     this.thinkingLevelIndicator = thinkingLevelIndicator;
-    this.workingMessage = undefined;
+    this.statusIndicator = undefined;
     this.slots = { modelBefore: undefined };
   }
 
-  setWorkingMessage(message?: string | undefined): void {
-    this.workingMessage = message;
-    this.tui.requestRender();
+  /** Receives Pi's working, retry, compaction, and branch summary indicators for the top border. */
+  override setWorkingStatusIndicator(indicator: StatusIndicator | undefined): void {
+    this.statusIndicator = indicator;
   }
 
   setSlot(slot: keyof typeof this.slots, value?: string | undefined): void {
@@ -55,7 +53,7 @@ class Editor extends CustomEditor {
   }
 
   protected override renderTopBorder(width: number, hiddenLineCount: number): string {
-    return this.renderBorder(width, this.getTopLeft(hiddenLineCount), this.getTopRight());
+    return this.renderBorder(width, this.getTopLeft(width, hiddenLineCount), this.getTopRight());
   }
 
   protected override renderBottomBorder(width: number, hiddenLineCount: number): string {
@@ -73,14 +71,10 @@ class Editor extends CustomEditor {
     }).render(width)[0];
   }
 
-  private getTopLeft(hiddenLineCount: number): string {
+  private getTopLeft(width: number, hiddenLineCount: number): string {
     const theme = this.ctx.ui.theme;
 
-    const spinner = this.spinner.getFrame();
-    const workingMessage = this.workingMessage;
-    const workingText = [spinner ? theme.fg("accent", spinner) : undefined, workingMessage ? theme.fg("dim", workingMessage) : undefined].filter(Boolean).join(" ");
-
-    return [this.getScrollHint("↑", hiddenLineCount), workingText].filter(Boolean).join(theme.fg("dim", " · "));
+    return [this.getScrollHint("↑", hiddenLineCount), this.statusIndicator?.renderInBorder(width)].filter(Boolean).join(theme.fg("dim", " · "));
   }
 
   private getTopRight(): string {
@@ -110,18 +104,13 @@ class Editor extends CustomEditor {
 
 export function registerEditor(pi: ExtensionAPI, events: EventCollector): void {
   let editor: Editor | undefined = undefined;
-  let spinner: Spinner | undefined = undefined;
-  let runningToolCallIds = new Set<string>();
 
   pi.on("session_start", (_event, ctx) => {
     const config = loadConfig(ctx).editor;
     if (ctx.mode !== "tui" || !config) return;
 
-    spinner = new Spinner(config.spinner);
-
-    ctx.ui.setWorkingVisible(false);
     ctx.ui.setEditorComponent((tui, theme, keybindings) => {
-      editor = new Editor(pi, ctx, tui, theme, keybindings, spinner, config.thinkingLevelIndicator);
+      editor = new Editor(pi, ctx, tui, theme, keybindings, config.thinkingLevelIndicator);
 
       events.on(PRESET_CHANGE, (data) => {
         const payload = parsePresetChange(data);
@@ -132,62 +121,7 @@ export function registerEditor(pi: ExtensionAPI, events: EventCollector): void {
     });
   });
 
-  pi.on("agent_start", () => {
-    runningToolCallIds.clear();
-    editor?.setWorkingMessage();
-    spinner?.start();
-  });
-
-  pi.on("message_update", (event) => {
-    if (runningToolCallIds.size > 0) return;
-
-    switch (event.assistantMessageEvent.type) {
-      case "thinking_start":
-      case "thinking_delta":
-      case "thinking_end":
-        editor?.setWorkingMessage("Thinking");
-        break;
-      case "text_start":
-      case "text_delta":
-      case "text_end":
-        editor?.setWorkingMessage("Streaming");
-        break;
-      case "toolcall_start":
-      case "toolcall_delta":
-      case "toolcall_end":
-        editor?.setWorkingMessage("Running tools");
-        break;
-      default:
-        editor?.setWorkingMessage();
-        break;
-    }
-  });
-
-  pi.on("tool_execution_start", (event) => {
-    runningToolCallIds.add(event.toolCallId);
-    editor?.setWorkingMessage("Running tools");
-  });
-
-  pi.on("tool_execution_end", (event) => {
-    runningToolCallIds.delete(event.toolCallId);
-    editor?.setWorkingMessage(runningToolCallIds.size > 0 ? "Running tools" : undefined);
-  });
-
-  pi.on("agent_end", () => {
-    runningToolCallIds.clear();
-    editor?.setWorkingMessage();
-  });
-
-  pi.on("agent_settled", () => {
-    runningToolCallIds.clear();
-    editor?.setWorkingMessage();
-    spinner?.stop();
-  });
-
   pi.on("session_shutdown", () => {
-    runningToolCallIds.clear();
     editor = undefined;
-    spinner?.dispose();
-    spinner = undefined;
   });
 }

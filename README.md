@@ -26,7 +26,7 @@ pi install git:github.com/zlliang/pi-spark
 
 pi-spark ships with a custom editor and footer, replacing the default ones. The compact TUI gives you a calm experience without distraction.
 
-- The editor shows a working indicator inspired by [Amp](https://ampcode.com/) and the current model on the top border. If you use [presets](#presets), the active preset appears there too.
+- The editor shows the current model and Pi's status indicators, such as working and compaction, on the top border. If you use [presets](#presets), the active preset appears there too.
 - The footer shows session information, extension statuses, cost, and context usage on one line.
 
 ![Compact TUI](./assets/screenshot-tui.png)
@@ -100,7 +100,7 @@ For example:
 ```json
 {
   "editor": {
-    "spinner": "dots"
+    "thinkingLevelIndicator": "model"
   },
   "footer": false,
   "presets": {
@@ -136,7 +136,7 @@ All fields are optional. Each top-level feature runs with the defaults below unl
 | Field | Value (or `false`) | Description |
 | --- | --- | --- |
 | `credits` | `CreditsConfig` | Shows the active provider's credit balance or rate-limit usage in the status line. |
-| `editor` | `EditorConfig` | Shows a working indicator and the current model on the editor's top border. |
+| `editor` | `EditorConfig` | Shows the current model and Pi's status indicators on the editor's top border. |
 | `footer` | `FooterConfig` | Shows session info, extension statuses, cost, and context usage. |
 | `presets` | `{ [name]: Preset }` | Defines named model presets, keyed by name. |
 | `recap` | `RecapConfig` | Generates a session recap when idle or on demand. |
@@ -163,14 +163,10 @@ All supported providers are enabled by default. Set a provider to `false` to dis
 
 #### `EditorConfig`
 
-The `spinner` field is optional and defaults to `tildes`. `thinkingLevelIndicator` is also optional and defaults to `border`.
+The `thinkingLevelIndicator` field is optional and defaults to `border`.
 
 | Field | Value | Description |
 | --- | --- | --- |
-| `spinner` | `dots` | `⠋, ⠙, ⠹, ⠸, ⠼, ⠴, ⠦, ⠧, ⠇, ⠏` |
-|  | `lights` | `○, ●` |
-|  | `tildes` (default) | `∼, ≈, ≋, ≈, ∼` |
-|  | `pulse` | `·, •, ●, •, ·` |
 | `thinkingLevelIndicator` | `border` (default) | Uses the thinking-level color for the editor border. |
 |  | `model` | Uses the thinking-level color for the model name and the dim color for the editor border. |
 
