@@ -1,5 +1,4 @@
-import { uuidv7 } from "@earendil-works/pi-agent-core";
-import { clampThinkingLevel, cleanupSessionResources } from "@earendil-works/pi-ai";
+import { clampThinkingLevel, cleanupSessionResources, uuidv7 } from "@earendil-works/pi-ai";
 
 import { formatModel } from "./format";
 
