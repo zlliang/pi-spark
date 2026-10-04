@@ -5,7 +5,6 @@ import { registerFooter } from "./src/features/footer";
 import { registerPresets } from "./src/features/presets";
 import { registerRecap } from "./src/features/recap";
 import { registerTitle } from "./src/features/title";
-import { registerWrite } from "./src/features/write";
 
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 
@@ -25,5 +24,4 @@ export default function (pi: ExtensionAPI) {
   registerPresets(pi);
   registerRecap(pi);
   registerTitle(pi);
-  registerWrite(pi);
 }
