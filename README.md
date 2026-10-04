@@ -20,6 +20,8 @@ Install from git:
 pi install git:github.com/zlliang/pi-spark
 ```
 
+pi-spark requires [Pi 1.0](https://pi.dev/changelog/releases/1.0.0) or later.
+
 ## Features
 
 ### Compact TUI: editor and footer
@@ -30,16 +32,6 @@ pi-spark ships with a custom editor and footer, replacing the default ones. The 
 - The footer shows session information, extension statuses, cost, and context usage on one line.
 
 ![Compact TUI](./assets/screenshot-tui.png)
-
-> Earlier pi-spark releases included a custom fullscreen renderer. Pi [0.84.0](https://github.com/earendil-works/pi/releases/tag/v0.84.0) now provides fullscreen mode natively, with a sticky editor and footer and an independently scrollable transcript, so pi-spark has retired its workaround. Enable Pi's fullscreen mode in `/settings`, with `pi --tui-mode fullscreen`, or in Pi's `settings.json`:
->
-> ```json
-> {
->   "tuiMode": "fullscreen"
-> }
-> ```
->
-> When upgrading, remove the retired `fullscreen` field from `spark.json`.
 
 ### Credits
 
@@ -104,26 +96,26 @@ For example:
   },
   "footer": false,
   "presets": {
-    "claude-opus": {
+    "ultra": {
       "provider": "anthropic",
-      "model": "claude-opus-4-8",
+      "model": "claude-opus-5-5",
       "thinkingLevel": "high"
     },
-    "gpt": {
+    "high": {
       "provider": "openai-codex",
-      "model": "gpt-5.5",
+      "model": "gpt-6.1-sol",
       "thinkingLevel": "medium"
     }
   },
   "recap": {
     "idle": "5m",
     "provider": "openai-codex",
-    "model": "gpt-5.4-mini",
+    "model": "gpt-6-luna",
     "thinkingLevel": "off"
   },
   "title": {
     "provider": "openai-codex",
-    "model": "gpt-5.4-mini",
+    "model": "gpt-6-luna",
     "thinkingLevel": "off"
   }
 }
