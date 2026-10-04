@@ -25,12 +25,11 @@ type ThinkingLevelSelection = {
 };
 
 /**
- * Completes a one-shot background request, using an isolated session for OpenAI Codex models.
+ * Completes a one-shot background request in an isolated session, so providers that route by
+ * session, such as OpenAI Codex and OpenCode, keep it apart from the main thread.
  * See [the investigation](../../docs/background-model-calls-and-openai-codex-sessions.md).
  */
 export async function completeBackground(ctx: ExtensionContext, model: Model<Api>, context: Context, options?: ModelsSimpleStreamOptions): Promise<AssistantMessage> {
-  if (model.api !== "openai-codex-responses") return ctx.modelRegistry.streamSimple(model, context, options).result();
-
   const sessionId = uuidv7();
 
   try {

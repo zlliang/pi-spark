@@ -77,3 +77,5 @@ Use the [`measuring-model-cache`](../.agents/skills/measuring-model-cache/SKILL.
 ---
 
 **Update Sep 19, 2026:** Background calls now use Pi 0.86's `ctx.modelRegistry.streamSimple(...).result()` to support extension-registered providers and resolve authentication automatically. Independent Codex UUIDv7 sessions and cleanup in `finally` remain unchanged.
+
+**Update Oct 4, 2026:** OpenCode also requires a session ID, sent as the `x-opencode-session` header. Every background call now gets an independent UUIDv7 session ID, regardless of provider.
