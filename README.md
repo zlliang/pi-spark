@@ -37,7 +37,7 @@ pi-spark ships with a custom editor and footer, replacing the default ones. The 
 
 pi-spark shows the active provider's credit balance or rate-limit usage in the status line, so you can keep an eye on what's left without leaving the terminal.
 
-- Supported providers: DeepSeek, Fireworks, Kimi Code, Moonshot, OpenAI Codex, OpenRouter, and Vercel AI Gateway.
+- Supported providers: DeepSeek, Fireworks, Kimi Code, Moonshot, OpenAI Codex (legacy), OpenCode Go, OpenRouter, and Vercel AI Gateway.
 - Most provider fetching follows [CodexBar](https://github.com/steipete/codexbar). Fireworks is the exception: its balance sits behind an internal gRPC API, reverse-engineered from the `firectl` binary (see [Reverse-Engineering Fireworks Credits](./docs/reverse-engineering-fireworks-credits.md)).
 
 ![Credits](./assets/screenshot-credits.png)
@@ -151,7 +151,7 @@ All supported providers are enabled by default. Set a provider to `false` to dis
 
 | Field | Value | Description |
 | --- | --- | --- |
-| `providers` | partial map of provider IDs to booleans | Enables or disables credits for individual providers. Valid IDs: `deepseek`, `fireworks`, `kimi-coding`, `moonshotai`, `moonshotai-cn`, `openai-codex`, `openrouter`, and `vercel-ai-gateway`. |
+| `providers` | partial map of provider IDs to booleans | Enables or disables credits for individual providers. Valid IDs: `deepseek`, `fireworks`, `kimi-coding`, `moonshotai`, `moonshotai-cn`, `openai-codex`, `opencode-go`, `openrouter`, and `vercel-ai-gateway`. |
 
 #### `EditorConfig`
 

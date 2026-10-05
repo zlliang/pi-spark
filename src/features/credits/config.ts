@@ -7,6 +7,7 @@ const creditsProviderIdSchema = z.enum([
   "moonshotai",
   "moonshotai-cn",
   "openai-codex",
+  "opencode-go",
   "openrouter",
   "vercel-ai-gateway",
 ]);

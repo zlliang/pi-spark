@@ -3,6 +3,7 @@ import { fireworksProvider } from "./fireworks";
 import { kimiCodeProvider } from "./kimi-code";
 import { moonshotProvider, moonshotCnProvider } from "./moonshot";
 import { openaiCodexProvider } from "./openai-codex";
+import { opencodeGoProvider } from "./opencode-go";
 import { openrouterProvider } from "./openrouter";
 import { vercelAiGatewayProvider } from "./vercel-ai-gateway";
 
@@ -17,6 +18,7 @@ const PROVIDERS: CreditsProvider[] = [
   moonshotProvider,
   moonshotCnProvider,
   openaiCodexProvider,
+  opencodeGoProvider,
   openrouterProvider,
   vercelAiGatewayProvider,
 ];
