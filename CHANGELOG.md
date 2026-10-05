@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.0](https://github.com/zlliang/pi-spark/compare/v0.28.1...v1.0.0) (2026-10-05)
+
+
+### Features
+
+* **credits:** add OpenCode Go usage tracking ([25c9ee1](https://github.com/zlliang/pi-spark/commit/25c9ee1034eb614945af8326baebbee9f52b74fe))
+* **editor:** use Pi's status indicators in the top border ([6b1493c](https://github.com/zlliang/pi-spark/commit/6b1493ce410132d64514efbf08ccb258117902f8))
+* remove write tool ([96b0e28](https://github.com/zlliang/pi-spark/commit/96b0e28840969d57c0d37761d869390cca048054))
+
 ## [0.28.1](https://github.com/zlliang/pi-spark/compare/v0.28.0...v0.28.1) (2026-10-04)
 
 
