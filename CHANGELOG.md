@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/zlliang/pi-spark/compare/v1.0.0...v1.1.0) (2026-10-09)
+
+
+### Features
+
+* **credits:** show Codex spend limit ([77aeb0a](https://github.com/zlliang/pi-spark/commit/77aeb0a3b42478786f2793ce1f47665956884e9c))
+
 ## [1.0.0](https://github.com/zlliang/pi-spark/compare/v0.28.1...v1.0.0) (2026-10-05)
 
 
