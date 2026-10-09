@@ -31,11 +31,12 @@ function renderWindows(theme: Theme, credits: Extract<Credits, { type: "windows"
 }
 
 function renderLane(theme: Theme, lane: CreditsLane): string {
-  const percent = `${lane.label} ${lane.percent === undefined ? "?" : lane.percent.toFixed(0)}%`;
+  const percent = `${lane.label ? `${lane.label} ` : ""}${lane.percent === undefined ? "?" : lane.percent.toFixed(0)}%`;
   const color = lane.percent && lane.percent > WINDOWS_ERROR ? "error" : lane.percent && lane.percent > WINDOWS_WARNING ? "warning" : "success";
+  const suffix = lane.suffix ? ` ${theme.fg("dim", lane.suffix)}` : "";
   const resetAt = !!lane.resetAt ? ` ${theme.fg("dim", `[⟳ ${prettyMilliseconds(Math.max(0, lane.resetAt - Date.now()), { compact: true })}]`)}` : "";
 
-  return `${theme.fg(color, percent)}${resetAt}`;
+  return `${theme.fg(color, percent)}${suffix}${resetAt}`;
 }
 
 function renderBalance(theme: Theme, credits: Extract<Credits, { type: "balance" }>): string {

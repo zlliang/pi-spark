@@ -17,6 +17,8 @@ const BASE_URL = "https://chatgpt.com/backend-api";
 const USAGE_PATH = "/wham/usage";
 const RESET_CREDITS_PATH = "/wham/rate-limit-reset-credits";
 const CONSUME_RESET_PATH = "/wham/rate-limit-reset-credits/consume";
+const CREDIT_USD = 0.04;
+const CREDITS_FORMAT = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
 
 interface CodexUsageResponse {
   rate_limit?: {
@@ -25,10 +27,17 @@ interface CodexUsageResponse {
   } | null;
   rate_limit_reset_credits?: { available_count: number } | null;
   credits?: { unlimited?: boolean } | null;
+  spend_control?: { individual_limit?: CodexSpendLimit | null } | null;
 }
 
 interface CodexRateWindow {
   limit_window_seconds: number;
+  used_percent?: number | string;
+  reset_at?: number;
+}
+
+interface CodexSpendLimit {
+  remaining?: number | string;
   used_percent?: number | string;
   reset_at?: number;
 }
@@ -107,26 +116,40 @@ async function consumeReset(client: KyInstance, redeemRequestId: string, creditI
 }
 
 function toCredits(usage: CodexUsageResponse, suffix?: string): Credits {
+  const spendLane = toSpendLane(usage.spend_control?.individual_limit);
+  const windowLanes = [usage.rate_limit?.primary_window, usage.rate_limit?.secondary_window]
+    .filter((window): window is CodexRateWindow => window != null)
+    .map(toLane);
+
   return {
     type: "windows",
     unlimited: usage.credits?.unlimited === true,
-    lanes: [usage.rate_limit?.primary_window, usage.rate_limit?.secondary_window]
-      .filter((window): window is CodexRateWindow => window != null)
-      .map(toLane),
+    lanes: spendLane ? [spendLane] : windowLanes,
     suffix,
+  };
+}
+
+function toSpendLane(limit?: CodexSpendLimit | null): CreditsLane | undefined {
+  const remaining = toNumber(limit?.remaining);
+  if (!limit || remaining === undefined) return undefined;
+
+  return {
+    percent: parseUsedPercent(limit.used_percent),
+    suffix: `(${CREDITS_FORMAT.format(remaining)} cr., est. $${(remaining * CREDIT_USD).toFixed(2)})`,
+    resetAt: !!limit.reset_at ? limit.reset_at * 1_000 : undefined,
   };
 }
 
 function toLane(window: CodexRateWindow): CreditsLane {
   return {
     label: prettyMilliseconds(window.limit_window_seconds * 1_000, { compact: true }),
-    percent: parseUsedPercent(window),
+    percent: parseUsedPercent(window.used_percent),
     resetAt: !!window.reset_at ? window.reset_at * 1_000 : undefined,
   };
 }
 
-function parseUsedPercent(window?: CodexRateWindow | null): number | undefined {
-  const value = toNumber(window?.used_percent);
+function parseUsedPercent(percent?: number | string): number | undefined {
+  const value = toNumber(percent);
   return value === undefined ? undefined : Math.min(100, Math.max(0, value));
 }
 

@@ -14,8 +14,10 @@ export type Credits = (
 ) & { suffix?: string | undefined };
 
 export interface CreditsLane {
-  label: string;
+  label?: string;
   percent: number | undefined;
+  /** Text between the percentage and the reset time. */
+  suffix?: string;
   /** Timestamp in milliseconds. */
   resetAt?: number;
 }
