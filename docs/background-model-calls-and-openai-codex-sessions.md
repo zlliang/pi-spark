@@ -1,4 +1,4 @@
-# Background Model Calls and OpenAI Codex Sessions
+# Background model calls and OpenAI Codex sessions
 
 > This document was generated with the [Pi](https://pi.dev/) coding agent.
 

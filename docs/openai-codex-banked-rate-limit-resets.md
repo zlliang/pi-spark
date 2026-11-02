@@ -1,4 +1,4 @@
-# OpenAI Codex Banked Rate-Limit Resets
+# OpenAI Codex banked rate-limit resets
 
 > This document was generated with the [Pi](https://pi.dev/) coding agent.
 

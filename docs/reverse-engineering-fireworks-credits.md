@@ -1,4 +1,4 @@
-# Reverse-Engineering Fireworks Credits
+# Reverse-engineering Fireworks credits
 
 > This document was generated with the [Pi](https://pi.dev/) coding agent.
 

@@ -38,13 +38,13 @@ pi-spark ships with a custom editor and footer, replacing the default ones. The 
 pi-spark shows the active provider's credit balance or rate-limit usage in the status line, so you can keep an eye on what's left without leaving the terminal.
 
 - Supported providers: DeepSeek, Fireworks, Kimi Code, Moonshot, OpenAI Codex (legacy), OpenCode Go, OpenRouter, and Vercel AI Gateway.
-- Most provider fetching follows [CodexBar](https://github.com/steipete/codexbar). Fireworks is the exception: its balance sits behind an internal gRPC API, reverse-engineered from the `firectl` binary (see [Reverse-Engineering Fireworks Credits](./docs/reverse-engineering-fireworks-credits.md)).
+- Most provider fetching follows [CodexBar](https://github.com/steipete/codexbar). Fireworks is the exception: its balance sits behind an internal gRPC API, reverse-engineered from the `firectl` binary (see [Reverse-engineering Fireworks credits](./docs/reverse-engineering-fireworks-credits.md)).
 
 ![Credits](./assets/screenshot-credits.png)
 
 #### OpenAI Codex banked resets
 
-Banked rate-limit resets are saved benefits that can reset eligible Codex usage windows when redeemed. When available, their count appears after the usage windows. Run `/codex-resets` to inspect each reset and its expiration date, then select one to redeem. See [OpenAI Codex Banked Rate-Limit Resets](./docs/openai-codex-banked-rate-limit-resets.md) for the underlying behavior and internal APIs.
+Banked rate-limit resets are saved benefits that can reset eligible Codex usage windows when redeemed. When available, their count appears after the usage windows. Run `/codex-resets` to inspect each reset and its expiration date, then select one to redeem. See [OpenAI Codex banked rate-limit resets](./docs/openai-codex-banked-rate-limit-resets.md) for the underlying behavior and internal APIs.
 
 ![Codex resets](./assets/screenshot-codex-resets.png)
 
