@@ -4,6 +4,7 @@ import { applyPricingRules } from "./pricing";
 import { renderCredits, renderError } from "./status";
 
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
+import type { CodexDisplay, CreditsConfig } from "./config";
 import type { CreditsProvider } from "./types";
 
 const STATUS_KEY = "credits";
@@ -11,10 +12,12 @@ const STATUS_KEY = "credits";
 export class CreditsManager {
   private inflight: AbortController | undefined = undefined;
   private providers: CreditsProvider[];
+  private config: CreditsConfig;
   private currentProvider: string | undefined = undefined;
 
-  constructor(providers: CreditsProvider[]) {
+  constructor(providers: CreditsProvider[], config: CreditsConfig = {}) {
     this.providers = providers;
+    this.config = config;
   }
 
   async refresh(ctx: ExtensionContext): Promise<void> {
@@ -43,6 +46,10 @@ export class CreditsManager {
     });
   }
 
+  setCodexDisplay(display: CodexDisplay): void {
+    this.config = { ...this.config, codexDisplay: display };
+  }
+
   cancel(): void {
     this.inflight?.abort();
     this.inflight = undefined;
@@ -57,7 +64,7 @@ export class CreditsManager {
         return;
       }
 
-      const credits = await provider.fetch(token, signal, ctx.model?.cost);
+      const credits = await provider.fetch(token, signal, ctx.model?.cost, this.config);
       if (signal.aborted || ctx.model?.provider !== provider.id) return;
 
       ctx.ui.setStatus(STATUS_KEY, renderCredits(ctx.ui.theme, provider.label, credits, provider.link));

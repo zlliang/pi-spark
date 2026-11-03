@@ -2,7 +2,9 @@ import { uuidv7 } from "@earendil-works/pi-ai";
 import { readStoredCredential } from "@earendil-works/pi-coding-agent";
 import prettyMilliseconds from "pretty-ms";
 
+import { selectCodexLanes } from "./openai-codex-display";
 import { confirmCodexReset, formatAvailableResets, showCodexResetsLoader, showCodexResetsSelector } from "./openai-codex-panel";
+import { loadConfig } from "../../../config";
 import { getAuthToken } from "../../../utils/auth";
 import { toNumber } from "../../../utils/format";
 import { http, withAuth } from "../../../utils/http";
@@ -10,6 +12,7 @@ import { http, withAuth } from "../../../utils/http";
 import type { ExtensionContext } from "@earendil-works/pi-coding-agent";
 import type { KyInstance } from "ky";
 import type { CodexResetsPanelData } from "./openai-codex-panel";
+import type { CodexDisplay } from "../config";
 import type { Credits, CreditsLane, CreditsProvider, RefreshCredits } from "../types";
 
 const PROVIDER = "openai-codex";
@@ -66,13 +69,15 @@ async function runCodexResets(ctx: ExtensionContext, refresh: RefreshCredits): P
   if (!token) return;
 
   const client = createClient(token);
+  const config = loadConfig(ctx).credits;
+  const display = config ? config.codexDisplay : undefined;
 
   const credit = await showCodexResetsSelector(ctx, async (signal) => {
     const [usage, details] = await Promise.all([fetchUsage(client, signal), fetchResetCredits(client, signal)]);
 
     return {
       ...details,
-      usage: toCredits(usage, `· ${formatAvailableResets(details.available_count)}`),
+      usage: toCredits(usage, `· ${formatAvailableResets(details.available_count)}`, display),
     } satisfies CodexResetsPanelData;
   });
   if (!credit || !(await confirmCodexReset(ctx, credit))) return;
@@ -115,16 +120,18 @@ async function consumeReset(client: KyInstance, redeemRequestId: string, creditI
   }).json<ConsumeResetResponse>();
 }
 
-function toCredits(usage: CodexUsageResponse, suffix?: string): Credits {
+function toCredits(usage: CodexUsageResponse, suffix?: string, display?: CodexDisplay): Credits {
   const spendLane = toSpendLane(usage.spend_control?.individual_limit);
   const windowLanes = [usage.rate_limit?.primary_window, usage.rate_limit?.secondary_window]
     .filter((window): window is CodexRateWindow => window != null)
     .map(toLane);
+  const lanes = selectCodexLanes(windowLanes, spendLane, display);
 
   return {
     type: "windows",
-    unlimited: usage.credits?.unlimited === true,
-    lanes: spendLane ? [spendLane] : windowLanes,
+    // An unlimited credits flag must not hide available usage or spend information.
+    unlimited: usage.credits?.unlimited === true && lanes.length === 0,
+    lanes,
     suffix,
   };
 }
@@ -158,13 +165,13 @@ export const openaiCodexProvider: CreditsProvider = {
   label: "Codex",
   link: "https://chatgpt.com/#settings/Usage",
 
-  async fetch(apiKey, signal): Promise<Credits> {
+  async fetch(apiKey, signal, _cost, config): Promise<Credits> {
     const client = createClient(apiKey);
     const usage = await fetchUsage(client, signal);
     const availableCount = usage.rate_limit_reset_credits?.available_count ?? 0;
     const suffix = availableCount > 0 ? `(${formatAvailableResets(availableCount)})` : undefined;
 
-    return toCredits(usage, suffix);
+    return toCredits(usage, suffix, config?.codexDisplay);
   },
 
   register(pi, _ctx, refresh): void {

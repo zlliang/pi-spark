@@ -24,8 +24,11 @@ export function renderError(theme: Theme, label: string, message: string): strin
 }
 
 function renderWindows(theme: Theme, credits: Extract<Credits, { type: "windows" }>): string {
-  const unlimited = credits.unlimited || credits.lanes.every((lane) => lane.percent === undefined);
-  if (unlimited) return theme.fg("success", "unlimited");
+  if (credits.unlimited) return theme.fg("success", "unlimited");
+  if (credits.lanes.length === 0) return theme.fg("dim", "?");
+  if (credits.lanes.every((lane) => lane.percent === undefined && !lane.suffix)) {
+    return theme.fg("success", "unlimited");
+  }
 
   return credits.lanes.map((lane) => renderLane(theme, lane)).join(" ");
 }

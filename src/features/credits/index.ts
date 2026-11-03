@@ -1,3 +1,4 @@
+import { registerCodexDisplayCommand } from "./codex-display-command";
 import { CreditsManager } from "./manager";
 import { getEnabledProviders, registerProviderExtensions } from "./providers";
 import { loadConfig } from "../../config";
@@ -7,6 +8,11 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 export function registerCredits(pi: ExtensionAPI): void {
   let creditsManager: CreditsManager | undefined = undefined;
 
+  registerCodexDisplayCommand(pi, async (ctx, display) => {
+    creditsManager?.setCodexDisplay(display);
+    await creditsManager?.refresh(ctx);
+  });
+
   pi.on("session_start", (_event, ctx) => {
     const config = loadConfig(ctx).credits;
     if (!config) return;
@@ -14,7 +20,7 @@ export function registerCredits(pi: ExtensionAPI): void {
     const providers = getEnabledProviders(config);
     if (providers.length === 0) return;
 
-    creditsManager = new CreditsManager(providers);
+    creditsManager = new CreditsManager(providers, config);
     registerProviderExtensions(pi, ctx, providers, async (ctx) => await creditsManager?.refresh(ctx));
 
     creditsManager.refresh(ctx);

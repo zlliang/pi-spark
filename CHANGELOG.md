@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Show both Codex rate-limit windows and spend information by default. Add
+  `credits.codexDisplay` (`both`, `rate-limits`, or `spend`) with automatic
+  fallback when a single-information mode's preferred source is unavailable.
+- Add `/spark codex-display [both | rate-limits | spend]` with an interactive
+  selector for TUI and RPC/Webview, persistent preferences, and live status refresh.
+- Preserve upstream Codex display formatting and its existing suffixes.
+- Keep available information visible even when the API also reports unlimited
+  credits.
+
+### Testing
+
+- Add offline regression tests for Codex display selection, configuration,
+  command handling, live updates, and safe preference persistence.
+
 ## [1.1.0](https://github.com/zlliang/pi-spark/compare/v1.0.0...v1.1.0) (2026-10-09)
 
 

@@ -42,6 +42,42 @@ pi-spark shows the active provider's credit balance or rate-limit usage in the s
 
 ![Credits](./assets/screenshot-credits.png)
 
+#### OpenAI Codex display
+
+Codex shows both rate-limit windows and the spend limit when available. Display
+formatting matches upstream: no additional spend label, and the existing credits,
+estimated USD, reset-time, and available-reset suffixes are preserved.
+
+Run `/spark codex-display` to choose interactively in either Pi's terminal UI or
+the Webview, or set the mode directly:
+
+```text
+/spark codex-display both
+/spark codex-display rate-limits
+/spark codex-display spend
+```
+
+Run `/spark` to see the command syntax.
+
+The choice is saved and applied to the running status without a reload or a model
+call. It is saved globally unless the workspace already overrides this preference
+(or enables credits that are disabled globally); in that case, only the workspace
+configuration is updated. Other preferences are preserved.
+
+You can also set `credits.codexDisplay` manually in `spark.json` (reload Pi after
+manual edits). Available modes:
+
+- `both` (default): rate-limit windows followed by the spend limit; unavailable
+  information is omitted.
+- `rate-limits`: only rate-limit windows; fall back to the spend limit if no
+  window is returned.
+- `spend`: only the spend limit; fall back to rate-limit windows if no usable
+  spend limit is returned.
+
+The same preference applies to the `/codex-resets` panel. Available reset counts
+remain visible in every mode. These settings affect display only, not quotas,
+billing, or reset redemption.
+
 #### OpenAI Codex banked resets
 
 Banked rate-limit resets are saved benefits that can reset eligible Codex usage windows when redeemed. When available, their count appears after the usage windows. Run `/codex-resets` to inspect each reset and its expiration date, then select one to redeem. See [OpenAI Codex banked rate-limit resets](./docs/openai-codex-banked-rate-limit-resets.md) for the underlying behavior and internal APIs.
@@ -141,6 +177,7 @@ All supported providers are enabled by default. Set a provider to `false` to dis
 ```json
 {
   "credits": {
+    "codexDisplay": "both",
     "providers": {
       "fireworks": false,
       "openai-codex": true
@@ -151,6 +188,7 @@ All supported providers are enabled by default. Set a provider to `false` to dis
 
 | Field | Value | Description |
 | --- | --- | --- |
+| `codexDisplay` | `both` (default), `rate-limits`, or `spend` | Selects the Codex information to display. Each single-information mode falls back to the other source when its preferred source is unavailable. |
 | `providers` | partial map of provider IDs to booleans | Enables or disables credits for individual providers. Valid IDs: `deepseek`, `fireworks`, `kimi-coding`, `moonshotai`, `moonshotai-cn`, `openai-codex`, `opencode-go`, `openrouter`, and `vercel-ai-gateway`. |
 
 #### `EditorConfig`

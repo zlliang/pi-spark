@@ -1,5 +1,5 @@
 import type { ExtensionAPI, ExtensionContext } from "@earendil-works/pi-coding-agent";
-import type { CreditsProviderId } from "./config";
+import type { CreditsConfig, CreditsProviderId } from "./config";
 import type { Cost, PricingRule } from "./pricing";
 
 /**
@@ -30,6 +30,6 @@ export interface CreditsProvider {
   readonly label: string;
   readonly link?: string;
   readonly pricingRules?: (timestamp: number) => PricingRule[];
-  fetch(apiKey: string, signal: AbortSignal, cost?: Cost): Promise<Credits>;
+  fetch(apiKey: string, signal: AbortSignal, cost?: Cost, config?: CreditsConfig): Promise<Credits>;
   register?(pi: ExtensionAPI, ctx: ExtensionContext, refresh: RefreshCredits): void;
 }
